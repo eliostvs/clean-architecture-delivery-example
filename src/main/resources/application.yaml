@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    show-sql: true
+
+server:
+  servlet:
+    context-path: '/api/v1'
+
+logging:
+  level:
+    org.springframework.web: INFO
+    org.hibernate: ERROR
+
+---
+
+spring:
+  profiles: test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

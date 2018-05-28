@@ -26,26 +26,38 @@ public class CousineRepositoryImpTest {
 
     @Test
     public void getByIdentityReturnsOptionalCousine() {
+        // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
         Identity id = cousine.getId();
         CousineData cousineData = CousineData.fromCousine(cousine);
 
+        // and
         doReturn(Optional.of(cousineData))
                 .when(jpaCousineRepository)
                 .findById(id.getNumber());
 
-        assertThat(cousineRepository.getByIdentity(id)).isEqualTo(Optional.of(cousine));
+        // when
+        final Optional<Cousine> actual = cousineRepository.getByIdentity(id);
+
+        // then
+        assertThat(actual).isEqualTo(Optional.of(cousine));
     }
 
     @Test
     public void getAllReturnsAllCousines() {
+        // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
         CousineData cousineData = CousineData.fromCousine(cousine);
 
+        // and
         doReturn(Collections.singletonList(cousineData))
                 .when(jpaCousineRepository)
                 .findAll();
+        // when
+        final List<Cousine> actual = cousineRepository.getAll();
 
-        assertThat(cousineRepository.getAll()).containsOnly(cousine);
+        // then
+        assertThat(actual).containsOnly(cousine);
+
     }
 }

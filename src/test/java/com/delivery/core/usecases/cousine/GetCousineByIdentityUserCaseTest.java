@@ -27,23 +27,32 @@ public class GetCousineByIdentityUserCaseTest {
 
     @Test
     public void returnsCousineWhenCousineIdIsFound() {
+        // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
 
+        // and
         doReturn(Optional.of(cousine))
                 .when(repository)
                 .getByIdentity(cousine.getId());
 
-        assertThat(userCase.execute(cousine.getId())).isEqualTo(cousine);
+        // when
+        final Cousine actual = userCase.execute(cousine.getId());
+
+        // then
+        assertThat(actual).isEqualTo(cousine);
     }
 
     @Test
     public void throwsExceptionWhenCousineIdIsNotFound() {
+        // given
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
+        // and
         doReturn(Optional.empty())
                 .when(repository)
                 .getByIdentity(id);
 
+        // then
         assertThatThrownBy(() -> userCase.execute(id))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("No cousine found for identity: " + id.getNumber());

@@ -24,12 +24,18 @@ public class GetAllCousinesUseCaseTest {
 
     @Test
     public void returnsAllCousines() {
+        // given
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
 
+        // and
         doReturn(cousines)
                 .when(repository)
                 .getAll();
 
-        assertThat(useCase.execute(null)).isEqualTo(cousines);
+        // when
+        final List<Cousine> actual = useCase.execute(null);
+
+        // then
+        assertThat(actual).isEqualTo(cousines);
     }
 }

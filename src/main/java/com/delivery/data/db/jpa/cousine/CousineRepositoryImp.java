@@ -33,4 +33,13 @@ public class CousineRepositoryImp implements CousineRepository {
                 .map(CousineData::toCousine)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Cousine> searchByName(String search) {
+        return jpaCousineRepository
+                .findByNameContainingIgnoreCase(search)
+                .parallelStream()
+                .map(CousineData::toCousine)
+                .collect(Collectors.toList());
+    }
 }

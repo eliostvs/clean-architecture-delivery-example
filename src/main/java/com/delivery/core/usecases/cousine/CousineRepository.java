@@ -10,4 +10,6 @@ public interface CousineRepository {
     Optional<Cousine> getByIdentity(Identity id);
 
     List<Cousine> getAll();
+
+    List<Cousine> searchByName(String search);
 }

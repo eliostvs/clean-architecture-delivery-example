@@ -39,4 +39,12 @@ public class IntegrationTest {
        
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
+    @Test
+    public void searchCousine() {
+        final String url = base.toString() + "/Cousine/search/abc";
+        ResponseEntity<String> response = template.getForEntity(url, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

@@ -11,9 +11,12 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/Cousine")
 public interface CousineResource {
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     CompletableFuture<CousineResponse> getCousineById(@PathVariable Long id);
 
     @GetMapping
     CompletableFuture<List<CousineResponse>> getAllCousines();
+
+    @GetMapping("/search/{text}")
+    CompletableFuture<List<CousineResponse>> getByNameMatching(@PathVariable String text);
 }

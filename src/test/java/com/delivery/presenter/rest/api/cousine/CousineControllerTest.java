@@ -6,6 +6,7 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetCousineByIdentityUserCase;
+import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.UseCaseExecutorImp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -31,7 +33,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -47,6 +48,9 @@ public class CousineControllerTest {
     @MockBean
     private GetAllCousinesUseCase getAllCousinesUseCase;
 
+    @MockBean
+    private SearchCousineByNameUseCase searchCousineByNameUseCase;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -56,29 +60,41 @@ public class CousineControllerTest {
     }
 
     @Test
-    public void returnsNotFoundWhenCousineIsNotFound() throws Exception {
+    public void getCousineByIdReturnsNotFound() throws Exception {
+        // given
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
+        // and
         doThrow(new NotFoundException("error"))
                 .when(getCousineByIdentityUserCase)
                 .execute(eq(id));
 
-        mockMvc.perform(asyncDispatch(getMvcResult("/Cousine/" + id.getNumber())))
+        // when
+        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber());
+
+        // then
+        mockMvc.perform(payload)
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error", is("true")))
                 .andExpect(jsonPath("$.message", is("Resource not found")));
     }
 
     @Test
-    public void returnsCousineWhenCousineIsFoundById() throws Exception {
+    public void getCousineByIdReturnsOk() throws Exception {
+        // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
         final Identity id = cousine.getId();
 
+        // and
         doReturn(cousine)
                 .when(getCousineByIdentityUserCase)
                 .execute(eq(id));
 
-        mockMvc.perform(asyncDispatch(getMvcResult("/Cousine/" + id.getNumber())))
+        // when
+        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber());
+
+        // then
+        mockMvc.perform(payload)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(id.getNumber().intValue())))
@@ -86,15 +102,21 @@ public class CousineControllerTest {
     }
 
     @Test
-    public void returnsAllCousines() throws Exception {
+    public void getAllCousinesReturnsOk() throws Exception {
+        // given
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
         Cousine firstCousine = cousines.get(0);
 
+        // and
         doReturn(cousines)
                 .when(getAllCousinesUseCase)
                 .execute(null);
 
-        mockMvc.perform(asyncDispatch(getMvcResult("/Cousine")))
+        // when
+        final RequestBuilder payload = asyncRequest("/Cousine");
+
+        // then
+        mockMvc.perform(payload)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(cousines.size())))
@@ -102,9 +124,30 @@ public class CousineControllerTest {
                 .andExpect(jsonPath("$[0].name", is(firstCousine.getName())));
     }
 
-    private MvcResult getMvcResult(String url) throws Exception {
-        return mockMvc.perform(get(url))
-                .andExpect(request().asyncStarted())
-                .andReturn();
+    @Test
+    public void searchCousineByNameReturnsOk() throws Exception {
+        // given
+        List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
+        Cousine firstCousine = cousines.get(0);
+        String text = "abc";
+
+        // and
+        doReturn(cousines)
+                .when(searchCousineByNameUseCase)
+                .execute(text);
+        // when
+        final RequestBuilder payload = asyncRequest("/Cousine/search/" + text);
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(cousines.size())))
+                .andExpect(jsonPath("$[0].id", is(firstCousine.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$[0].name", is(firstCousine.getName())));
+    }
+
+    private RequestBuilder asyncRequest(String url) throws Exception {
+        return asyncDispatch(mockMvc.perform(get(url)).andExpect(MockMvcResultMatchers.request().asyncStarted()).andReturn());
     }
 }

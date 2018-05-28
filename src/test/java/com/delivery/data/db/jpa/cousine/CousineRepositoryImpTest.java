@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +59,24 @@ public class CousineRepositoryImpTest {
 
         // then
         assertThat(actual).containsOnly(cousine);
+    }
 
+    @Test
+    public void searchCousineByNameReturnsAllCousines() {
+        // given
+        Cousine cousine = TestCoreEntityGenerator.randomCousine();
+        CousineData cousineData = CousineData.fromCousine(cousine);
+        String search = "abc";
+
+        // and
+        doReturn(Collections.singletonList(cousineData))
+                .when(jpaCousineRepository)
+                .findByNameContainingIgnoreCase(search);
+
+        // when
+        final List<Cousine> actual = cousineRepository.searchByName(search);
+
+        // then
+        assertThat(actual).isEqualTo(Collections.singletonList(cousine));
     }
 }

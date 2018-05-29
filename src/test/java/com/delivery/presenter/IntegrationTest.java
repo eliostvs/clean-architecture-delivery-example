@@ -56,4 +56,12 @@ public class IntegrationTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
+    @Test
+    public void getStores() {
+        final String url = base.toString() + "/Store";
+        ResponseEntity<String> response = template.getForEntity(url, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

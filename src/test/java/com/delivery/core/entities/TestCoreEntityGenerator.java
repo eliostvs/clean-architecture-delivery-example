@@ -28,7 +28,18 @@ public class TestCoreEntityGenerator {
     }
 
     public static Store randomStore() {
-        return new Store(randomIdentity(), faker.name().name(), faker.address().streetAddress());
+        return new Store(
+                randomIdentity(),
+                faker.name().name(),
+                faker.address().streetAddress(),
+                randomCousine());
+    }
+
+    public static List<Store> randomStores() {
+        return IntStream.rangeClosed(0, randomNumberBetweenFiveAndTen())
+                .mapToObj(number -> randomStore())
+                .map(object -> (Store) object)
+                .collect(Collectors.toList());
     }
 
     private static int randomNumberBetweenFiveAndTen() {

@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +39,7 @@ public class StoreData {
     @NotEmpty
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cousine_id", nullable = false)
     private CousineData cousine;
 
@@ -49,7 +48,9 @@ public class StoreData {
         return new Store(
                 new Identity(storeData.getId()),
                 storeData.getName(),
-                storeData.getAddress());
+                storeData.getAddress(),
+                CousineData.toCousine(storeData.getCousine())
+        );
     }
 
     // TODO: test method
@@ -58,7 +59,7 @@ public class StoreData {
                 store.getId().getNumber(),
                 store.getName(),
                 store.getAddress(),
-                null
+                CousineData.fromCousine(store.getCousine())
         );
     }
 }

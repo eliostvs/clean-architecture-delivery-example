@@ -1,10 +1,10 @@
 package com.delivery.presenter.rest.api.cousine;
 
-import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
@@ -58,7 +58,7 @@ public class CousineControllerTest {
     private MockMvc mockMvc;
 
     @Configuration
-    @ComponentScan("com.delivery.presenter.rest.api")
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.cousine", "com.delivery.presenter.rest.api.common"})
     static class Config {
     }
 

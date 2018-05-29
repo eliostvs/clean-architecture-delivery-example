@@ -1,6 +1,6 @@
 package com.delivery.core.usecases.cousine;
 
-import com.delivery.core.TestCoreEntityGenerator;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import org.junit.Test;
 import org.junit.runner.RunWith;

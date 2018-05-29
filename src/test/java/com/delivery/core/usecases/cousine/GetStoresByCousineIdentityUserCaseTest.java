@@ -1,6 +1,6 @@
 package com.delivery.core.usecases.cousine;
 
-import com.delivery.core.TestCoreEntityGenerator;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;

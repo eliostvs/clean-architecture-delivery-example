@@ -1,6 +1,6 @@
 package com.delivery.data.db.jpa.repositories;
 
-import com.delivery.core.TestCoreEntityGenerator;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Store;

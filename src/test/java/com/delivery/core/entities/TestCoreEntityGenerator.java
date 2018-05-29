@@ -1,4 +1,4 @@
-package com.delivery.core;
+package com.delivery.core.entities;
 
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;

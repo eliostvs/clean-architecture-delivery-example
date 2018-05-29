@@ -1,6 +1,6 @@
 package com.delivery.presenter.rest.api.cousine;
 
-import com.delivery.core.TestCoreEntityGenerator;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;

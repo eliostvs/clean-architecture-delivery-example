@@ -2,7 +2,7 @@ package com.delivery.presenter.config;
 
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetCousineByIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class Module {
     
     @Bean
-    public GetCousineByIdentityUserCase getCousineByIdUserCase(CousineRepository cousineRepository) {
-        return new GetCousineByIdentityUserCase(cousineRepository);
+    public GetStoresByCousineIdentityUserCase getCousineByIdUserCase(CousineRepository cousineRepository) {
+        return new GetStoresByCousineIdentityUserCase(cousineRepository);
     }
     
     @Bean

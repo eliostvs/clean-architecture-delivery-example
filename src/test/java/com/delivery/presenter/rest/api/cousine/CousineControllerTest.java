@@ -4,10 +4,11 @@ import com.delivery.core.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
+import com.delivery.core.domain.Store;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetCousineByIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
-import com.delivery.presenter.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.HashSet;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,7 +46,7 @@ public class CousineControllerTest {
     private UseCaseExecutorImp useCaseExecutor;
 
     @MockBean
-    private GetCousineByIdentityUserCase getCousineByIdentityUserCase;
+    private GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase;
 
     @MockBean
     private GetAllCousinesUseCase getAllCousinesUseCase;
@@ -60,17 +63,17 @@ public class CousineControllerTest {
     }
 
     @Test
-    public void getCousineByIdReturnsNotFound() throws Exception {
+    public void getStoreByCousineIdReturnsNotFound() throws Exception {
         // given
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
         doThrow(new NotFoundException("error"))
-                .when(getCousineByIdentityUserCase)
+                .when(getStoresByCousineIdentityUserCase)
                 .execute(eq(id));
 
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber());
+        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
 
         // then
         mockMvc.perform(payload)
@@ -80,25 +83,28 @@ public class CousineControllerTest {
     }
 
     @Test
-    public void getCousineByIdReturnsOk() throws Exception {
+    public void getStoresByCousineIdReturnsOk() throws Exception {
         // given
-        Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        final Identity id = cousine.getId();
+        Store store = TestCoreEntityGenerator.randomStore();
+        final Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doReturn(cousine)
-                .when(getCousineByIdentityUserCase)
+        doReturn(new HashSet<>(singletonList(store)))
+                .when(getStoresByCousineIdentityUserCase)
                 .execute(eq(id));
 
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber());
+        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
 
         // then
         mockMvc.perform(payload)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(id.getNumber().intValue())))
-                .andExpect(jsonPath("$.name", is(cousine.getName())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(store.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$[0].name", is(store.getName())))
+                .andExpect(jsonPath("$[0].address", is(store.getAddress())))
+                .andExpect(jsonPath("$[0].cousineId", is(id.getNumber().intValue())));
     }
 
     @Test

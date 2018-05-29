@@ -1,4 +1,4 @@
-package com.delivery.presenter.rest.api.cousine;
+package com.delivery.presenter.rest.api.entities;
 
 import com.delivery.core.domain.Cousine;
 import lombok.Value;
@@ -11,7 +11,7 @@ public class CousineResponse {
     private final Long id;
     private final String name;
 
-    public static CousineResponse fromCousine(Cousine cousine) {
+    private static CousineResponse fromCousine(Cousine cousine) {
         return new CousineResponse(cousine.getId().getNumber(), cousine.getName());
     }
     

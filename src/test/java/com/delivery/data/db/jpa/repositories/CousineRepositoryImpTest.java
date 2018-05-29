@@ -1,8 +1,11 @@
-package com.delivery.data.db.jpa.cousine;
+package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Store;
+import com.delivery.data.db.jpa.entities.CousineData;
+import com.delivery.data.db.jpa.entities.StoreData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -10,8 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -26,22 +30,25 @@ public class CousineRepositoryImpTest {
     private JpaCousineRepository jpaCousineRepository;
 
     @Test
-    public void getByIdentityReturnsOptionalCousine() {
+    public void getStoresByIdentityReturnsStores() {
         // given
-        Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        Identity id = cousine.getId();
-        CousineData cousineData = CousineData.fromCousine(cousine);
+        Store store = TestCoreEntityGenerator.randomStore();
+        Identity id = TestCoreEntityGenerator.randomIdentity();
+
+        StoreData storeData = StoreData.fromStore(store);
+        Set<StoreData> stores = new HashSet<>();
+        stores.add(storeData);
 
         // and
-        doReturn(Optional.of(cousineData))
+        doReturn(stores)
                 .when(jpaCousineRepository)
-                .findById(id.getNumber());
+                .findStoresById(id.getNumber());
 
         // when
-        final Optional<Cousine> actual = cousineRepository.getByIdentity(id);
+        final Set<Store> actual = cousineRepository.getStoresByIdentity(id);
 
         // then
-        assertThat(actual).isEqualTo(Optional.of(cousine));
+        assertThat(actual).containsOnly(store);
     }
 
     @Test

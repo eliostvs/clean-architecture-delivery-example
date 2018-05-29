@@ -1,10 +1,15 @@
 spring:
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: none
+
+  datasource:
+    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;MODE=MYSQL
 
 server:
   servlet:
-    context-path: '/api/v1'
+    context-path: /api/v1
 
 logging:
   level:
@@ -15,6 +20,9 @@ logging:
 
 spring:
   profiles: test
+  h2:
+    console:
+      enabled: true
 
 management:
   endpoints:

@@ -1,4 +1,4 @@
-package com.delivery.presenter;
+package com.delivery.presenter.usecases;
 
 import com.delivery.core.usecases.UseCase;
 import com.delivery.core.usecases.UseCaseExecutor;

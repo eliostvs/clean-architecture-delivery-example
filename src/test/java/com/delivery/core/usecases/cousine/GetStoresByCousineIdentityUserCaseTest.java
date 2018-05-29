@@ -1,45 +1,50 @@
 package com.delivery.core.usecases.cousine;
 
 import com.delivery.core.TestCoreEntityGenerator;
-import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
+import com.delivery.core.domain.Store;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetCousineByIdentityUserCaseTest {
+public class GetStoresByCousineIdentityUserCaseTest {
 
     @InjectMocks
-    private GetCousineByIdentityUserCase userCase;
+    private GetStoresByCousineIdentityUserCase userCase;
 
     @Mock
     private CousineRepository repository;
 
     @Test
-    public void returnsCousineWhenCousineIdIsFound() {
+    public void returnsStoresWhenCousineIdIsFound() {
         // given
-        Cousine cousine = TestCoreEntityGenerator.randomCousine();
+        Store store = TestCoreEntityGenerator.randomStore();
+        Set<Store> stores = new HashSet<>();
+        stores.add(store);
+
+        Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doReturn(Optional.of(cousine))
+        doReturn(stores)
                 .when(repository)
-                .getByIdentity(cousine.getId());
+                .getStoresByIdentity(id);
 
         // when
-        final Cousine actual = userCase.execute(cousine.getId());
+        final Set<Store> actual = userCase.execute(id);
 
         // then
-        assertThat(actual).isEqualTo(cousine);
+        assertThat(actual).containsOnly(store);
     }
 
     @Test
@@ -48,9 +53,9 @@ public class GetCousineByIdentityUserCaseTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doReturn(Optional.empty())
+        doReturn(new HashSet<>())
                 .when(repository)
-                .getByIdentity(id);
+                .getStoresByIdentity(id);
 
         // then
         assertThatThrownBy(() -> userCase.execute(id))

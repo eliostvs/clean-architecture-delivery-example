@@ -1,12 +1,15 @@
-package com.delivery.data.db.jpa.cousine;
+package com.delivery.data.db.jpa.repositories;
 
-import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Cousine;
+import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Store;
 import com.delivery.core.usecases.cousine.CousineRepository;
+import com.delivery.data.db.jpa.entities.CousineData;
+import com.delivery.data.db.jpa.entities.StoreData;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,10 +22,12 @@ public class CousineRepositoryImp implements CousineRepository {
     }
 
     @Override
-    public Optional<Cousine> getByIdentity(Identity id) {
+    public Set<Store> getStoresByIdentity(Identity id) {
         return jpaCousineRepository
-                .findById(id.getNumber())
-                .map(CousineData::toCousine);
+                .findStoresById(id.getNumber())
+                .parallelStream()
+                .map(StoreData::toStore)
+                .collect(Collectors.toSet());
     }
 
     @Override

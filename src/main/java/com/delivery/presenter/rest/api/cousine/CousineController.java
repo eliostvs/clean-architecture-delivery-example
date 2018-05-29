@@ -3,38 +3,41 @@ package com.delivery.presenter.rest.api.cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetCousineByIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
+import com.delivery.presenter.rest.api.entities.CousineResponse;
+import com.delivery.presenter.rest.api.entities.StoreResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Component
 public class CousineController implements CousineResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllCousinesUseCase getAllCousinesUseCase;
-    private GetCousineByIdentityUserCase getCousineByIdentityUserCase;
-    private SearchCousineByNameUseCase searchCousineByNameUseCase;
+    private GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase;
+    private SearchCousineByNameUseCase getAllCousinesByNameMatching;
 
     public CousineController(UseCaseExecutor useCaseExecutor,
                              GetAllCousinesUseCase getAllCousinesUseCase,
-                             GetCousineByIdentityUserCase getCousineByIdentityUserCase,
-                             SearchCousineByNameUseCase searchCousineByNameUseCase) {
+                             GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase,
+                             SearchCousineByNameUseCase getAllCousinesByNameMatching) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllCousinesUseCase = getAllCousinesUseCase;
-        this.getCousineByIdentityUserCase = getCousineByIdentityUserCase;
-        this.searchCousineByNameUseCase = searchCousineByNameUseCase;
+        this.getStoresByCousineIdentityUserCase = getStoresByCousineIdentityUserCase;
+        this.getAllCousinesByNameMatching = getAllCousinesByNameMatching;
     }
 
     @Override
-    public CompletableFuture<CousineResponse> getCousineById(@PathVariable Long id) {
+    public CompletableFuture<Set<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getCousineByIdentityUserCase,
+                getStoresByCousineIdentityUserCase,
                 id,
                 Identity::new,
-                CousineResponse::fromCousine);
+                (store) -> StoreResponse.fromStore(id, store));
     }
 
     @Override
@@ -47,9 +50,9 @@ public class CousineController implements CousineResource {
     }
 
     @Override
-    public CompletableFuture<List<CousineResponse>> getByNameMatching(@PathVariable String text) {
+    public CompletableFuture<List<CousineResponse>> getAllCousinesByNameMatching(@PathVariable String text) {
         return useCaseExecutor.execute(
-                searchCousineByNameUseCase,
+                getAllCousinesByNameMatching,
                 text,
                 (searchText) -> searchText,
                 CousineResponse::fromCousine);

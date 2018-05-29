@@ -36,7 +36,16 @@ public class IntegrationTest {
     public void getAllCousines() {
         final String url = base.toString() + "/Cousine";
         ResponseEntity<String> response = template.getForEntity(url, String.class);
-       
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void getStoresByCousineId() {
+        final String url = base.toString() + "/Cousine/1/stores";
+
+        ResponseEntity<String> response = template.getForEntity(url, String.class);
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

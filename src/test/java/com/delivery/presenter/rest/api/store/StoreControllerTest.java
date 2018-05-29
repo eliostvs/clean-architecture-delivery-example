@@ -3,6 +3,7 @@ package com.delivery.presenter.rest.api.store;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
+import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,6 +45,9 @@ public class StoreControllerTest {
 
     @MockBean
     private SearchStoresByNameUseCase searchStoresByNameUseCase;
+
+    @MockBean
+    private GetStoreByIdentityUseCase getStoreByIdentityUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -75,6 +80,29 @@ public class StoreControllerTest {
                 .andExpect(jsonPath("$[0].name", is(firstStore.getName())))
                 .andExpect(jsonPath("$[0].address", is(firstStore.getAddress())))
                 .andExpect(jsonPath("$[0].cousineId", is(firstStore.getCousine().getId().getNumber().intValue())));
+    }
+
+    @Test
+    public void getStoreByIdentityReturnsOk() throws Exception {
+        // given
+        Store store = TestCoreEntityGenerator.randomStore();
+
+        // and
+        doReturn(store)
+                .when(getStoreByIdentityUseCase)
+                .execute(eq(store.getId()));
+
+        // when
+        final RequestBuilder payload = asyncRequest("/Store/" + store.getId().getNumber());
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(store.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$.name", is(store.getName())))
+                .andExpect(jsonPath("$.address", is(store.getAddress())))
+                .andExpect(jsonPath("$.cousineId", is(store.getCousine().getId().getNumber().intValue())));
     }
 
     @Test

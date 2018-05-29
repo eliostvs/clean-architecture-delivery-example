@@ -18,4 +18,7 @@ public interface StoreResource {
 
     @GetMapping("/search/{text}")
     CompletableFuture<List<StoreResponse>> getAllStoresByNameMatching(@PathVariable String text);
+
+    @GetMapping("/{id}")
+    CompletableFuture<StoreResponse> getStoreByIdentity(@PathVariable Long id);
 }

@@ -5,6 +5,7 @@ import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
+import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.core.usecases.store.StoreRepository;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean
+    public GetStoreByIdentityUseCase getStoreByIdentityUseCase(StoreRepository storeRepository) {
+        return new GetStoreByIdentityUseCase(storeRepository);
+    }
 
     @Bean
     public SearchStoresByNameUseCase searchStoresByNameUseCase(StoreRepository storeRepository) {

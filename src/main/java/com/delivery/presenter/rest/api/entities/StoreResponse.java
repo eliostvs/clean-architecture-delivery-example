@@ -15,7 +15,7 @@ public class StoreResponse {
     private final String address;
     private final Long cousineId;
 
-    private static StoreResponse fromStore(Store store) {
+    public static StoreResponse fromStore(Store store) {
         return new StoreResponse(
                 store.getId().getNumber(),
                 store.getName(),

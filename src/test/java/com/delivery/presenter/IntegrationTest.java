@@ -34,42 +34,72 @@ public class IntegrationTest {
 
     @Test
     public void getAllCousines() {
+        // given
         final String url = base.toString() + "/Cousine";
+
+        // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
 
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     public void getStoresByCousineId() {
+        // given
         final String url = base.toString() + "/Cousine/1/stores";
 
+        // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
 
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     public void searchCousine() {
+        // given
         final String url = base.toString() + "/Cousine/search/abc";
+
+        // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
 
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     public void getStores() {
+        // given
         final String url = base.toString() + "/Store";
+
+        // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
 
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     public void searchStore() {
+        // given
         final String url = base.toString() + "/Store/search/pizza";
+
+        // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
 
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void getStoreById() {
+        // given
+        final String url = base.toString() + "/Store/1/";
+
+        ResponseEntity<String> response = template.getForEntity(url, String.class);
+
+        // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

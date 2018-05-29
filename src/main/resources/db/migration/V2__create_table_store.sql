@@ -1,8 +1,9 @@
 CREATE TABLE store (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    address VARCHAR(200) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    address VARCHAR(300) NOT NULL,
     cousine_id INT NOT NULL,
+    UNIQUE(name),
     PRIMARY KEY (id),
     FOREIGN KEY (cousine_id) REFERENCES cousine (id)
 );

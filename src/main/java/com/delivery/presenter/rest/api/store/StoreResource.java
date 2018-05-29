@@ -1,5 +1,6 @@
 package com.delivery.presenter.rest.api.store;
 
+import com.delivery.presenter.rest.api.entities.ProductResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,4 +22,8 @@ public interface StoreResource {
 
     @GetMapping("/{id}")
     CompletableFuture<StoreResponse> getStoreByIdentity(@PathVariable Long id);
+
+    @GetMapping("/{id}/products")
+    CompletableFuture<List<ProductResponse>> getProductsBy(@PathVariable Long id);
+
 }

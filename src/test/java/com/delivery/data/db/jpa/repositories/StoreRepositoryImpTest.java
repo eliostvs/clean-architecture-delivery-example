@@ -1,8 +1,10 @@
 package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
+import com.delivery.data.db.jpa.entities.ProductData;
 import com.delivery.data.db.jpa.entities.StoreData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +66,7 @@ public class StoreRepositoryImpTest {
     }
 
     @Test
-    public void getStoreByIdReturnsOptionalStore() {
+    public void getStoreByIdentityReturnsOptionalStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
         StoreData storeData = StoreData.fromStore(store);
@@ -82,7 +84,7 @@ public class StoreRepositoryImpTest {
     }
 
     @Test
-    public void getStoreByIdReturnsOptionalEmpty() {
+    public void getStoreByIdentityReturnsOptionalEmpty() {
         // given
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
@@ -96,5 +98,24 @@ public class StoreRepositoryImpTest {
 
         // then
         assertThat(actual).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void getProductsByIdentityReturnsProducts() {
+        // given
+        Product product = TestCoreEntityGenerator.randomProduct();
+        ProductData productData = ProductData.fromProduct(product);
+        Identity id = product.getStore().getId();
+
+        // and
+        doReturn(Collections.singletonList(productData))
+                .when(jpaStoreRepository)
+                .findProductsById(id.getNumber());
+
+        //when
+        List<Product> actual = storeRepository.getProductsByIdentity(id);
+
+        // then
+        assertThat(actual).containsOnly(product);
     }
 }

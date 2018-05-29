@@ -1,6 +1,7 @@
 package com.delivery.core.usecases.store;
 
 import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface StoreRepository {
     List<Store> searchByName(String searchText);
 
     Optional<Store> getByIdentity(Identity id);
+
+    List<Product> getProductsByIdentity(Identity id);
 }

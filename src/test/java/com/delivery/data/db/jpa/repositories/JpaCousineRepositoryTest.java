@@ -52,8 +52,8 @@ public class JpaCousineRepositoryTest {
     public void getStoresByCousineId() {
         // given
         CousineData cousine = entityManager.persistFlushFind(CousineData.withName("name"));
-        StoreData storeA = entityManager.persistFlushFind(new StoreData(null, "name A", "address A", cousine));
-        StoreData storeB = entityManager.persistFlushFind(new StoreData(null, "name B", "address B", cousine));
+        StoreData storeA = entityManager.persistFlushFind(StoreData.withNameAndCousine("name A", cousine));
+        StoreData storeB = entityManager.persistFlushFind(StoreData.withNameAndCousine("name B", cousine));
 
         // and
         cousine.addStore(storeA);

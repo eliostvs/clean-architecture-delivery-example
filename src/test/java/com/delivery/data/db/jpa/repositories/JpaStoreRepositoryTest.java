@@ -1,7 +1,9 @@
 package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.data.db.jpa.entities.CousineData;
+import com.delivery.data.db.jpa.entities.ProductData;
 import com.delivery.data.db.jpa.entities.StoreData;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +32,22 @@ public class JpaStoreRepositoryTest {
     @Configuration
     @AutoConfigurationPackage
     @EntityScan("com.delivery.data.db.jpa.entities")
-    static class Config {}
+    static class Config {
+    }
+
+    private CousineData cousineData;
+
+    @Before
+    public void setUp() throws Exception {
+        cousineData = entityManager.persistFlushFind(CousineData.withName("name"));
+    }
 
     @Test
     public void findByNameContainingIgnoreCaseReturnsAllMatchStores() {
         // given
-        CousineData cousineData = entityManager.persistFlushFind(CousineData.withName("name"));
-
-        // and
         Arrays.stream(new String[]{"aAbc", "abBc", "abCc"})
                 .forEach(name -> {
-                    final StoreData storeData = new StoreData(null, name, name, cousineData);
+                    final StoreData storeData = StoreData.withNameAndCousine(name, cousineData);
                     entityManager.persistAndFlush(storeData);
                 });
 
@@ -49,5 +56,24 @@ public class JpaStoreRepositoryTest {
 
         // then
         assertThat(actual).hasSize(2).extracting("name").containsOnly("aAbc", "abCc");
+    }
+
+    @Test
+    public void findProductsByIdReturnsAllProducts() {
+        // given
+        StoreData storeData = entityManager.persistFlushFind(StoreData.withNameAndCousine("name", cousineData));
+
+        // and
+        Arrays.stream(new String[]{"product A", "product B"})
+                .forEach(name -> {
+                    final ProductData productData = ProductData.withNameAndStore(name, storeData);
+                    entityManager.persistAndFlush(productData);
+                });
+
+        // when
+        List<ProductData> actual = repository.findProductsById(storeData.getId());
+
+        // then
+        assertThat(actual).hasSize(2).extracting("name").containsOnly("product A", "product B");
     }
 }

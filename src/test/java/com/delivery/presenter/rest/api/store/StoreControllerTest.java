@@ -1,8 +1,12 @@
 package com.delivery.presenter.rest.api.store;
 
+import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.NotFoundException;
+import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
 import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
@@ -21,12 +25,12 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,22 +53,24 @@ public class StoreControllerTest {
     @MockBean
     private GetStoreByIdentityUseCase getStoreByIdentityUseCase;
 
+    @MockBean
+    private GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase;
+
     @Autowired
     private MockMvc mockMvc;
 
     @Configuration
-    @ComponentScan("com.delivery.presenter.rest.api.store")
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.store", "com.delivery.presenter.rest.api.common"})
     static class Config {
     }
 
     @Test
     public void getAllStoresReturnsOk() throws Exception {
         // given
-        List<Store> stores = TestCoreEntityGenerator.randomStores();
-        Store firstStore = stores.get(0);
+        Store store = TestCoreEntityGenerator.randomStore();
 
         // and
-        doReturn(stores)
+        doReturn(Collections.singletonList(store))
                 .when(getAllStoresUseCase)
                 .execute(null);
 
@@ -75,11 +81,11 @@ public class StoreControllerTest {
         mockMvc.perform(payload)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(stores.size())))
-                .andExpect(jsonPath("$[0].id", is(firstStore.getId().getNumber().intValue())))
-                .andExpect(jsonPath("$[0].name", is(firstStore.getName())))
-                .andExpect(jsonPath("$[0].address", is(firstStore.getAddress())))
-                .andExpect(jsonPath("$[0].cousineId", is(firstStore.getCousine().getId().getNumber().intValue())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(store.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$[0].name", is(store.getName())))
+                .andExpect(jsonPath("$[0].address", is(store.getAddress())))
+                .andExpect(jsonPath("$[0].cousineId", is(store.getCousine().getId().getNumber().intValue())));
     }
 
     @Test
@@ -127,6 +133,53 @@ public class StoreControllerTest {
                 .andExpect(jsonPath("$[0].name", is(store.getName())))
                 .andExpect(jsonPath("$[0].address", is(store.getAddress())))
                 .andExpect(jsonPath("$[0].cousineId", is(store.getCousine().getId().getNumber().intValue())));
+    }
+
+    @Test
+    public void getProductsByStoreIdReturnsStoreProducts() throws Exception {
+        //given
+        Product product = TestCoreEntityGenerator.randomProduct();
+        Identity id = product.getStore().getId();
+
+        // and
+        doReturn(Collections.singletonList(product))
+                .when(getProductsByStoreIdentityUseCase)
+                .execute(eq(id));
+
+        // when
+        final RequestBuilder payload = asyncRequest("/Store/" + id.getNumber() + "/products");
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(product.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$[0].name", is(product.getName())))
+                .andExpect(jsonPath("$[0].description", is(product.getDescription())))
+                .andExpect(jsonPath("$[0].price", is(product.getPrice())))
+                .andExpect(jsonPath("$[0].storeId", is(id.getNumber().intValue())));
+    }
+
+    @Test
+    public void getProductsByStoreIdReturnsNotFound() throws Exception {
+        //given
+        Identity id = TestCoreEntityGenerator.randomIdentity();
+
+        // and
+        doThrow(new NotFoundException("error"))
+                .when(getProductsByStoreIdentityUseCase)
+                .execute(eq(id));
+
+        // when
+        final RequestBuilder payload = asyncRequest("/Store/" + id.getNumber() + "/products");
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.error", is("true")))
+                .andExpect(jsonPath("$.message", is("Resource not found")));
     }
 
     private RequestBuilder asyncRequest(String url) throws Exception {

@@ -16,8 +16,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @Entity(name = "store")
@@ -43,6 +46,9 @@ public class StoreData {
     @JoinColumn(name = "cousine_id", nullable = false)
     private CousineData cousine;
 
+    @OneToMany(mappedBy = "store")
+    private Set<ProductData> products;
+
     // TODO: test method
     public static Store toStore(StoreData storeData) {
         return new Store(
@@ -59,7 +65,11 @@ public class StoreData {
                 store.getId().getNumber(),
                 store.getName(),
                 store.getAddress(),
-                CousineData.fromCousine(store.getCousine())
-        );
+                CousineData.fromCousine(store.getCousine()),
+                new HashSet<>());
+    }
+
+    public static StoreData withNameAndCousine(String name, CousineData cousineData) {
+        return new StoreData(null, name, name, cousineData, new HashSet<>());
     }
 }

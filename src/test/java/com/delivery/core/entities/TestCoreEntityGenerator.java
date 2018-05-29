@@ -2,6 +2,7 @@ package com.delivery.core.entities;
 
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.github.javafaker.Faker;
 
@@ -35,14 +36,17 @@ public class TestCoreEntityGenerator {
                 randomCousine());
     }
 
-    public static List<Store> randomStores() {
-        return IntStream.rangeClosed(0, randomNumberBetweenFiveAndTen())
-                .mapToObj(number -> randomStore())
-                .map(object -> (Store) object)
-                .collect(Collectors.toList());
+    public static Product randomProduct() {
+        return new Product(
+                randomIdentity(),
+                faker.name().name(),
+                faker.name().fullName(),
+                faker.number().randomDouble(2, 1, 50),
+                randomStore());
     }
 
     private static int randomNumberBetweenFiveAndTen() {
         return faker.number().numberBetween(5, 10);
     }
+
 }

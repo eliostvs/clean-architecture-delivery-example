@@ -1,8 +1,10 @@
 package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.usecases.store.StoreRepository;
+import com.delivery.data.db.jpa.entities.ProductData;
 import com.delivery.data.db.jpa.entities.StoreData;
 import org.springframework.stereotype.Repository;
 
@@ -41,5 +43,14 @@ public class StoreRepositoryImp implements StoreRepository {
         return repository
                 .findById(id.getNumber())
                 .map(StoreData::toStore);
+    }
+
+    @Override
+    public List<Product> getProductsByIdentity(Identity id) {
+        return repository
+                .findProductsById(id.getNumber())
+                .parallelStream()
+                .map(ProductData::toProduct)
+                .collect(Collectors.toList());
     }
 }

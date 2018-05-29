@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -32,12 +31,12 @@ public class CousineController implements CousineResource {
     }
 
     @Override
-    public CompletableFuture<Set<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
+    public CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getStoresByCousineIdentityUserCase,
                 id,
                 Identity::new,
-                (store) -> StoreResponse.fromStore(id, store));
+                StoreResponse::fromStore);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.delivery.presenter.rest.api.store;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
+import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -38,6 +40,9 @@ public class StoreControllerTest {
 
     @MockBean
     private GetAllStoresUseCase getAllStoresUseCase;
+
+    @MockBean
+    private SearchStoresByNameUseCase searchStoresByNameUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,6 +75,30 @@ public class StoreControllerTest {
                 .andExpect(jsonPath("$[0].name", is(firstStore.getName())))
                 .andExpect(jsonPath("$[0].address", is(firstStore.getAddress())))
                 .andExpect(jsonPath("$[0].cousineId", is(firstStore.getCousine().getId().getNumber().intValue())));
+    }
+
+    @Test
+    public void getAllStoresNameMatchingReturnsStores() throws Exception {
+        //given
+        Store store = TestCoreEntityGenerator.randomStore();
+
+        // and
+        doReturn(Collections.singletonList(store))
+                .when(searchStoresByNameUseCase)
+                .execute("abc");
+
+        // when
+        final RequestBuilder payload = asyncRequest("/Store/search/abc");
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(store.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$[0].name", is(store.getName())))
+                .andExpect(jsonPath("$[0].address", is(store.getAddress())))
+                .andExpect(jsonPath("$[0].cousineId", is(store.getCousine().getId().getNumber().intValue())));
     }
 
     private RequestBuilder asyncRequest(String url) throws Exception {

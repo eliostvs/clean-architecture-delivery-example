@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
@@ -86,10 +85,10 @@ public class CousineControllerTest {
     public void getStoresByCousineIdReturnsOk() throws Exception {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        final Identity id = TestCoreEntityGenerator.randomIdentity();
+        final Identity id = store.getCousine().getId();
 
         // and
-        doReturn(new HashSet<>(singletonList(store)))
+        doReturn(singletonList(store))
                 .when(getStoresByCousineIdentityUserCase)
                 .execute(eq(id));
 

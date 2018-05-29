@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/Cousine")
 public interface CousineResource {
     @GetMapping("/{id}/stores")
-    CompletableFuture<Set<StoreResponse>> getStoresByCousineId(@PathVariable Long id);
+    CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id);
 
     @GetMapping
     CompletableFuture<List<CousineResponse>> getAllCousines();

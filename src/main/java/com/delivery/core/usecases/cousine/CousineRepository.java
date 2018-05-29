@@ -5,10 +5,9 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Store;
 
 import java.util.List;
-import java.util.Set;
 
 public interface CousineRepository {
-    Set<Store> getStoresByIdentity(Identity id);
+    List<Store> getStoresByIdentity(Identity id);
 
     List<Cousine> getAll();
 

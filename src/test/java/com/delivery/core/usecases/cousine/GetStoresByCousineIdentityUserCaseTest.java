@@ -1,17 +1,17 @@
 package com.delivery.core.usecases.cousine;
 
-import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,18 +30,15 @@ public class GetStoresByCousineIdentityUserCaseTest {
     public void returnsStoresWhenCousineIdIsFound() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        Set<Store> stores = new HashSet<>();
-        stores.add(store);
-
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doReturn(stores)
+        doReturn(Collections.singletonList(store))
                 .when(repository)
                 .getStoresByIdentity(id);
 
         // when
-        final Set<Store> actual = userCase.execute(id);
+        final List<Store> actual = userCase.execute(id);
 
         // then
         assertThat(actual).containsOnly(store);
@@ -53,7 +50,7 @@ public class GetStoresByCousineIdentityUserCaseTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doReturn(new HashSet<>())
+        doReturn(Collections.emptyList())
                 .when(repository)
                 .getStoresByIdentity(id);
 

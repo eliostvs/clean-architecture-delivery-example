@@ -9,7 +9,6 @@ import com.delivery.data.db.jpa.entities.StoreData;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -22,12 +21,12 @@ public class CousineRepositoryImp implements CousineRepository {
     }
 
     @Override
-    public Set<Store> getStoresByIdentity(Identity id) {
+    public List<Store> getStoresByIdentity(Identity id) {
         return jpaCousineRepository
                 .findStoresById(id.getNumber())
                 .parallelStream()
                 .map(StoreData::toStore)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

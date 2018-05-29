@@ -24,4 +24,13 @@ public class StoreRepositoryImp implements StoreRepository {
                 .map(StoreData::toStore)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Store> searchByName(String searchText) {
+        return repository
+                .findByNameContainingIgnoreCase(searchText)
+                .parallelStream()
+                .map(StoreData::toStore)
+                .collect(Collectors.toList());
+    }
 }

@@ -1,9 +1,9 @@
 package com.delivery.data.db.jpa.repositories;
 
-import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Store;
+import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.data.db.jpa.entities.CousineData;
 import com.delivery.data.db.jpa.entities.StoreData;
 import org.junit.Test;
@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -36,16 +34,14 @@ public class CousineRepositoryImpTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         StoreData storeData = StoreData.fromStore(store);
-        Set<StoreData> stores = new HashSet<>();
-        stores.add(storeData);
 
         // and
-        doReturn(stores)
+        doReturn(Collections.singletonList(storeData))
                 .when(jpaCousineRepository)
                 .findStoresById(id.getNumber());
 
         // when
-        final Set<Store> actual = cousineRepository.getStoresByIdentity(id);
+        final List<Store> actual = cousineRepository.getStoresByIdentity(id);
 
         // then
         assertThat(actual).containsOnly(store);

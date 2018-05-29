@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,8 +31,7 @@ public class JpaCousineRepositoryTest {
     @Configuration
     @AutoConfigurationPackage
     @EntityScan("com.delivery.data.db.jpa.entities")
-    static class Config {
-    }
+    static class Config {}
 
     @Test
     public void findByNameIgnoreCase() {
@@ -73,7 +71,7 @@ public class JpaCousineRepositoryTest {
 
     @Test
     public void getStoresByCousineIdReturnsEmpty() {
-        Set<StoreData> actual = repository.findStoresById(0L);
+        List<StoreData> actual = repository.findStoresById(0L);
 
         assertThat(actual).hasSize(0);
     }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface StoreRepository {
     List<Store> getAll();
+
+    List<Store> searchByName(String searchText);
 }

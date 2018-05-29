@@ -41,4 +41,23 @@ public class StoreRepositoryImpTest {
         // then
         assertThat(actual).containsOnly(store);
     }
+
+    @Test
+    public void searchStoresByNameReturnsAllMatchStores() {
+        // given
+        String text = "abc";
+        Store store = TestCoreEntityGenerator.randomStore();
+        StoreData storeData = StoreData.fromStore(store);
+
+        // and
+        doReturn(Collections.singletonList(storeData))
+                .when(jpaStoreRepository)
+                .findByNameContainingIgnoreCase(text);
+
+        // when
+        List<Store> actual = storeRepository.searchByName(text);
+
+        // then
+        assertThat(actual).containsOnly(store);
+    }
 }

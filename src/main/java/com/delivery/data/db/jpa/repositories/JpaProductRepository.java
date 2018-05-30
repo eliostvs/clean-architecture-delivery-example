@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface JpaProductRepository extends JpaRepository<ProductData, Long> {
-    List<ProductData> findByNameContainingIgnoreCase(String name);
+    List<ProductData> findByNameContainingOrDescriptionContainingAllIgnoreCase(String name, String description);
 }

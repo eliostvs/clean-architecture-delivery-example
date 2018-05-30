@@ -4,7 +4,7 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
-import com.delivery.core.usecases.product.SearchProductsByNameUseCase;
+import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.presenter.rest.api.entities.ProductResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,16 +17,16 @@ public class ProductController implements ProductResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllProductsUseCase getAllProductsUseCase;
     private GetProductByIdentityUseCase getProductByIdentityUseCase;
-    private SearchProductsByNameUseCase searchProductsByNameUseCase;
+    private SearchProductsByNameOrDescriptionUseCase searchProductsByNameOrDescriptionUseCase;
 
     public ProductController(UseCaseExecutor useCaseExecutor,
                              GetAllProductsUseCase getAllProductsUseCase,
                              GetProductByIdentityUseCase getProductByIdentityUseCase,
-                             SearchProductsByNameUseCase searchProductsByNameUseCase) {
+                             SearchProductsByNameOrDescriptionUseCase searchProductsByNameOrDescriptionUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllProductsUseCase = getAllProductsUseCase;
         this.getProductByIdentityUseCase = getProductByIdentityUseCase;
-        this.searchProductsByNameUseCase = searchProductsByNameUseCase;
+        this.searchProductsByNameOrDescriptionUseCase = searchProductsByNameOrDescriptionUseCase;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ProductController implements ProductResource {
     @Override
     public CompletableFuture<List<ProductResponse>> getByMatchingName(@PathVariable String text) {
         return useCaseExecutor.execute(
-                searchProductsByNameUseCase,
+                searchProductsByNameOrDescriptionUseCase,
                 text,
                 (arg) -> arg,
                 ProductResponse::fromDomain);

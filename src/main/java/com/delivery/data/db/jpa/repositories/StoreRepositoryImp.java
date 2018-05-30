@@ -50,7 +50,7 @@ public class StoreRepositoryImp implements StoreRepository {
         return repository
                 .findProductsById(id.getNumber())
                 .parallelStream()
-                .map(ProductData::toDomain)
+                .map(ProductData::from)
                 .collect(Collectors.toList());
     }
 }

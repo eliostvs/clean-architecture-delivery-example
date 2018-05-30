@@ -49,16 +49,16 @@ public class ProductData {
     @JoinColumn(name = "store_id", nullable = false)
     private StoreData store;
 
-    public static ProductData withNameAndStore(String name, StoreData storeData) {
+    public static ProductData newInstance(String name, String description, StoreData storeData) {
         return new ProductData(
                 null,
                 name,
-                name,
+                description,
                 0d,
                 storeData);
     }
 
-    public static ProductData fromDomain(Product product) {
+    public static ProductData from(Product product) {
         return new ProductData(
                 convertId(product.getId()),
                 product.getName(),
@@ -67,7 +67,7 @@ public class ProductData {
                 StoreData.fromDomain(product.getStore()));
     }
 
-    public static Product toDomain(ProductData productData) {
+    public static Product from(ProductData productData) {
         return new Product(
                 new Identity(productData.getId()),
                 productData.getName(),

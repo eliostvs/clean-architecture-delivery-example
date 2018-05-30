@@ -5,7 +5,7 @@ import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
-import com.delivery.core.usecases.product.SearchProductsByNameUseCase;
+import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class ProductControllerTest extends BaseControllerTest {
     private GetAllProductsUseCase getAllProductsUseCase;
 
     @MockBean
-    private SearchProductsByNameUseCase searchProductsByNameUseCase;
+    private SearchProductsByNameOrDescriptionUseCase searchProductsByNameOrDescriptionUseCase;
 
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
@@ -68,7 +68,7 @@ public class ProductControllerTest extends BaseControllerTest {
 
         // and
         doReturn(Collections.singletonList(product))
-                .when(searchProductsByNameUseCase)
+                .when(searchProductsByNameOrDescriptionUseCase)
                 .execute(eq("abc"));
 
         // when

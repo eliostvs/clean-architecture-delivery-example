@@ -104,7 +104,7 @@ public class StoreRepositoryImpTest {
     public void getProductsByIdentityReturnsProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        ProductData productData = ProductData.fromDomain(product);
+        ProductData productData = ProductData.from(product);
         Identity id = product.getStore().getId();
 
         // and

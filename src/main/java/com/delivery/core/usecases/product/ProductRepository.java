@@ -11,5 +11,5 @@ public interface ProductRepository {
 
     Optional<Product> getByIdentity(Identity id);
 
-    List<Product> searchByName(String searchText);
+    List<Product> searchByNameOrDescription(String searchText);
 }

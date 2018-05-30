@@ -30,16 +30,16 @@ public class ProductRepositoryImpTest {
     public void searchByNameReturnMatchingProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        ProductData productData = ProductData.fromDomain(product);
+        ProductData productData = ProductData.from(product);
         String searchText = "abc";
 
         // and
         doReturn(Collections.singletonList(productData))
                 .when(jpaProductRepository)
-                .findByNameContainingIgnoreCase(searchText);
+                .findByNameContainingOrDescriptionContainingAllIgnoreCase(searchText, searchText);
 
         // when
-        List<Product> actual = productRepository.searchByName(searchText);
+        List<Product> actual = productRepository.searchByNameOrDescription(searchText);
 
         // then
         assertThat(actual).containsOnly(product);
@@ -67,7 +67,7 @@ public class ProductRepositoryImpTest {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
         Identity id = product.getId();
-        ProductData productData = ProductData.fromDomain(product);
+        ProductData productData = ProductData.from(product);
 
         // and
         doReturn(Optional.of(productData))
@@ -86,7 +86,7 @@ public class ProductRepositoryImpTest {
     public void getAllReturnsAllProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        ProductData productData = ProductData.fromDomain(product);
+        ProductData productData = ProductData.from(product);
 
         // and
         doReturn(Collections.singletonList(productData))

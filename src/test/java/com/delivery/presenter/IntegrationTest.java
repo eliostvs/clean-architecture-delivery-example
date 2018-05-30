@@ -140,7 +140,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void searchProductByName() {
+    public void searchProductByNameOrDescription() {
         // given
         final String url = base.toString() + "/Product/search/temp";
 

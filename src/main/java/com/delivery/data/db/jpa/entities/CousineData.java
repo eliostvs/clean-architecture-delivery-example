@@ -58,14 +58,14 @@ public class CousineData {
         return new CousineData(null, name, new HashSet<>());
     }
 
-    // TODO: test toDomain
+    // TODO: test from
     public static Cousine toDomain(CousineData cousineData) {
         return new Cousine(
                 new Identity(cousineData.getId()),
                 cousineData.getName());
     }
 
-    // TODO: test fromDomain
+    // TODO: test from
     public static CousineData fromDomain(Cousine cousine) {
         return new CousineData(
                 convertId(cousine.getId()),

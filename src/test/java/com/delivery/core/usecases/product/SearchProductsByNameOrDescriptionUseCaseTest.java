@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SearchProductsByNameUseCaseTest {
+public class SearchProductsByNameOrDescriptionUseCaseTest {
 
     @InjectMocks
-    private SearchProductsByNameUseCase useCase;
+    private SearchProductsByNameOrDescriptionUseCase useCase;
 
     @Mock
     private ProductRepository repository;
@@ -32,7 +32,7 @@ public class SearchProductsByNameUseCaseTest {
         // and
         doReturn(Collections.singletonList(product))
                 .when(repository)
-                .searchByName(searchText);
+                .searchByNameOrDescription(searchText);
 
         // when
         List<Product> actual = useCase.execute(searchText);

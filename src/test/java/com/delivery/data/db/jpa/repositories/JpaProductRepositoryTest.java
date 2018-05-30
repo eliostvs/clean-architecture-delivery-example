@@ -3,6 +3,7 @@ package com.delivery.data.db.jpa.repositories;
 import com.delivery.data.db.jpa.entities.CousineData;
 import com.delivery.data.db.jpa.entities.ProductData;
 import com.delivery.data.db.jpa.entities.StoreData;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,13 @@ public class JpaProductRepositoryTest {
     @Configuration
     @AutoConfigurationPackage
     @EntityScan("com.delivery.data.db.jpa.entities")
-    static class Config{}
+    static class Config {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        repository.deleteAll();
+    }
 
     @Test
     public void findByNameContainingIgnoreCase() {
@@ -39,15 +46,21 @@ public class JpaProductRepositoryTest {
         CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance("name"));
         StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", cousineData));
 
-        Arrays.stream(new String[]{"aAbc", "abCc", "abBc"})
+        Arrays.stream(new String[]{"AABC", "ABBC", "ABCC"})
                 .forEach(name -> {
-                    entityManager.persistAndFlush(ProductData.withNameAndStore(name, storeData));
+                    String description = name;
+
+                    if ("ABBC".equals(name)) {
+                        description = "DESCRIPTION";
+                    }
+
+                    entityManager.persistAndFlush(ProductData.newInstance(name, description, storeData));
                 });
 
         // when
-        List<ProductData> actual = repository.findByNameContainingIgnoreCase("abc");
+        List<ProductData> actual = repository.findByNameContainingOrDescriptionContainingAllIgnoreCase("abc", "des");
 
         // then
-        assertThat(actual).hasSize(2).extracting("name").containsOnly("aAbc", "abCc");
+        assertThat(actual).hasSize(3).extracting("name").containsOnly("AABC", "ABBC", "ABCC");
     }
 }

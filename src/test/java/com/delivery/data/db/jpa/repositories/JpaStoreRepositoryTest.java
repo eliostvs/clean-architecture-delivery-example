@@ -66,7 +66,7 @@ public class JpaStoreRepositoryTest {
         // and
         Arrays.stream(new String[]{"product A", "product B"})
                 .forEach(name -> {
-                    final ProductData productData = ProductData.withNameAndStore(name, storeData);
+                    final ProductData productData = ProductData.newInstance(name, "desc", storeData);
                     entityManager.persistAndFlush(productData);
                 });
 

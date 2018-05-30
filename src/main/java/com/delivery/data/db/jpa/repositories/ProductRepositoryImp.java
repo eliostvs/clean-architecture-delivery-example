@@ -23,7 +23,7 @@ public class ProductRepositoryImp implements ProductRepository {
         return repository
                 .findAll()
                 .parallelStream()
-                .map(ProductData::toDomain)
+                .map(ProductData::from)
                 .collect(Collectors.toList());
     }
 
@@ -31,15 +31,15 @@ public class ProductRepositoryImp implements ProductRepository {
     public Optional<Product> getByIdentity(Identity id) {
         return repository
                 .findById(id.getNumber())
-                .map(ProductData::toDomain);
+                .map(ProductData::from);
     }
 
     @Override
-    public List<Product> searchByName(String searchText) {
+    public List<Product> searchByNameOrDescription(String searchText) {
         return repository
-                .findByNameContainingIgnoreCase(searchText)
+                .findByNameContainingOrDescriptionContainingAllIgnoreCase(searchText, searchText)
                 .parallelStream()
-                .map(ProductData::toDomain)
+                .map(ProductData::from)
                 .collect(Collectors.toList());
     }
 }

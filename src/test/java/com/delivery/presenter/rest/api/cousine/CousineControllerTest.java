@@ -8,6 +8,7 @@ import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
+import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -31,15 +31,13 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CousineController.class)
-public class CousineControllerTest {
+public class CousineControllerTest extends BaseControllerTest {
 
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
@@ -55,6 +53,11 @@ public class CousineControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Override
+    protected MockMvc getMockMvc() {
+        return mockMvc;
+    }
 
     @Configuration
     @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.cousine", "com.delivery.presenter.rest.api.common"})
@@ -150,9 +153,5 @@ public class CousineControllerTest {
                 .andExpect(jsonPath("$", hasSize(cousines.size())))
                 .andExpect(jsonPath("$[0].id", is(firstCousine.getId().getNumber().intValue())))
                 .andExpect(jsonPath("$[0].name", is(firstCousine.getName())));
-    }
-
-    private RequestBuilder asyncRequest(String url) throws Exception {
-        return asyncDispatch(mockMvc.perform(get(url)).andExpect(MockMvcResultMatchers.request().asyncStarted()).andReturn());
     }
 }

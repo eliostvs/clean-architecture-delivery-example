@@ -9,6 +9,7 @@ import com.delivery.core.usecases.store.GetAllStoresUseCase;
 import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
 import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
+import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 
@@ -31,15 +31,13 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(StoreController.class)
-public class StoreControllerTest {
+public class StoreControllerTest extends BaseControllerTest {
 
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
@@ -58,6 +56,11 @@ public class StoreControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Override
+    protected MockMvc getMockMvc() {
+        return mockMvc;
+    }
 
     @Configuration
     @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.store", "com.delivery.presenter.rest.api.common"})
@@ -180,9 +183,5 @@ public class StoreControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.error", is("true")))
                 .andExpect(jsonPath("$.message", is("Resource not found")));
-    }
-
-    private RequestBuilder asyncRequest(String url) throws Exception {
-        return asyncDispatch(mockMvc.perform(get(url)).andExpect(MockMvcResultMatchers.request().asyncStarted()).andReturn());
     }
 }

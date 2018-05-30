@@ -33,4 +33,13 @@ public class ProductRepositoryImp implements ProductRepository {
                 .findById(id.getNumber())
                 .map(ProductData::toDomain);
     }
+
+    @Override
+    public List<Product> searchByName(String searchText) {
+        return repository
+                .findByNameContainingIgnoreCase(searchText)
+                .parallelStream()
+                .map(ProductData::toDomain)
+                .collect(Collectors.toList());
+    }
 }

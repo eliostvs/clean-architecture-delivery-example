@@ -138,4 +138,16 @@ public class IntegrationTest {
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
+    @Test
+    public void searchProductByName() {
+        // given
+        final String url = base.toString() + "/Product/search/temp";
+
+        // when
+        ResponseEntity<String> response = template.getForEntity(url, String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

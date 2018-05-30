@@ -27,6 +27,25 @@ public class ProductRepositoryImpTest {
     private JpaProductRepository jpaProductRepository;
 
     @Test
+    public void searchByNameReturnMatchingProducts() {
+        // given
+        Product product = TestCoreEntityGenerator.randomProduct();
+        ProductData productData = ProductData.fromDomain(product);
+        String searchText = "abc";
+
+        // and
+        doReturn(Collections.singletonList(productData))
+                .when(jpaProductRepository)
+                .findByNameContainingIgnoreCase(searchText);
+
+        // when
+        List<Product> actual = productRepository.searchByName(searchText);
+
+        // then
+        assertThat(actual).containsOnly(product);
+    }
+
+    @Test
     public void getByIdentityReturnsEmpty() {
         // given
         Identity id = TestCoreEntityGenerator.randomIdentity();

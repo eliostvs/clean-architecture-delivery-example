@@ -10,4 +10,6 @@ public interface ProductRepository {
     List<Product> getAll();
 
     Optional<Product> getByIdentity(Identity id);
+
+    List<Product> searchByName(String searchText);
 }

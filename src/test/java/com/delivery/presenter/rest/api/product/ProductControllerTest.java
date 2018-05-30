@@ -5,6 +5,7 @@ import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
+import com.delivery.core.usecases.product.SearchProductsByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
@@ -40,6 +41,9 @@ public class ProductControllerTest extends BaseControllerTest {
     @MockBean
     private GetAllProductsUseCase getAllProductsUseCase;
 
+    @MockBean
+    private SearchProductsByNameUseCase searchProductsByNameUseCase;
+
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
 
@@ -54,6 +58,32 @@ public class ProductControllerTest extends BaseControllerTest {
     @Configuration
     @ComponentScan("com.delivery.presenter.rest.api.product")
     static class Config {
+    }
+
+    @Test
+    public void getByMatchingNameReturnsProducts() throws Exception {
+        // given
+        Product product = TestCoreEntityGenerator.randomProduct();
+        Store store = product.getStore();
+
+        // and
+        doReturn(Collections.singletonList(product))
+                .when(searchProductsByNameUseCase)
+                .execute(eq("abc"));
+
+        // when
+        RequestBuilder payload = asyncRequest("/Product/search/abc");
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$.[0].id", is(product.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$.[0].name", is(product.getName())))
+                .andExpect(jsonPath("$.[0].description", is(product.getDescription())))
+                .andExpect(jsonPath("$.[0].price", is(product.getPrice())))
+                .andExpect(jsonPath("$.[0].storeId", is(store.getId().getNumber().intValue())));
     }
 
     @Test

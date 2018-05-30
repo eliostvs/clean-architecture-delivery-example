@@ -17,4 +17,7 @@ public interface ProductResource {
 
     @GetMapping("/{id}")
     CompletableFuture<ProductResponse> getByIdentity(@PathVariable Long id);
+
+    @GetMapping("/search/{text}")
+    CompletableFuture<List<ProductResponse>> getByMatchingName(@PathVariable String text);
 }

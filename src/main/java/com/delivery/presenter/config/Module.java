@@ -7,6 +7,7 @@ import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
 import com.delivery.core.usecases.product.ProductRepository;
+import com.delivery.core.usecases.product.SearchProductsByNameUseCase;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
 import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
 import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
@@ -17,6 +18,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean
+    public SearchProductsByNameUseCase searchProductsByNameUseCase(ProductRepository repository) {
+        return new SearchProductsByNameUseCase(repository);
+    }
 
     @Bean
     public GetProductByIdentityUseCase getProductByIdentityUseCase(ProductRepository repository) {

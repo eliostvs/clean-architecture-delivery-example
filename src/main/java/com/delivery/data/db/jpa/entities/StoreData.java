@@ -50,22 +50,22 @@ public class StoreData {
     private Set<ProductData> products;
 
     // TODO: test method
-    public static Store toStore(StoreData storeData) {
+    public static Store toDomain(StoreData storeData) {
         return new Store(
                 new Identity(storeData.getId()),
                 storeData.getName(),
                 storeData.getAddress(),
-                CousineData.toCousine(storeData.getCousine())
+                CousineData.toDomain(storeData.getCousine())
         );
     }
 
     // TODO: test method
-    public static StoreData fromStore(Store store) {
+    public static StoreData fromDomain(Store store) {
         return new StoreData(
                 store.getId().getNumber(),
                 store.getName(),
                 store.getAddress(),
-                CousineData.fromCousine(store.getCousine()),
+                CousineData.fromDomain(store.getCousine()),
                 new HashSet<>());
     }
 

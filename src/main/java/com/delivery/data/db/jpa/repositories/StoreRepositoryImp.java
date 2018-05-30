@@ -25,7 +25,7 @@ public class StoreRepositoryImp implements StoreRepository {
         return repository
                 .findAll()
                 .parallelStream()
-                .map(StoreData::toStore)
+                .map(StoreData::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public class StoreRepositoryImp implements StoreRepository {
         return repository
                 .findByNameContainingIgnoreCase(searchText)
                 .parallelStream()
-                .map(StoreData::toStore)
+                .map(StoreData::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -42,7 +42,7 @@ public class StoreRepositoryImp implements StoreRepository {
     public Optional<Store> getByIdentity(Identity id) {
         return repository
                 .findById(id.getNumber())
-                .map(StoreData::toStore);
+                .map(StoreData::toDomain);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class StoreRepositoryImp implements StoreRepository {
         return repository
                 .findProductsById(id.getNumber())
                 .parallelStream()
-                .map(ProductData::toProduct)
+                .map(ProductData::toDomain)
                 .collect(Collectors.toList());
     }
 }

@@ -33,7 +33,7 @@ public class CousineRepositoryImpTest {
         Store store = TestCoreEntityGenerator.randomStore();
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
-        StoreData storeData = StoreData.fromStore(store);
+        StoreData storeData = StoreData.fromDomain(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -51,7 +51,7 @@ public class CousineRepositoryImpTest {
     public void getAllReturnsAllCousines() {
         // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        CousineData cousineData = CousineData.fromCousine(cousine);
+        CousineData cousineData = CousineData.fromDomain(cousine);
 
         // and
         doReturn(Collections.singletonList(cousineData))
@@ -68,7 +68,7 @@ public class CousineRepositoryImpTest {
     public void searchCousineByNameReturnsAllCousines() {
         // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        CousineData cousineData = CousineData.fromCousine(cousine);
+        CousineData cousineData = CousineData.fromDomain(cousine);
         String search = "abc";
 
         // and

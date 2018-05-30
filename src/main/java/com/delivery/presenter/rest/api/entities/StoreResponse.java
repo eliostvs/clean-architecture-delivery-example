@@ -15,7 +15,7 @@ public class StoreResponse {
     private final String address;
     private final Long cousineId;
 
-    public static StoreResponse fromStore(Store store) {
+    public static StoreResponse fromDomain(Store store) {
         return new StoreResponse(
                 store.getId().getNumber(),
                 store.getName(),
@@ -24,10 +24,10 @@ public class StoreResponse {
         );
     }
 
-    public static List<StoreResponse> fromStore(List<Store> stores) {
+    public static List<StoreResponse> fromDomain(List<Store> stores) {
         return stores
                 .parallelStream()
-                .map(StoreResponse::fromStore)
+                .map(StoreResponse::fromDomain)
                 .collect(Collectors.toList());
     }
 }

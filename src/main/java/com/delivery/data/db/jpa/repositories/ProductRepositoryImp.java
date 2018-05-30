@@ -21,7 +21,7 @@ public class ProductRepositoryImp implements ProductRepository {
         return repository
                 .findAll()
                 .parallelStream()
-                .map(ProductData::toProduct)
+                .map(ProductData::toDomain)
                 .collect(Collectors.toList());
     }
 }

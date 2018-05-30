@@ -28,7 +28,7 @@ public class ProductRepositoryImpTest {
     public void getAllReturnsAllProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        ProductData productData = ProductData.fromProduct(product);
+        ProductData productData = ProductData.fromDomain(product);
 
         // and
         doReturn(Collections.singletonList(productData))

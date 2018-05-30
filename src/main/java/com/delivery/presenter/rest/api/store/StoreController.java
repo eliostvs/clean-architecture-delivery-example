@@ -41,7 +41,7 @@ public class StoreController implements StoreResource {
                 getAllStoresUseCase,
                 null,
                 (arg) -> null,
-                StoreResponse::fromStore);
+                StoreResponse::fromDomain);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class StoreController implements StoreResource {
                 searchStoresByNameUseCase,
                 text,
                 (arg) -> arg,
-                StoreResponse::fromStore);
+                StoreResponse::fromDomain);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class StoreController implements StoreResource {
                 getStoreByIdentityUseCase,
                 id,
                 Identity::new,
-                StoreResponse::fromStore);
+                StoreResponse::fromDomain);
     }
 
     @Override
@@ -68,6 +68,6 @@ public class StoreController implements StoreResource {
                 getProductsByStoreIdentityUseCase,
                 id,
                 Identity::new,
-                ProductResponse::fromProduct);
+                ProductResponse::fromDomain);
     }
 }

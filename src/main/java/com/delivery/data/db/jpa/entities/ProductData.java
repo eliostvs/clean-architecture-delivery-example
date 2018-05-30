@@ -58,21 +58,21 @@ public class ProductData {
                 storeData);
     }
 
-    public static ProductData fromProduct(Product product) {
+    public static ProductData fromDomain(Product product) {
         return new ProductData(
                 convertId(product.getId()),
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                StoreData.fromStore(product.getStore()));
+                StoreData.fromDomain(product.getStore()));
     }
 
-    public static Product toProduct(ProductData productData) {
+    public static Product toDomain(ProductData productData) {
         return new Product(
                 new Identity(productData.getId()),
                 productData.getName(),
                 productData.getDescription(),
                 productData.getPrice(),
-                StoreData.toStore(productData.getStore()));
+                StoreData.toDomain(productData.getStore()));
     }
 }

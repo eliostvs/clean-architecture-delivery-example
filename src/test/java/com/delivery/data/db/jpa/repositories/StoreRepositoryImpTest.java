@@ -32,7 +32,7 @@ public class StoreRepositoryImpTest {
     public void getAllReturnsAllStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromStore(store);
+        StoreData storeData = StoreData.fromDomain(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -51,7 +51,7 @@ public class StoreRepositoryImpTest {
         // given
         String text = "abc";
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromStore(store);
+        StoreData storeData = StoreData.fromDomain(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -69,7 +69,7 @@ public class StoreRepositoryImpTest {
     public void getStoreByIdentityReturnsOptionalStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromStore(store);
+        StoreData storeData = StoreData.fromDomain(store);
 
         // and
         doReturn(Optional.of(storeData))
@@ -104,7 +104,7 @@ public class StoreRepositoryImpTest {
     public void getProductsByIdentityReturnsProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        ProductData productData = ProductData.fromProduct(product);
+        ProductData productData = ProductData.fromDomain(product);
         Identity id = product.getStore().getId();
 
         // and

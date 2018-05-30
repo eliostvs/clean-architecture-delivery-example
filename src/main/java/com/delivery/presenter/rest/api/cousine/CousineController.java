@@ -36,7 +36,7 @@ public class CousineController implements CousineResource {
                 getStoresByCousineIdentityUserCase,
                 id,
                 Identity::new,
-                StoreResponse::fromStore);
+                StoreResponse::fromDomain);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CousineController implements CousineResource {
                 getAllCousinesUseCase,
                 null,
                 (arg) -> null,
-                CousineResponse::fromCousine);
+                CousineResponse::fromDomain);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class CousineController implements CousineResource {
                 getAllCousinesByNameMatching,
                 text,
                 (searchText) -> searchText,
-                CousineResponse::fromCousine);
+                CousineResponse::fromDomain);
     }
 }

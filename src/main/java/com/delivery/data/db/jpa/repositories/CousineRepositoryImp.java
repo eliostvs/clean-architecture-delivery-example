@@ -25,7 +25,7 @@ public class CousineRepositoryImp implements CousineRepository {
         return jpaCousineRepository
                 .findStoresById(id.getNumber())
                 .parallelStream()
-                .map(StoreData::toStore)
+                .map(StoreData::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public class CousineRepositoryImp implements CousineRepository {
         return jpaCousineRepository
                 .findAll()
                 .parallelStream()
-                .map(CousineData::toCousine)
+                .map(CousineData::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +43,7 @@ public class CousineRepositoryImp implements CousineRepository {
         return jpaCousineRepository
                 .findByNameContainingIgnoreCase(search)
                 .parallelStream()
-                .map(CousineData::toCousine)
+                .map(CousineData::toDomain)
                 .collect(Collectors.toList());
     }
 }

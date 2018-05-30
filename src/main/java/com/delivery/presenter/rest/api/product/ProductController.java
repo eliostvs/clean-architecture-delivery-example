@@ -25,6 +25,6 @@ public class ProductController implements ProductResource {
                 getAllProductsUseCase,
                 null,
                 (arg) -> null,
-                ProductResponse::fromProduct);
+                ProductResponse::fromDomain);
     }
 }

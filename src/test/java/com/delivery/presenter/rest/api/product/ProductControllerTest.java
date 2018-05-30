@@ -4,6 +4,7 @@ import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
+import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,14 +34,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest extends BaseControllerTest {
 
+    @MockBean
+    private GetProductByIdentityUseCase getProductByIdentityUseCase;
+
+    @MockBean
+    private GetAllProductsUseCase getAllProductsUseCase;
+
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private GetAllProductsUseCase getAllProductsUseCase;
 
     @Override
     protected MockMvc getMockMvc() {
@@ -75,5 +80,31 @@ public class ProductControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.[0].description", is(product.getDescription())))
                 .andExpect(jsonPath("$.[0].price", is(product.getPrice())))
                 .andExpect(jsonPath("$.[0].storeId", is(store.getId().getNumber().intValue())));
+    }
+
+    @Test
+    public void getProductByIdentityReturnsOk() throws Exception {
+        // given
+        Product product = TestCoreEntityGenerator.randomProduct();
+        Store store = product.getStore();
+
+        // and
+        doReturn(product)
+                .when(getProductByIdentityUseCase)
+                .execute(eq(product.getId()));
+
+        // when
+        RequestBuilder payload = asyncRequest("/Product/" + product.getId().getNumber());
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(product.getId().getNumber().intValue())))
+                .andExpect(jsonPath("$.name", is(product.getName())))
+                .andExpect(jsonPath("$.description", is(product.getDescription())))
+                .andExpect(jsonPath("$.price", is(product.getPrice())))
+                .andExpect(jsonPath("$.storeId", is(store.getId().getNumber().intValue())));
+
     }
 }

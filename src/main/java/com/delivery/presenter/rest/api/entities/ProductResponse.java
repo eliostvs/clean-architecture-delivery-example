@@ -16,7 +16,7 @@ public class ProductResponse {
     private final Double price;
     private final Long storeId;
 
-    private static ProductResponse fromDomain(Product product) {
+    public static ProductResponse fromDomain(Product product) {
         return new ProductResponse(
                 convertId(product.getId()),
                 product.getName(),

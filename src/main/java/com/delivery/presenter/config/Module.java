@@ -29,37 +29,37 @@ public class Module {
     }
 
     @Bean
-    public GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase(StoreRepository storeRepository) {
-        return new GetProductsByStoreIdentityUseCase(storeRepository);
+    public GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase(StoreRepository repository) {
+        return new GetProductsByStoreIdentityUseCase(repository);
     }
 
     @Bean
-    public GetStoreByIdentityUseCase getStoreByIdentityUseCase(StoreRepository storeRepository) {
-        return new GetStoreByIdentityUseCase(storeRepository);
+    public GetStoreByIdentityUseCase getStoreByIdentityUseCase(StoreRepository repository) {
+        return new GetStoreByIdentityUseCase(repository);
     }
 
     @Bean
-    public SearchStoresByNameUseCase searchStoresByNameUseCase(StoreRepository storeRepository) {
-        return new SearchStoresByNameUseCase(storeRepository);
+    public SearchStoresByNameUseCase searchStoresByNameUseCase(StoreRepository repository) {
+        return new SearchStoresByNameUseCase(repository);
     }
 
     @Bean
-    public GetAllStoresUseCase getAllStoresUseCase(StoreRepository storeRepository) {
-        return new GetAllStoresUseCase(storeRepository);
+    public GetAllStoresUseCase getAllStoresUseCase(StoreRepository repository) {
+        return new GetAllStoresUseCase(repository);
     }
 
     @Bean
-    public GetStoresByCousineIdentityUserCase getCousineByIdUserCase(CousineRepository cousineRepository) {
-        return new GetStoresByCousineIdentityUserCase(cousineRepository);
+    public GetStoresByCousineIdentityUserCase getCousineByIdUserCase(CousineRepository repository) {
+        return new GetStoresByCousineIdentityUserCase(repository);
     }
 
     @Bean
-    public GetAllCousinesUseCase getAllCousinesUseCase(CousineRepository cousineRepository) {
-        return new GetAllCousinesUseCase(cousineRepository);
+    public GetAllCousinesUseCase getAllCousinesUseCase(CousineRepository repository) {
+        return new GetAllCousinesUseCase(repository);
     }
 
     @Bean
-    public SearchCousineByNameUseCase searchCousineByNameUseCase(CousineRepository cousineRepository) {
-        return new SearchCousineByNameUseCase(cousineRepository);
+    public SearchCousineByNameUseCase searchCousineByNameUseCase(CousineRepository repository) {
+        return new SearchCousineByNameUseCase(repository);
     }
 }

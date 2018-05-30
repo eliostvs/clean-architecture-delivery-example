@@ -9,6 +9,6 @@ public interface UseCaseExecutor {
     <RQ, RX, I, O> CompletableFuture<RX> execute(
             UseCase<I, O> useCase,
             @Nullable RQ request,
-            @Nullable Function<RQ, I> inputMapper,
-            @Nullable Function<O, RX> outputMapper);
+            Function<RQ, I> inputMapper,
+            Function<O, RX> outputMapper);
 }

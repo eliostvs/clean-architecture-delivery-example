@@ -6,7 +6,7 @@ import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
@@ -43,7 +43,7 @@ public class CousineControllerTest extends BaseControllerTest {
     private UseCaseExecutorImp useCaseExecutor;
 
     @MockBean
-    private GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase;
+    private GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase;
 
     @MockBean
     private GetAllCousinesUseCase getAllCousinesUseCase;
@@ -71,7 +71,7 @@ public class CousineControllerTest extends BaseControllerTest {
 
         // and
         doThrow(new NotFoundException("error"))
-                .when(getStoresByCousineIdentityUserCase)
+                .when(getStoresByCousineIdentityUseCase)
                 .execute(eq(id));
 
         // when
@@ -92,7 +92,7 @@ public class CousineControllerTest extends BaseControllerTest {
 
         // and
         doReturn(singletonList(store))
-                .when(getStoresByCousineIdentityUserCase)
+                .when(getStoresByCousineIdentityUseCase)
                 .execute(eq(id));
 
         // when

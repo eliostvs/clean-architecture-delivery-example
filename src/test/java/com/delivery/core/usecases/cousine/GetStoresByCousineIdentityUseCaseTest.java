@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetStoresByCousineIdentityUserCaseTest {
+public class GetStoresByCousineIdentityUseCaseTest {
 
     @InjectMocks
-    private GetStoresByCousineIdentityUserCase userCase;
+    private GetStoresByCousineIdentityUseCase useCase;
 
     @Mock
     private CousineRepository repository;
@@ -38,7 +38,7 @@ public class GetStoresByCousineIdentityUserCaseTest {
                 .getStoresByIdentity(id);
 
         // when
-        final List<Store> actual = userCase.execute(id);
+        final List<Store> actual = useCase.execute(id);
 
         // then
         assertThat(actual).containsOnly(store);
@@ -55,7 +55,7 @@ public class GetStoresByCousineIdentityUserCaseTest {
                 .getStoresByIdentity(id);
 
         // then
-        assertThatThrownBy(() -> userCase.execute(id))
+        assertThatThrownBy(() -> useCase.execute(id))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("No cousine found for identity: " + id.getNumber());
     }

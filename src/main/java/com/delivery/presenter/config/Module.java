@@ -2,7 +2,7 @@ package com.delivery.presenter.config;
 
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
@@ -55,8 +55,8 @@ public class Module {
     }
 
     @Bean
-    public GetStoresByCousineIdentityUserCase getCousineByIdUserCase(CousineRepository repository) {
-        return new GetStoresByCousineIdentityUserCase(repository);
+    public GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase(CousineRepository repository) {
+        return new GetStoresByCousineIdentityUseCase(repository);
     }
 
     @Bean

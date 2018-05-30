@@ -3,7 +3,7 @@ package com.delivery.presenter.rest.api.cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUserCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.entities.CousineResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
@@ -17,23 +17,23 @@ import java.util.concurrent.CompletableFuture;
 public class CousineController implements CousineResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllCousinesUseCase getAllCousinesUseCase;
-    private GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase;
+    private GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase;
     private SearchCousineByNameUseCase getAllCousinesByNameMatching;
 
     public CousineController(UseCaseExecutor useCaseExecutor,
                              GetAllCousinesUseCase getAllCousinesUseCase,
-                             GetStoresByCousineIdentityUserCase getStoresByCousineIdentityUserCase,
+                             GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase,
                              SearchCousineByNameUseCase getAllCousinesByNameMatching) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllCousinesUseCase = getAllCousinesUseCase;
-        this.getStoresByCousineIdentityUserCase = getStoresByCousineIdentityUserCase;
+        this.getStoresByCousineIdentityUseCase = getStoresByCousineIdentityUseCase;
         this.getAllCousinesByNameMatching = getAllCousinesByNameMatching;
     }
 
     @Override
     public CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getStoresByCousineIdentityUserCase,
+                getStoresByCousineIdentityUseCase,
                 id,
                 Identity::new,
                 StoreResponse::fromDomain);

@@ -7,10 +7,10 @@ import com.delivery.core.usecases.UseCase;
 
 import java.util.List;
 
-public class GetStoresByCousineIdentityUserCase implements UseCase<Identity, List<Store>> {
+public class GetStoresByCousineIdentityUseCase implements UseCase<Identity, List<Store>> {
     private CousineRepository repository;
 
-    public GetStoresByCousineIdentityUserCase(CousineRepository repository) {
+    public GetStoresByCousineIdentityUseCase(CousineRepository repository) {
         this.repository = repository;
     }
 

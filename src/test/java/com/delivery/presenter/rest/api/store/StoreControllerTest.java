@@ -170,7 +170,7 @@ public class StoreControllerTest extends BaseControllerTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doThrow(new NotFoundException("error"))
+        doThrow(new NotFoundException(""))
                 .when(getProductsByStoreIdentityUseCase)
                 .execute(eq(id));
 
@@ -181,7 +181,7 @@ public class StoreControllerTest extends BaseControllerTest {
         mockMvc.perform(payload)
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.error", is("true")))
+                .andExpect(jsonPath("$.success", is(false)))
                 .andExpect(jsonPath("$.message", is("Resource not found")));
     }
 }

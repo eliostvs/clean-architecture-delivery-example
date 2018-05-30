@@ -80,7 +80,7 @@ public class CousineControllerTest extends BaseControllerTest {
         // then
         mockMvc.perform(payload)
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error", is("true")))
+                .andExpect(jsonPath("$.success", is(false)))
                 .andExpect(jsonPath("$.message", is("Resource not found")));
     }
 

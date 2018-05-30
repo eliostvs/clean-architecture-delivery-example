@@ -4,6 +4,7 @@ import com.delivery.core.domain.Cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
+import com.delivery.core.usecases.customer.Customer;
 import com.github.javafaker.Faker;
 
 import java.util.List;
@@ -49,4 +50,12 @@ public class TestCoreEntityGenerator {
         return faker.number().numberBetween(5, 10);
     }
 
+    public static Customer randomCustomer() {
+        return new Customer(
+                randomIdentity(),
+                faker.name().name(),
+                faker.internet().emailAddress(),
+                faker.address().fullAddress(),
+                faker.lorem().fixedString(30));
+    }
 }

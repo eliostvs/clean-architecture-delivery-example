@@ -32,8 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(ProductController.class)
+@WebMvcTest(value = ProductController.class, secure = false)
 public class ProductControllerTest extends BaseControllerTest {
+
+    @Configuration
+    @ComponentScan("com.delivery.presenter.rest.api.product")
+    static class Config {
+    }
 
     @MockBean
     private GetProductByIdentityUseCase getProductByIdentityUseCase;
@@ -53,11 +58,6 @@ public class ProductControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
-    }
-
-    @Configuration
-    @ComponentScan("com.delivery.presenter.rest.api.product")
-    static class Config {
     }
 
     @Test

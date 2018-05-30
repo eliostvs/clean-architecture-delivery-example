@@ -1,5 +1,6 @@
 package com.delivery.presenter;
 
+import com.delivery.presenter.rest.api.entities.SignUpRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -149,5 +150,18 @@ public class IntegrationTest {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void createCustomer() {
+        // given
+        final String url = base.toString() + "/Customer";
+        SignUpRequest request = new SignUpRequest("name", "email@mail.com", "address", "password");
+
+        // when
+        ResponseEntity<String> response = template.postForEntity(url, request, String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
     }
 }

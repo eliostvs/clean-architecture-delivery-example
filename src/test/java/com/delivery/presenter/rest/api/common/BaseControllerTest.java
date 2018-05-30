@@ -1,10 +1,12 @@
 package com.delivery.presenter.rest.api.common;
 
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 public abstract class BaseControllerTest {
@@ -15,5 +17,15 @@ public abstract class BaseControllerTest {
         return asyncDispatch(getMockMvc().perform(get(url))
                 .andExpect(request().asyncStarted())
                 .andReturn());
+    }
+
+    protected RequestBuilder asyncRequest(String url, String payload) throws Exception {
+        // @formatter:off
+        return asyncDispatch(
+                getMockMvc().perform(
+                        post(url).contentType(MediaType.APPLICATION_JSON_UTF8).content(payload))
+                .andExpect(request().asyncStarted())
+                .andReturn());
+        // @formatter:on
     }
 }

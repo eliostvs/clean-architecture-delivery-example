@@ -29,14 +29,14 @@ public class JpaProductRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    @Configuration
     @AutoConfigurationPackage
+    @Configuration
     @EntityScan("com.delivery.data.db.jpa.entities")
     static class Config {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         repository.deleteAll();
     }
 

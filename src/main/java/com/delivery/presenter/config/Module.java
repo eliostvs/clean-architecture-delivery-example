@@ -4,6 +4,8 @@ import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
+import com.delivery.core.usecases.customer.CreateCustomerUseCase;
+import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
 import com.delivery.core.usecases.product.ProductRepository;
@@ -18,6 +20,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean
+    public CreateCustomerUseCase createCustomerUseCase(CustomerRepository repository) {
+        return new CreateCustomerUseCase(repository);
+    }
 
     @Bean
     public SearchProductsByNameOrDescriptionUseCase searchProductsByNameUseCase(ProductRepository repository) {

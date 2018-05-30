@@ -36,8 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(StoreController.class)
+@WebMvcTest(value = StoreController.class, secure = false)
 public class StoreControllerTest extends BaseControllerTest {
+
+    @Configuration
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.store", "com.delivery.presenter.rest.api.common"})
+    static class Config {
+    }
 
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
@@ -60,11 +65,6 @@ public class StoreControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
-    }
-
-    @Configuration
-    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.store", "com.delivery.presenter.rest.api.common"})
-    static class Config {
     }
 
     @Test

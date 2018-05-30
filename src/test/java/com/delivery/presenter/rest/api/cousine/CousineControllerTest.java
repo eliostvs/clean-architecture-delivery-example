@@ -36,8 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(CousineController.class)
+@WebMvcTest(value = CousineController.class, secure = false)
 public class CousineControllerTest extends BaseControllerTest {
+
+    @Configuration
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.cousine", "com.delivery.presenter.rest.api.common"})
+    static class Config {
+    }
 
     @SpyBean
     private UseCaseExecutorImp useCaseExecutor;
@@ -57,11 +62,6 @@ public class CousineControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
-    }
-
-    @Configuration
-    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.cousine", "com.delivery.presenter.rest.api.common"})
-    static class Config {
     }
 
     @Test

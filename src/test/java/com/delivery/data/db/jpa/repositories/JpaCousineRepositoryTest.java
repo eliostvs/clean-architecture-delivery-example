@@ -31,13 +31,14 @@ public class JpaCousineRepositoryTest {
     @Configuration
     @AutoConfigurationPackage
     @EntityScan("com.delivery.data.db.jpa.entities")
-    static class Config {}
+    static class Config {
+    }
 
     @Test
     public void findByNameIgnoreCase() {
         // given
         Arrays.stream(new String[]{"aAbc", "abBc", "abCc"})
-                .forEach(name -> entityManager.persistAndFlush(CousineData.withName(name)));
+                .forEach(name -> entityManager.persistAndFlush(CousineData.newInstance(name)));
 
         // when
         final List<CousineData> actual = repository.findByNameContainingIgnoreCase("abc");
@@ -51,9 +52,9 @@ public class JpaCousineRepositoryTest {
     @Test
     public void getStoresByCousineId() {
         // given
-        CousineData cousine = entityManager.persistFlushFind(CousineData.withName("name"));
-        StoreData storeA = entityManager.persistFlushFind(StoreData.withNameAndCousine("name A", cousine));
-        StoreData storeB = entityManager.persistFlushFind(StoreData.withNameAndCousine("name B", cousine));
+        CousineData cousine = entityManager.persistFlushFind(CousineData.newInstance("name"));
+        StoreData storeA = entityManager.persistFlushFind(StoreData.newInstance("name A", cousine));
+        StoreData storeB = entityManager.persistFlushFind(StoreData.newInstance("name B", cousine));
 
         // and
         cousine.addStore(storeA);

@@ -39,15 +39,15 @@ public class JpaStoreRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        cousineData = entityManager.persistFlushFind(CousineData.withName("name"));
+        cousineData = entityManager.persistFlushFind(CousineData.newInstance("name"));
     }
 
     @Test
-    public void findByNameContainingIgnoreCaseReturnsAllMatchStores() {
+    public void findByNameOrDescriptionContainingIgnoreCaseAllReturnsAllMatchStores() {
         // given
         Arrays.stream(new String[]{"aAbc", "abBc", "abCc"})
                 .forEach(name -> {
-                    final StoreData storeData = StoreData.withNameAndCousine(name, cousineData);
+                    final StoreData storeData = StoreData.newInstance(name, cousineData);
                     entityManager.persistAndFlush(storeData);
                 });
 
@@ -61,7 +61,7 @@ public class JpaStoreRepositoryTest {
     @Test
     public void findProductsByIdReturnsAllProducts() {
         // given
-        StoreData storeData = entityManager.persistFlushFind(StoreData.withNameAndCousine("name", cousineData));
+        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", cousineData));
 
         // and
         Arrays.stream(new String[]{"product A", "product B"})

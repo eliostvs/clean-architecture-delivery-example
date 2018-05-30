@@ -54,7 +54,7 @@ public class CousineData {
         this.stores.add(store);
     }
 
-    public static CousineData withName(String name) {
+    public static CousineData newInstance(String name) {
         return new CousineData(null, name, new HashSet<>());
     }
 

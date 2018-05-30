@@ -69,7 +69,7 @@ public class StoreData {
                 new HashSet<>());
     }
 
-    public static StoreData withNameAndCousine(String name, CousineData cousineData) {
-        return new StoreData(null, name, name, cousineData, new HashSet<>());
+    public static StoreData newInstance(String name, CousineData cousineData) {
+        return new StoreData(null, name, "Address of " + name, cousineData, new HashSet<>());
     }
 }

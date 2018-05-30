@@ -36,8 +36,8 @@ public class JpaProductRepositoryTest {
     @Test
     public void findByNameContainingIgnoreCase() {
         // given
-        CousineData cousineData = entityManager.persistFlushFind(CousineData.withName("name"));
-        StoreData storeData = entityManager.persistFlushFind(StoreData.withNameAndCousine("name", cousineData));
+        CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance("name"));
+        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", cousineData));
 
         Arrays.stream(new String[]{"aAbc", "abCc", "abBc"})
                 .forEach(name -> {

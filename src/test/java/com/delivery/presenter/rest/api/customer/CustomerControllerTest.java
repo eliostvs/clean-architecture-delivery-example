@@ -1,5 +1,6 @@
 package com.delivery.presenter.rest.api.customer;
 
+import com.delivery.core.domain.EmailAlreadyUsedException;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.customer.CreateCustomerInput;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -65,7 +67,34 @@ public class CustomerControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void signInReturnsCreatedWhenIsANewCustomer() throws Exception {
+    public void signUpReturnsBadRequestWhenEmailIsAlreadyBeenUsed() throws Exception {
+        // given
+        final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
+        String payload = signInJson.write(signUpRequest).getJson();
+        CreateCustomerInput createCustomerInput = new CreateCustomerInput(null, null, null, null);
+
+        // and
+        doReturn(createCustomerInput)
+                .when(createCustomerInputMapper)
+                .map(eq(signUpRequest));
+
+        // and
+        doThrow(new EmailAlreadyUsedException("error"))
+                .when(createCustomerUseCase)
+                .execute(createCustomerInput);
+        // when
+        RequestBuilder request = asyncRequest("/Customer", payload);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.message", is("registered successfully")));
+    }
+
+    @Test
+    public void signUpReturnsCreatedWhenIsANewCustomer() throws Exception {
         // given
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
         String payload = signInJson.write(signUpRequest).getJson();

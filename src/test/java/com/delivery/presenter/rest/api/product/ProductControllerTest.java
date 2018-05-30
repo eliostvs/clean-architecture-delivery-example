@@ -1,5 +1,7 @@
 package com.delivery.presenter.rest.api.product;
 
+import com.delivery.core.domain.Identity;
+import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
@@ -27,6 +29,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest extends BaseControllerTest {
 
     @Configuration
-    @ComponentScan("com.delivery.presenter.rest.api.product")
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.product", "com.delivery.presenter.rest.api.common"})
     static class Config {
     }
 
@@ -58,6 +61,27 @@ public class ProductControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
+    }
+
+    @Test
+    public void getProductByIdentityReturnsNotFound() throws Exception {
+        // given
+        Identity id = TestCoreEntityGenerator.randomIdentity();
+
+        // and
+        doThrow(new NotFoundException("Error"))
+                .when(getProductByIdentityUseCase)
+                .execute(eq(id));
+
+        // when
+        RequestBuilder payload = asyncRequest("/Product/" + id.getNumber());
+
+        // then
+        mockMvc.perform(payload)
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.message", is("Error")));
     }
 
     @Test

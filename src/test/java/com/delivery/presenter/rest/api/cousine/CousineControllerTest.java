@@ -70,7 +70,7 @@ public class CousineControllerTest extends BaseControllerTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doThrow(new NotFoundException("error"))
+        doThrow(new NotFoundException("Error"))
                 .when(getStoresByCousineIdentityUseCase)
                 .execute(eq(id));
 
@@ -81,7 +81,7 @@ public class CousineControllerTest extends BaseControllerTest {
         mockMvc.perform(payload)
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success", is(false)))
-                .andExpect(jsonPath("$.message", is("Resource not found")));
+                .andExpect(jsonPath("$.message", is("Error")));
     }
 
     @Test

@@ -170,7 +170,7 @@ public class StoreControllerTest extends BaseControllerTest {
         Identity id = TestCoreEntityGenerator.randomIdentity();
 
         // and
-        doThrow(new NotFoundException(""))
+        doThrow(new NotFoundException("Error"))
                 .when(getProductsByStoreIdentityUseCase)
                 .execute(eq(id));
 
@@ -182,6 +182,6 @@ public class StoreControllerTest extends BaseControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.success", is(false)))
-                .andExpect(jsonPath("$.message", is("Resource not found")));
+                .andExpect(jsonPath("$.message", is("Error")));
     }
 }

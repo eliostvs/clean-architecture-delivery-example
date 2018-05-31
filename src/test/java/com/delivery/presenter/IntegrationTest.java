@@ -1,5 +1,8 @@
 package com.delivery.presenter;
 
+import com.delivery.core.usecases.customer.CreateCustomerInput;
+import com.delivery.core.usecases.customer.CreateCustomerUseCase;
+import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +13,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URL;
@@ -27,6 +31,12 @@ public class IntegrationTest {
 
     @Autowired
     private TestRestTemplate template;
+
+    @Autowired
+    private CreateCustomerUseCase createCustomerUseCase;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Before
     public void setUp() throws Exception {
@@ -156,12 +166,32 @@ public class IntegrationTest {
     public void createCustomer() {
         // given
         final String url = base.toString() + "/Customer";
-        SignUpRequest request = new SignUpRequest("name", "email@mail.com", "address", "password");
+        SignUpRequest request = new SignUpRequest("name", "create@mail.com", "address", "password");
 
         // when
         ResponseEntity<String> response = template.postForEntity(url, request, String.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    public void authenticateCustomer() {
+        // given
+        String email = "auth@email.com";
+        String password = "password";
+        SignInRequest request = new SignInRequest(email, password);
+        final String url = base.toString() + "/Customer/auth";
+
+        // and
+        CreateCustomerInput input = new CreateCustomerInput(
+                "name", email, "address", passwordEncoder.encode(password));
+        createCustomerUseCase.execute(input);
+
+        // when
+        ResponseEntity<String> response = template.postForEntity(url, request, String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

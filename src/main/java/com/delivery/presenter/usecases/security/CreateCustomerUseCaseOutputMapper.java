@@ -1,4 +1,4 @@
-package com.delivery.presenter.rest.api.customer;
+package com.delivery.presenter.usecases.security;
 
 import com.delivery.core.usecases.customer.Customer;
 import com.delivery.presenter.rest.api.entities.ApiResponse;

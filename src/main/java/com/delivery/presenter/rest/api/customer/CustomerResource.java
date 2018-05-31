@@ -1,6 +1,8 @@
 package com.delivery.presenter.rest.api.customer;
 
 import com.delivery.presenter.rest.api.entities.ApiResponse;
+import com.delivery.presenter.rest.api.entities.AuthenticationResponse;
+import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,4 +21,7 @@ public interface CustomerResource {
     @PostMapping
     CompletableFuture<ResponseEntity<ApiResponse>> signUp(
             @Valid @RequestBody SignUpRequest request, HttpServletRequest httpServletRequest);
+
+    @PostMapping("/auth")
+    CompletableFuture<ResponseEntity<AuthenticationResponse>> signIn(@Valid @RequestBody SignInRequest request);
 }

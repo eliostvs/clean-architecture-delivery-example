@@ -3,7 +3,14 @@ package com.delivery.presenter.rest.api.customer;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
+import com.delivery.presenter.rest.api.entities.AuthenticationResponse;
+import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
+import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCase;
+import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCaseInputMapper;
+import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCaseOutputMapper;
+import com.delivery.presenter.usecases.security.CreateCustomerInputMapper;
+import com.delivery.presenter.usecases.security.CreateCustomerUseCaseOutputMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,13 +24,16 @@ public class CustomerController implements CustomerResource {
     private UseCaseExecutor useCaseExecutor;
     private CreateCustomerUseCase createCustomerUseCase;
     private CreateCustomerInputMapper createCustomerUseCaseInputMapper;
+    private AuthenticateCustomerUseCase authenticateCustomerUseCase;
 
     public CustomerController(UseCaseExecutor useCaseExecutor,
                               CreateCustomerUseCase createCustomerUseCase,
-                              CreateCustomerInputMapper createCustomerUseCaseInputMapper) {
+                              CreateCustomerInputMapper createCustomerUseCaseInputMapper,
+                              AuthenticateCustomerUseCase authenticateCustomerUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.createCustomerUseCase = createCustomerUseCase;
         this.createCustomerUseCaseInputMapper = createCustomerUseCaseInputMapper;
+        this.authenticateCustomerUseCase = authenticateCustomerUseCase;
     }
 
     @Override
@@ -34,5 +44,14 @@ public class CustomerController implements CustomerResource {
                 request,
                 createCustomerUseCaseInputMapper::map,
                 (customer) -> CreateCustomerUseCaseOutputMapper.map(customer, httpServletRequest));
+    }
+
+    @Override
+    public CompletableFuture<ResponseEntity<AuthenticationResponse>> signIn(@Valid @RequestBody SignInRequest signInRequest) {
+        return useCaseExecutor.execute(
+                authenticateCustomerUseCase,
+                signInRequest,
+                AuthenticateCustomerUseCaseInputMapper::map,
+                AuthenticateCustomerUseCaseOutputMapper::map);
     }
 }

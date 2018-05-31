@@ -6,8 +6,12 @@ import com.delivery.core.usecases.customer.CreateCustomerInput;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.core.usecases.customer.Customer;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
+import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCase;
+import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCaseInputMapper;
+import com.delivery.presenter.usecases.security.CreateCustomerInputMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +24,8 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -38,11 +44,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerControllerTest extends BaseControllerTest {
 
     @Configuration
-    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.customer", "com.delivery.presenter.reset.api.common"})
+    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.customer", "com.delivery.presenter.rest.api.common"})
     static class Config {
     }
 
-    private JacksonTester<SignUpRequest> signInJson;
+    private JacksonTester<SignUpRequest> signUpJson;
+    private JacksonTester<SignInRequest> signInJson;
+
+    @MockBean
+    private AuthenticateCustomerUseCase authenticateCustomerUseCase;
 
     @MockBean
     private CreateCustomerUseCase createCustomerUseCase;
@@ -67,10 +77,59 @@ public class CustomerControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void signInReturnsOkWhenAuthenticationWorks() throws Exception {
+        // given
+        SignInRequest signInRequest = new SignInRequest("email@email.com", "password");
+        String payload = signInJson.write(signInRequest).getJson();
+        String token = "token";
+        UsernamePasswordAuthenticationToken authenticationToken =
+                AuthenticateCustomerUseCaseInputMapper.map(signInRequest);
+
+        // and
+        doReturn(token)
+                .when(authenticateCustomerUseCase)
+                .execute(eq(authenticationToken));
+
+        // when
+        RequestBuilder request = asyncRequest("/Customer/auth", payload);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.token", is(token)));
+    }
+
+    @Test
+    public void signInReturnsBadRequestWhenAuthenticationManagerFails() throws Exception {
+        // given
+        SignInRequest signInRequest = new SignInRequest("email@email.com", "password");
+        String payload = signInJson.write(signInRequest).getJson();
+        UsernamePasswordAuthenticationToken authenticationToken =
+                AuthenticateCustomerUseCaseInputMapper.map(signInRequest);
+
+        // and
+        doThrow(new UsernameNotFoundException("Error"))
+                .when(authenticateCustomerUseCase)
+                .execute(eq(authenticationToken));
+
+        // when
+        RequestBuilder request = asyncRequest("/Customer/auth", payload);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.message", is("Error")));
+    }
+
+    @Test
     public void signUpReturnsBadRequestWhenEmailIsAlreadyBeenUsed() throws Exception {
         // given
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
-        String payload = signInJson.write(signUpRequest).getJson();
+        String payload = signUpJson.write(signUpRequest).getJson();
         CreateCustomerInput createCustomerInput = new CreateCustomerInput(null, null, null, null);
 
         // and
@@ -79,7 +138,7 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .map(eq(signUpRequest));
 
         // and
-        doThrow(new EmailAlreadyUsedException("error"))
+        doThrow(new EmailAlreadyUsedException("Error"))
                 .when(createCustomerUseCase)
                 .execute(createCustomerInput);
         // when
@@ -90,14 +149,14 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.success", is(false)))
-                .andExpect(jsonPath("$.message", is("registered successfully")));
+                .andExpect(jsonPath("$.message", is("Error")));
     }
 
     @Test
     public void signUpReturnsCreatedWhenIsANewCustomer() throws Exception {
         // given
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
-        String payload = signInJson.write(signUpRequest).getJson();
+        String payload = signUpJson.write(signUpRequest).getJson();
         Customer customer = TestCoreEntityGenerator.randomCustomer();
         CreateCustomerInput createCustomerInput = new CreateCustomerInput(
                 customer.getName(), customer.getEmail(),

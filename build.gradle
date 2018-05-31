@@ -35,13 +35,14 @@ test {
 }
 
 dependencies {
+	compileOnly('org.projectlombok:lombok')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.flywaydb:flyway-core')
-	compileOnly('org.projectlombok:lombok')
+	compile('io.jsonwebtoken:jjwt:0.9.0')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 

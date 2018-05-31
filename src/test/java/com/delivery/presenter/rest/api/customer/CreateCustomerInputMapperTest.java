@@ -2,6 +2,7 @@ package com.delivery.presenter.rest.api.customer;
 
 import com.delivery.core.usecases.customer.CreateCustomerInput;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
+import com.delivery.presenter.usecases.security.CreateCustomerInputMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

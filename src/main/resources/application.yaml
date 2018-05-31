@@ -16,6 +16,11 @@ logging:
     org.springframework.web: INFO
     org.hibernate: ERROR
 
+app:
+  security:
+    jwtSecret: JWTSuperSecretKey
+    jwtExpirationInMs: 604800000
+
 ---
 
 spring:

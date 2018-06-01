@@ -1,8 +1,8 @@
 package com.delivery.data.db.jpa.entities;
 
+import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.customer.CreateCustomerInput;
-import com.delivery.core.usecases.customer.Customer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

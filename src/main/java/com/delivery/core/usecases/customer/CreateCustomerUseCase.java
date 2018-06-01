@@ -1,5 +1,6 @@
 package com.delivery.core.usecases.customer;
 
+import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.EmailAlreadyUsedException;
 import com.delivery.core.usecases.UseCase;
 

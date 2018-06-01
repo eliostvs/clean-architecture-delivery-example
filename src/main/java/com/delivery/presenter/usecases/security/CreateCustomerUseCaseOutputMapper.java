@@ -1,6 +1,6 @@
 package com.delivery.presenter.usecases.security;
 
-import com.delivery.core.usecases.customer.Customer;
+import com.delivery.core.domain.Customer;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

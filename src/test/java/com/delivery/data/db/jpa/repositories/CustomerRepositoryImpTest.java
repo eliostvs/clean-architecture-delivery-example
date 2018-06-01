@@ -1,8 +1,8 @@
 package com.delivery.data.db.jpa.repositories;
 
+import com.delivery.core.domain.Customer;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.customer.CreateCustomerInput;
-import com.delivery.core.usecases.customer.Customer;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import org.junit.Test;
 import org.junit.runner.RunWith;

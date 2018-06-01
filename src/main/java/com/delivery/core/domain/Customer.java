@@ -1,6 +1,5 @@
-package com.delivery.core.usecases.customer;
+package com.delivery.core.domain;
 
-import com.delivery.core.domain.Identity;
 import lombok.Value;
 
 @Value

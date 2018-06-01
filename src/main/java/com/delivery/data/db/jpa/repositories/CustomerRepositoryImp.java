@@ -1,7 +1,7 @@
 package com.delivery.data.db.jpa.repositories;
 
+import com.delivery.core.domain.Customer;
 import com.delivery.core.usecases.customer.CreateCustomerInput;
-import com.delivery.core.usecases.customer.Customer;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import org.springframework.stereotype.Repository;

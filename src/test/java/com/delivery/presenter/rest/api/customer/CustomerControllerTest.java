@@ -1,10 +1,10 @@
 package com.delivery.presenter.rest.api.customer;
 
+import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.EmailAlreadyUsedException;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.customer.CreateCustomerInput;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
-import com.delivery.core.usecases.customer.Customer;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;

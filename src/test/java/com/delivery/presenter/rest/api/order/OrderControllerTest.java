@@ -9,8 +9,8 @@ import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import com.delivery.presenter.config.WebSecurityConfig;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
-import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
+import com.delivery.presenter.usecases.UseCaseExecutorImpl;
 import com.delivery.presenter.usecases.security.JwtProvider;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = OrderController.class, secure = false)
 public class OrderControllerTest extends BaseControllerTest {
 
-    private JacksonTester<PartialOrderRequest> createOrderJson;
+    private JacksonTester<OrderRequest> createOrderJson;
     private UserPrincipal userPrincipal;
 
     @Configuration
@@ -67,7 +67,7 @@ public class OrderControllerTest extends BaseControllerTest {
     private CreateOrderUseCase createOrderUseCase;
 
     @SpyBean
-    private UseCaseExecutorImp useCaseExecutor;
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @MockBean
     private JwtProvider jwtProvider;
@@ -114,9 +114,9 @@ public class OrderControllerTest extends BaseControllerTest {
     @Test
     public void createOrderReturnsNotAuthenticate() throws Exception {
         // given
-        PartialOrderRequest partialOrderRequest = TestEntityGenerator.randomOrderRequest();
+        OrderRequest orderRequest = TestEntityGenerator.randomOrderRequest();
 
-        String payload = createOrderJson.write(partialOrderRequest).getJson();
+        String payload = createOrderJson.write(orderRequest).getJson();
 
         // then
         mockMvc
@@ -127,9 +127,9 @@ public class OrderControllerTest extends BaseControllerTest {
     @Test
     public void createOrderReturnsResourceNotFoundWhenStoreOrProductIsNotFound() throws Exception {
         // given
-        PartialOrderRequest partialOrderRequest = TestEntityGenerator.randomOrderRequest();
+        OrderRequest orderRequest = TestEntityGenerator.randomOrderRequest();
 
-        String payload = createOrderJson.write(partialOrderRequest).getJson();
+        String payload = createOrderJson.write(orderRequest).getJson();
 
         // and
         doThrow(new NotFoundException("Error"))
@@ -150,13 +150,14 @@ public class OrderControllerTest extends BaseControllerTest {
     @Test
     public void createOrderReturnsHttpCreated() throws Exception {
         // given
-        PartialOrderRequest partialOrderRequest = TestEntityGenerator.randomOrderRequest();
+        OrderRequest orderRequest = TestEntityGenerator.randomOrderRequest();
 
-        String payload = createOrderJson.write(partialOrderRequest).getJson();
+        String payload = createOrderJson.write(orderRequest).getJson();
         Order order = TestCoreEntityGenerator.randomOrder();
+        CreateOrderUseCase.OutputValues output = new CreateOrderUseCase.OutputValues(order);
 
         // and
-        doReturn(order)
+        doReturn(output)
                 .when(createOrderUseCase)
                 .execute(any(CreateOrderUseCase.InputValues.class));
 

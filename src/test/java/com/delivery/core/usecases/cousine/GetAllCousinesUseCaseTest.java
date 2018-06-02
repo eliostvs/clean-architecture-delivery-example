@@ -26,6 +26,8 @@ public class GetAllCousinesUseCaseTest {
     public void returnsAllCousines() {
         // given
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
+        GetAllCousinesUseCase.InputValues input =
+                new GetAllCousinesUseCase.InputValues();
 
         // and
         doReturn(cousines)
@@ -33,7 +35,7 @@ public class GetAllCousinesUseCaseTest {
                 .getAll();
 
         // when
-        final List<Cousine> actual = useCase.execute(null);
+        final List<Cousine> actual = useCase.execute(input).getCousines();
 
         // then
         assertThat(actual).isEqualTo(cousines);

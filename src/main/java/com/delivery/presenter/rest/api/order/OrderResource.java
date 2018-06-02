@@ -1,7 +1,7 @@
 package com.delivery.presenter.rest.api.order;
 
 import com.delivery.presenter.rest.api.entities.ApiResponse;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,5 +24,5 @@ public interface OrderResource {
     CompletableFuture<ResponseEntity<ApiResponse>> createOrder(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             HttpServletRequest httpServletRequest,
-            @Valid @RequestBody PartialOrderRequest partialOrderRequest);
+            @Valid @RequestBody OrderRequest orderRequest);
 }

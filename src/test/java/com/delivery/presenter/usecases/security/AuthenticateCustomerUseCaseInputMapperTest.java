@@ -16,7 +16,8 @@ public class AuthenticateCustomerUseCaseInputMapperTest {
         SignInRequest signInRequest = new SignInRequest(email, password);
 
         // when
-        UsernamePasswordAuthenticationToken actual = AuthenticateCustomerUseCaseInputMapper.map(signInRequest);
+        UsernamePasswordAuthenticationToken actual =
+                AuthenticateCustomerUseCaseInputMapper.map(signInRequest).getAuthenticationToken();
 
         // then
         assertThat(actual.getPrincipal()).isEqualTo(email);

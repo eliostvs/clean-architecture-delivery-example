@@ -4,10 +4,11 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;
 import com.delivery.core.usecases.UseCase;
+import lombok.Value;
 
 import java.util.List;
 
-public class GetStoresByCousineIdUseCase implements UseCase<Identity, List<Store>> {
+public class GetStoresByCousineIdUseCase extends UseCase<GetStoresByCousineIdUseCase.InputValues, GetStoresByCousineIdUseCase.OutputValues> {
     private CousineRepository repository;
 
     public GetStoresByCousineIdUseCase(CousineRepository repository) {
@@ -15,14 +16,25 @@ public class GetStoresByCousineIdUseCase implements UseCase<Identity, List<Store
     }
 
     @Override
-    public List<Store> execute(Identity id) {
+    public OutputValues execute(InputValues input) {
+        Identity id = input.getId();
+
         List<Store> stores = repository.getStoresById(id);
 
         if (stores.isEmpty()) {
-            // TODO: Use a simpler exception message
             throw new NotFoundException("Cousine " + id.getNumber() + " not found");
         }
 
-        return stores;
+        return new OutputValues(stores);
+    }
+
+    @Value
+    public static class InputValues implements UseCase.InputValues {
+        private final Identity id;
+    }
+
+    @Value
+    public static class OutputValues implements UseCase.OutputValues {
+        private final List<Store> stores;
     }
 }

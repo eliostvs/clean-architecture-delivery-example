@@ -8,12 +8,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Service
-public class UseCaseExecutorImp implements UseCaseExecutor {
+public class UseCaseExecutorImpl implements UseCaseExecutor {
     @Override
-    public <RQ, RX, I, O> CompletableFuture<RX> execute(
-            UseCase<I, O> useCase, RQ request, Function<RQ, I> inputMapper, Function<O, RX> outputMapper) {
+    public <RX, I extends UseCase.InputValues, O extends UseCase.OutputValues> CompletableFuture<RX> execute(
+            UseCase<I, O> useCase, I input, Function<O, RX> outputMapper) {
         return CompletableFuture
-                .supplyAsync(() -> inputMapper.apply(request))
+                .supplyAsync(() -> input)
                 .thenApplyAsync(useCase::execute)
                 .thenApplyAsync(outputMapper);
     }

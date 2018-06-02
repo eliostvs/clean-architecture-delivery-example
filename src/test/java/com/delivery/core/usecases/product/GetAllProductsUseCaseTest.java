@@ -27,6 +27,8 @@ public class GetAllProductsUseCaseTest {
     public void executeReturnsAllProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
+        GetAllProductsUseCase.InputValues input =
+                new GetAllProductsUseCase.InputValues();
 
         // and
         doReturn(Collections.singletonList(product))
@@ -34,7 +36,7 @@ public class GetAllProductsUseCaseTest {
                 .getAll();
 
         // when
-        List<Product> actual = useCase.execute(null);
+        List<Product> actual = useCase.execute(input).getProducts();
 
         // then
         assertThat(actual).containsOnly(product);

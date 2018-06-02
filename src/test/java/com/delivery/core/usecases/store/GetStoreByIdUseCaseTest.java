@@ -30,6 +30,7 @@ public class GetStoreByIdUseCaseTest {
     public void getStoreByIdentityReturnsStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
+        GetStoreByIdUseCase.InputValues input = new GetStoreByIdUseCase.InputValues(store.getId());
 
         // and
         doReturn(Optional.of(store))
@@ -37,7 +38,7 @@ public class GetStoreByIdUseCaseTest {
                 .getById(eq(store.getId()));
 
         // when
-        Store actual = useCase.execute(store.getId());
+        Store actual = useCase.execute(input).getStore();
 
         // then
         assertThat(actual).isEqualTo(store);
@@ -47,6 +48,7 @@ public class GetStoreByIdUseCaseTest {
     public void getStoreByIdentityThrowsNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetStoreByIdUseCase.InputValues input = new GetStoreByIdUseCase.InputValues(id);
 
         // and
         doReturn(Optional.empty())
@@ -54,7 +56,7 @@ public class GetStoreByIdUseCaseTest {
                 .getById(eq(id));
 
         // then
-        assertThatThrownBy(() -> useCase.execute(id))
+        assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("No store found by identity: " + id.getNumber());
     }

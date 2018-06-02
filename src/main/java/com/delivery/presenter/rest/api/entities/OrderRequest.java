@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Value
-public class PartialOrderRequest {
+public class OrderRequest {
     @NotNull
     private final Long storeId;
 

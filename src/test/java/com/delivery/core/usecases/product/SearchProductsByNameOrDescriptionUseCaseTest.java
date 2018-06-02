@@ -27,6 +27,8 @@ public class SearchProductsByNameOrDescriptionUseCaseTest {
     public void executeReturnsMatchingProducts() {
         // given
         String searchText = "searchText";
+        SearchProductsByNameOrDescriptionUseCase.InputValues input =
+                new SearchProductsByNameOrDescriptionUseCase.InputValues(searchText);
         Product product = TestCoreEntityGenerator.randomProduct();
 
         // and
@@ -35,7 +37,7 @@ public class SearchProductsByNameOrDescriptionUseCaseTest {
                 .searchByNameOrDescription(searchText);
 
         // when
-        List<Product> actual = useCase.execute(searchText);
+        List<Product> actual = useCase.execute(input).getProducts();
 
         // then
         assertThat(actual).containsOnly(product);

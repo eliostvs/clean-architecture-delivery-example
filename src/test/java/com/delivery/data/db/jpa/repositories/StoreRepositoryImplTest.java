@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StoreRepositoryImpTest {
+public class StoreRepositoryImplTest {
 
     @InjectMocks
-    private StoreRepositoryImp storeRepository;
+    private StoreRepositoryImpl storeRepository;
 
     @Mock
     private JpaStoreRepository jpaStoreRepository;

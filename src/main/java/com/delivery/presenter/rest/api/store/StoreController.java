@@ -39,35 +39,31 @@ public class StoreController implements StoreResource {
     public CompletableFuture<List<StoreResponse>> getAll() {
         return useCaseExecutor.execute(
                 getAllStoresUseCase,
-                null,
-                (arg) -> null,
-                StoreResponse::from);
+                new GetAllStoresUseCase.InputValues(),
+                (outputValues) -> StoreResponse.from(outputValues.getStores()));
     }
 
     @Override
     public CompletableFuture<List<StoreResponse>> getAllStoresByNameMatching(@PathVariable String text) {
         return useCaseExecutor.execute(
                 searchStoresByNameUseCase,
-                text,
-                (arg) -> arg,
-                StoreResponse::from);
+                new SearchStoresByNameUseCase.InputValues(text),
+                (outputValues) -> StoreResponse.from(outputValues.getStores()));
     }
 
     @Override
     public CompletableFuture<StoreResponse> getStoreByIdentity(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getStoreByIdUseCase,
-                id,
-                Identity::new,
-                StoreResponse::from);
+                new GetStoreByIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> StoreResponse.from(outputValues.getStore()));
     }
 
     @Override
     public CompletableFuture<List<ProductResponse>> getProductsBy(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getProductsByStoreIdUseCase,
-                id,
-                Identity::new,
-                ProductResponse::from);
+                new GetProductsByStoreIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> ProductResponse.from(outputValues.getProducts()));
     }
 }

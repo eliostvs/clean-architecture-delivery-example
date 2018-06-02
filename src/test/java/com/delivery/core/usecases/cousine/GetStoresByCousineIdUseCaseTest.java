@@ -31,6 +31,7 @@ public class GetStoresByCousineIdUseCaseTest {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
         Identity id = TestCoreEntityGenerator.randomId();
+        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
 
         // and
         doReturn(Collections.singletonList(store))
@@ -38,7 +39,7 @@ public class GetStoresByCousineIdUseCaseTest {
                 .getStoresById(id);
 
         // when
-        final List<Store> actual = useCase.execute(id);
+        final List<Store> actual = useCase.execute(input).getStores();
 
         // then
         assertThat(actual).containsOnly(store);
@@ -48,6 +49,7 @@ public class GetStoresByCousineIdUseCaseTest {
     public void throwsExceptionWhenCousineIdIsNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
 
         // and
         doReturn(Collections.emptyList())
@@ -55,7 +57,7 @@ public class GetStoresByCousineIdUseCaseTest {
                 .getStoresById(id);
 
         // then
-        assertThatThrownBy(() -> useCase.execute(id))
+        assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Cousine " + id.getNumber() + " not found");
     }

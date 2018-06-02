@@ -18,42 +18,39 @@ public class CousineController implements CousineResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllCousinesUseCase getAllCousinesUseCase;
     private GetStoresByCousineIdUseCase getStoresByCousineIdUseCase;
-    private SearchCousineByNameUseCase getAllCousinesByNameMatching;
+    private SearchCousineByNameUseCase searchCousineByNameUseCase;
 
     public CousineController(UseCaseExecutor useCaseExecutor,
                              GetAllCousinesUseCase getAllCousinesUseCase,
                              GetStoresByCousineIdUseCase getStoresByCousineIdUseCase,
-                             SearchCousineByNameUseCase getAllCousinesByNameMatching) {
+                             SearchCousineByNameUseCase searchCousineByNameUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllCousinesUseCase = getAllCousinesUseCase;
         this.getStoresByCousineIdUseCase = getStoresByCousineIdUseCase;
-        this.getAllCousinesByNameMatching = getAllCousinesByNameMatching;
+        this.searchCousineByNameUseCase = searchCousineByNameUseCase;
     }
 
     @Override
     public CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getStoresByCousineIdUseCase,
-                id,
-                Identity::new,
-                StoreResponse::from);
+                new GetStoresByCousineIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> StoreResponse.from(outputValues.getStores()));
     }
 
     @Override
     public CompletableFuture<List<CousineResponse>> getAllCousines() {
         return useCaseExecutor.execute(
                 getAllCousinesUseCase,
-                null,
-                (arg) -> null,
-                CousineResponse::from);
+                new GetAllCousinesUseCase.InputValues(),
+                (outputValues) -> CousineResponse.from(outputValues.getCousines()));
     }
 
     @Override
     public CompletableFuture<List<CousineResponse>> getAllCousinesByNameMatching(@PathVariable String text) {
         return useCaseExecutor.execute(
-                getAllCousinesByNameMatching,
-                text,
-                (searchText) -> searchText,
-                CousineResponse::from);
+                searchCousineByNameUseCase,
+                new SearchCousineByNameUseCase.InputValues(text),
+                (outputValues) -> CousineResponse.from(outputValues.getCousines()));
     }
 }

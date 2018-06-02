@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class StoreRepositoryImp implements StoreRepository {
+public class StoreRepositoryImpl implements StoreRepository {
     private JpaStoreRepository repository;
 
-    public StoreRepositoryImp(JpaStoreRepository repository) {
+    public StoreRepositoryImpl(JpaStoreRepository repository) {
         this.repository = repository;
     }
 

@@ -33,6 +33,8 @@ public class AuthenticateCustomerUseCaseTest {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken("user", "password");
         Authentication authentication = new TestingAuthenticationToken("user", "password");
+        AuthenticateCustomerUseCase.InputValues input =
+                new AuthenticateCustomerUseCase.InputValues(authenticationToken);
 
         // and
         doReturn(authentication)
@@ -45,7 +47,7 @@ public class AuthenticateCustomerUseCaseTest {
                 .generateToken(authentication);
 
         // when
-        String actual = useCase.execute(authenticationToken);
+        String actual = useCase.execute(input).getJwtToken();
 
         // then
         assertThat(actual).isEqualTo(jwtToken);

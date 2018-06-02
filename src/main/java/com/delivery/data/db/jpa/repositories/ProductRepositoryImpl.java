@@ -11,10 +11,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class ProductRepositoryImp implements ProductRepository {
+public class ProductRepositoryImpl implements ProductRepository {
     private JpaProductRepository repository;
 
-    public ProductRepositoryImp(JpaProductRepository repository) {
+    public ProductRepositoryImpl(JpaProductRepository repository) {
         this.repository = repository;
     }
 

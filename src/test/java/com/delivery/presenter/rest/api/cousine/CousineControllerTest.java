@@ -9,7 +9,7 @@ import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
-import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.UseCaseExecutorImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class CousineControllerTest extends BaseControllerTest {
     }
 
     @SpyBean
-    private UseCaseExecutorImp useCaseExecutor;
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @MockBean
     private GetStoresByCousineIdUseCase getStoresByCousineIdUseCase;
@@ -68,11 +68,12 @@ public class CousineControllerTest extends BaseControllerTest {
     public void getStoreByCousineIdReturnsNotFound() throws Exception {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
                 .when(getStoresByCousineIdUseCase)
-                .execute(eq(id));
+                .execute(eq(input));
 
         // when
         final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
@@ -88,12 +89,15 @@ public class CousineControllerTest extends BaseControllerTest {
     public void getStoresByCousineIdReturnsOk() throws Exception {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        final Identity id = store.getCousine().getId();
+        Identity id = store.getCousine().getId();
+        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
+        GetStoresByCousineIdUseCase.OutputValues output =
+                new GetStoresByCousineIdUseCase.OutputValues(singletonList(store));
 
         // and
-        doReturn(singletonList(store))
+        doReturn(output)
                 .when(getStoresByCousineIdUseCase)
-                .execute(eq(id));
+                .execute(eq(input));
 
         // when
         final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
@@ -115,10 +119,13 @@ public class CousineControllerTest extends BaseControllerTest {
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
         Cousine firstCousine = cousines.get(0);
 
+        GetAllCousinesUseCase.InputValues input = new GetAllCousinesUseCase.InputValues();
+        GetAllCousinesUseCase.OutputValues output = new GetAllCousinesUseCase.OutputValues(cousines);
+
         // and
-        doReturn(cousines)
+        doReturn(output)
                 .when(getAllCousinesUseCase)
-                .execute(null);
+                .execute(input);
 
         // when
         final RequestBuilder payload = asyncRequest("/Cousine");
@@ -137,14 +144,15 @@ public class CousineControllerTest extends BaseControllerTest {
         // given
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
         Cousine firstCousine = cousines.get(0);
-        String text = "abc";
+        SearchCousineByNameUseCase.InputValues input = new SearchCousineByNameUseCase.InputValues("abc");
+        SearchCousineByNameUseCase.OutputValues output = new SearchCousineByNameUseCase.OutputValues(cousines);
 
         // and
-        doReturn(cousines)
+        doReturn(output)
                 .when(searchCousineByNameUseCase)
-                .execute(text);
+                .execute(input);
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/search/" + text);
+        final RequestBuilder payload = asyncRequest("/Cousine/search/abc");
 
         // then
         mockMvc.perform(payload)

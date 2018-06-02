@@ -10,7 +10,7 @@ import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
 import com.delivery.core.usecases.store.GetStoreByIdUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
-import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.UseCaseExecutorImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-import java.util.Collections;
-
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,7 +44,7 @@ public class StoreControllerTest extends BaseControllerTest {
     }
 
     @SpyBean
-    private UseCaseExecutorImp useCaseExecutor;
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @MockBean
     private GetAllStoresUseCase getAllStoresUseCase;
@@ -71,11 +70,13 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getAllStoresReturnsOk() throws Exception {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
+        GetAllStoresUseCase.InputValues input = new GetAllStoresUseCase.InputValues();
+        GetAllStoresUseCase.OutputValues output = new GetAllStoresUseCase.OutputValues(singletonList(store));
 
         // and
-        doReturn(Collections.singletonList(store))
+        doReturn(output)
                 .when(getAllStoresUseCase)
-                .execute(null);
+                .execute(input);
 
         // when
         final RequestBuilder payload = asyncRequest("/Store");
@@ -95,11 +96,13 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getStoreByIdentityReturnsOk() throws Exception {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
+        GetStoreByIdUseCase.OutputValues output = new GetStoreByIdUseCase.OutputValues(store);
+        GetStoreByIdUseCase.InputValues input = new GetStoreByIdUseCase.InputValues(store.getId());
 
         // and
-        doReturn(store)
+        doReturn(output)
                 .when(getStoreByIdUseCase)
-                .execute(eq(store.getId()));
+                .execute(eq(input));
 
         // when
         final RequestBuilder payload = asyncRequest("/Store/" + store.getId().getNumber());
@@ -118,11 +121,14 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getAllStoresNameMatchingReturnsStores() throws Exception {
         //given
         Store store = TestCoreEntityGenerator.randomStore();
+        SearchStoresByNameUseCase.InputValues input = new SearchStoresByNameUseCase.InputValues("abc");
+        SearchStoresByNameUseCase.OutputValues output =
+                new SearchStoresByNameUseCase.OutputValues(singletonList(store));
 
         // and
-        doReturn(Collections.singletonList(store))
+        doReturn(output)
                 .when(searchStoresByNameUseCase)
-                .execute("abc");
+                .execute(input);
 
         // when
         final RequestBuilder payload = asyncRequest("/Store/search/abc");
@@ -143,11 +149,13 @@ public class StoreControllerTest extends BaseControllerTest {
         //given
         Product product = TestCoreEntityGenerator.randomProduct();
         Identity id = product.getStore().getId();
+        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
+        GetProductsByStoreIdUseCase.OutputValues output = new GetProductsByStoreIdUseCase.OutputValues(singletonList(product));
 
         // and
-        doReturn(Collections.singletonList(product))
+        doReturn(output)
                 .when(getProductsByStoreIdUseCase)
-                .execute(eq(id));
+                .execute(eq(input));
 
         // when
         final RequestBuilder payload = asyncRequest("/Store/" + id.getNumber() + "/products");
@@ -168,11 +176,12 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getProductsByStoreIdReturnsNotFound() throws Exception {
         //given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
                 .when(getProductsByStoreIdUseCase)
-                .execute(eq(id));
+                .execute(eq(input));
 
         // when
         final RequestBuilder payload = asyncRequest("/Store/" + id.getNumber() + "/products");

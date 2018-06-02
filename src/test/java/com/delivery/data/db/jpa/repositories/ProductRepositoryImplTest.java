@@ -19,10 +19,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductRepositoryImpTest {
+public class ProductRepositoryImplTest {
 
     @InjectMocks
-    private ProductRepositoryImp productRepository;
+    private ProductRepositoryImpl productRepository;
 
     @Mock
     private JpaProductRepository jpaProductRepository;

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class CustomerRepositoryImp implements CustomerRepository {
+public class CustomerRepositoryImpl implements CustomerRepository {
     private JpaCustomerRepository repository;
 
-    public CustomerRepositoryImp(JpaCustomerRepository repository) {
+    public CustomerRepositoryImpl(JpaCustomerRepository repository) {
         this.repository = repository;
     }
 

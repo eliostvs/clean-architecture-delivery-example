@@ -27,15 +27,16 @@ public class SearchStoresByNameUseCaseTest {
     public void searchStoresByNameReturnsStores() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        String text = "abc";
+        String searchText = "abc";
+        SearchStoresByNameUseCase.InputValues input = new SearchStoresByNameUseCase.InputValues(searchText);
 
         // and
         doReturn(Collections.singletonList(store))
                 .when(repository)
-                .searchByName(text);
+                .searchByName(searchText);
 
         // when
-        List<Store> actual = useCase.execute(text);
+        List<Store> actual = useCase.execute(input).getStores();
 
         // then
         assertThat(actual).containsOnly(store);

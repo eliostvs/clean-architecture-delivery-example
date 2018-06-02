@@ -33,6 +33,8 @@ public class GetProductsByStoreIdUseCaseTest {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
         Store store = product.getStore();
+        GetProductsByStoreIdUseCase.InputValues input =
+                new GetProductsByStoreIdUseCase.InputValues(store.getId());
 
         // and
         doReturn(Collections.singletonList(product))
@@ -40,7 +42,7 @@ public class GetProductsByStoreIdUseCaseTest {
                 .getProductsById(eq(store.getId()));
 
         // when
-        List<Product> actual = useCase.execute(store.getId());
+        List<Product> actual = useCase.execute(input).getProducts();
 
         // then
         assertThat(actual).containsOnly(product);
@@ -50,6 +52,7 @@ public class GetProductsByStoreIdUseCaseTest {
     public void getProductsByStoreIdentityThrowsNotFoundWhenStoreNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
 
         // and
         doReturn(Collections.emptyList())
@@ -57,7 +60,7 @@ public class GetProductsByStoreIdUseCaseTest {
                 .getProductsById(eq(id));
 
         // then
-        assertThatThrownBy(() -> useCase.execute(id))
+        assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("No store found by identity: " + id.getNumber());
     }

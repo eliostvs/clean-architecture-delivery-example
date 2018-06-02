@@ -7,7 +7,7 @@ import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
-import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.UseCaseExecutorImpl;
 import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCase;
 import com.delivery.presenter.usecases.security.AuthenticateCustomerUseCaseInputMapper;
 import com.delivery.presenter.usecases.security.CreateCustomerInputMapper;
@@ -23,7 +23,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,7 +62,7 @@ public class CustomerControllerTest extends BaseControllerTest {
     private CreateCustomerInputMapper createCustomerInputMapper;
 
     @SpyBean
-    private UseCaseExecutorImp useCaseExecutor;
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,15 +81,18 @@ public class CustomerControllerTest extends BaseControllerTest {
     public void signInReturnsOkWhenAuthenticationWorks() throws Exception {
         // given
         SignInRequest signInRequest = new SignInRequest("email@email.com", "password");
-        String payload = signInJson.write(signInRequest).getJson();
-        String token = "token";
-        UsernamePasswordAuthenticationToken authenticationToken =
+        AuthenticateCustomerUseCase.InputValues input =
                 AuthenticateCustomerUseCaseInputMapper.map(signInRequest);
 
+        String token = "token";
+        AuthenticateCustomerUseCase.OutputValues output = new AuthenticateCustomerUseCase.OutputValues(token);
+
+        String payload = signInJson.write(signInRequest).getJson();
+
         // and
-        doReturn(token)
+        doReturn(output)
                 .when(authenticateCustomerUseCase)
-                .execute(eq(authenticationToken));
+                .execute(eq(input));
 
         // when
         RequestBuilder request = asyncRequest("/Customer/auth", payload);
@@ -108,13 +110,13 @@ public class CustomerControllerTest extends BaseControllerTest {
         // given
         SignInRequest signInRequest = new SignInRequest("email@email.com", "password");
         String payload = signInJson.write(signInRequest).getJson();
-        UsernamePasswordAuthenticationToken authenticationToken =
+        AuthenticateCustomerUseCase.InputValues input =
                 AuthenticateCustomerUseCaseInputMapper.map(signInRequest);
 
         // and
         doThrow(new UsernameNotFoundException("Error"))
                 .when(authenticateCustomerUseCase)
-                .execute(eq(authenticationToken));
+                .execute(eq(input));
 
         // when
         RequestBuilder request = asyncRequest("/Customer/auth", payload);
@@ -160,19 +162,22 @@ public class CustomerControllerTest extends BaseControllerTest {
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
         String payload = signUpJson.write(signUpRequest).getJson();
         Customer customer = TestCoreEntityGenerator.randomCustomer();
-        CreateCustomerUseCase.InputValues inputValues = new CreateCustomerUseCase.InputValues(
+
+        CreateCustomerUseCase.InputValues input = new CreateCustomerUseCase.InputValues(
                 customer.getName(), customer.getEmail(),
                 customer.getAddress(), customer.getPassword());
 
+        CreateCustomerUseCase.OutputValues output = new CreateCustomerUseCase.OutputValues(customer);
+
         // and
-        doReturn(inputValues)
+        doReturn(input)
                 .when(createCustomerInputMapper)
                 .map(eq(signUpRequest));
 
         // and
-        doReturn(customer)
+        doReturn(output)
                 .when(createCustomerUseCase)
-                .execute(eq(inputValues));
+                .execute(eq(input));
 
         // when
         RequestBuilder request = asyncRequest("/Customer", payload);

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GetProductsByStoreAndProductsIdUseCase implements UseCase<GetProductsByStoreAndProductsIdUseCase.InputValues, GetProductsByStoreAndProductsIdUseCase.OutputValues> {
+public class GetProductsByStoreAndProductsIdUseCase extends UseCase<GetProductsByStoreAndProductsIdUseCase.InputValues, GetProductsByStoreAndProductsIdUseCase.OutputValues> {
     private ProductRepository repository;
 
     public GetProductsByStoreAndProductsIdUseCase(ProductRepository repository) {
@@ -76,13 +76,13 @@ public class GetProductsByStoreAndProductsIdUseCase implements UseCase<GetProduc
     }
 
     @Value
-    public static class InputValues {
+    public static class InputValues implements UseCase.InputValues {
         private final Identity storeId;
         private final List<Identity> productsId;
     }
 
     @Value
-    public static class OutputValues {
+    public static class OutputValues implements UseCase.OutputValues {
         private final List<Product> products;
     }
 }

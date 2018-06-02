@@ -66,7 +66,7 @@ public class CreateOrderUseCaseTest {
                 .persist(any(Order.class));
 
         // when
-        Order actual = useCase.execute(useCaseInput);
+        Order actual = useCase.execute(useCaseInput).getOrder();
 
         // then
         assertThat(actual).isEqualTo(expected);

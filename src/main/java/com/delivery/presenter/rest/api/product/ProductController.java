@@ -33,26 +33,23 @@ public class ProductController implements ProductResource {
     public CompletableFuture<List<ProductResponse>> getAllProducts() {
         return useCaseExecutor.execute(
                 getAllProductsUseCase,
-                null,
-                (arg) -> null,
-                ProductResponse::from);
+                new GetAllProductsUseCase.InputValues(),
+                (outputValues) -> ProductResponse.from(outputValues.getProducts()));
     }
 
     @Override
     public CompletableFuture<ProductResponse> getByIdentity(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getProductByIdUseCase,
-                id,
-                Identity::new,
-                ProductResponse::from);
+                new GetProductByIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> ProductResponse.from(outputValues.getProduct()));
     }
 
     @Override
     public CompletableFuture<List<ProductResponse>> getByMatchingName(@PathVariable String text) {
         return useCaseExecutor.execute(
                 searchProductsByNameOrDescriptionUseCase,
-                text,
-                (arg) -> arg,
-                ProductResponse::from);
+                new SearchProductsByNameOrDescriptionUseCase.InputValues(text),
+                (outputValues) -> ProductResponse.from(outputValues.getProducts()));
     }
 }

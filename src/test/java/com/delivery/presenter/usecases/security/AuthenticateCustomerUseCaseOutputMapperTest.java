@@ -13,9 +13,10 @@ public class AuthenticateCustomerUseCaseOutputMapperTest {
     public void mapReturnsResponseOkWithJwtToken() {
         // given
         String jwtToken = "jwtToken";
+        AuthenticateCustomerUseCase.OutputValues output = new AuthenticateCustomerUseCase.OutputValues(jwtToken);
 
         // when
-        ResponseEntity<AuthenticationResponse> response = AuthenticateCustomerUseCaseOutputMapper.map(jwtToken);
+        ResponseEntity<AuthenticationResponse> response = AuthenticateCustomerUseCaseOutputMapper.map(output);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

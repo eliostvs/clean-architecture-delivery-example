@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CousineRepositoryImpTest {
+public class CousineRepositoryImplTest {
 
     @InjectMocks
-    private CousineRepositoryImp cousineRepository;
+    private CousineRepositoryImpl cousineRepository;
 
     @Mock
     private JpaCousineRepository jpaCousineRepository;

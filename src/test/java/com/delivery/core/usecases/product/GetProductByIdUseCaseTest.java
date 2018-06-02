@@ -29,6 +29,8 @@ public class GetProductByIdUseCaseTest {
     public void executeThrowsException() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetProductByIdUseCase.InputValues input =
+                new GetProductByIdUseCase.InputValues(id);
 
         // and
         doReturn(Optional.empty())
@@ -36,7 +38,7 @@ public class GetProductByIdUseCaseTest {
                 .getById(id);
 
         // then
-        assertThatThrownBy(() -> useCase.execute(id))
+        assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Product " + id.getNumber() + " not found");
     }
@@ -45,6 +47,8 @@ public class GetProductByIdUseCaseTest {
     public void executeReturnsProduct() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
+        GetProductByIdUseCase.InputValues input =
+                new GetProductByIdUseCase.InputValues(product.getId());
 
         // and
         doReturn(Optional.of(product))
@@ -52,7 +56,7 @@ public class GetProductByIdUseCaseTest {
                 .getById(product.getId());
 
         // when
-        Product actual = useCase.execute(product.getId());
+        Product actual = useCase.execute(input).getProduct();
 
         // then
         assertThat(actual).isEqualTo(product);

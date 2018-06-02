@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CreateOrderUseCase implements UseCase<CreateOrderUseCase.InputValues, Order> {
+public class CreateOrderUseCase extends UseCase<CreateOrderUseCase.InputValues, CreateOrderUseCase.OutputValues> {
     private GetProductsByStoreAndProductsIdUseCase getProductsByStoreAndProductsIdUseCase;
     private OrderRepository orderRepository;
 
@@ -26,10 +26,10 @@ public class CreateOrderUseCase implements UseCase<CreateOrderUseCase.InputValue
     }
 
     @Override
-    public Order execute(InputValues input) {
+    public OutputValues execute(InputValues input) {
         Order order = createOrder(input);
 
-        return orderRepository.persist(order);
+        return new OutputValues(orderRepository.persist(order));
     }
 
     private Order createOrder(InputValues input) {
@@ -81,14 +81,14 @@ public class CreateOrderUseCase implements UseCase<CreateOrderUseCase.InputValue
     }
 
     @Value
-    public static class InputValues {
+    public static class InputValues implements UseCase.InputValues {
         private final Customer customer;
         private final Identity storeId;
         private final List<InputItem> orderItems;
     }
 
     @Value
-    public static class OutputValues {
+    public static class OutputValues implements UseCase.OutputValues {
         private final Order order;
     }
 

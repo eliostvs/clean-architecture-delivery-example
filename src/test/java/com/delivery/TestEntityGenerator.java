@@ -1,7 +1,7 @@
 package com.delivery;
 
 import com.delivery.presenter.rest.api.entities.OrderRequestItem;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import com.github.javafaker.Faker;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,8 +39,8 @@ public final class TestEntityGenerator {
         return faker.code().isbn10();
     }
 
-    public static PartialOrderRequest randomOrderRequest() {
-        return new PartialOrderRequest(
+    public static OrderRequest randomOrderRequest() {
+        return new OrderRequest(
                 randomId(),
                 randomItemsOf(TestEntityGenerator::randomOrderItemRequest));
     }

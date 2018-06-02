@@ -4,9 +4,8 @@ import com.delivery.TestEntityGenerator;
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
-import com.delivery.presenter.rest.api.entities.CreateOrderRequest;
 import com.delivery.presenter.rest.api.entities.OrderRequestItem;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.junit.Test;
 
@@ -20,7 +19,7 @@ public class InputValuesMapperTest {
     @Test
     public void mapReturnsCreateOrderInputMapper() {
         // given
-        UserPrincipal userPrincipal = (UserPrincipal) TestEntityGenerator.randomUserPrincipal();
+        UserPrincipal userPrincipal = TestEntityGenerator.randomUserPrincipal();
         Customer customer = new Customer(
                 new Identity(userPrincipal.getId()),
                 userPrincipal.getUsername(),
@@ -34,10 +33,10 @@ public class InputValuesMapperTest {
         OrderRequestItem orderItem = new OrderRequestItem(orderItemId.getNumber(), orderItemQuantity);
 
         Identity storeId = randomId();
-        PartialOrderRequest partialOrderRequest = new PartialOrderRequest(storeId.getNumber(), singletonList(orderItem));
+        OrderRequest orderRequest = new OrderRequest(storeId.getNumber(), singletonList(orderItem));
 
         // when
-        CreateOrderUseCase.InputValues actual = CreateOrderInputMapper.map(new CreateOrderRequest(userPrincipal, partialOrderRequest));
+        CreateOrderUseCase.InputValues actual = CreateOrderInputMapper.map(orderRequest, userPrincipal);
 
         // then
         assertThat(actual.getCustomer()).isEqualTo(customer);

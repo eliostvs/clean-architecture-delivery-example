@@ -3,8 +3,7 @@ package com.delivery.presenter.rest.api.order;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
-import com.delivery.presenter.rest.api.entities.CreateOrderRequest;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,11 +27,10 @@ public class OrderController implements OrderResource {
     @Override
     public CompletableFuture<ResponseEntity<ApiResponse>> createOrder(@AuthenticationPrincipal UserPrincipal userDetails,
                                                                       HttpServletRequest httpServletRequest,
-                                                                      @Valid @RequestBody PartialOrderRequest partialOrderRequest) {
+                                                                      @Valid @RequestBody OrderRequest orderRequest) {
         return useCaseExecutor.execute(
                 createOrderUseCase,
-                new CreateOrderRequest(userDetails, partialOrderRequest),
-                CreateOrderInputMapper::map,
-                (order) -> CreateOrderOutputMapper.map(order, httpServletRequest));
+                CreateOrderInputMapper.map(orderRequest, userDetails),
+                (outputValues) -> CreateOrderOutputMapper.map(outputValues.getOrder(), httpServletRequest));
     }
 }

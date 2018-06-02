@@ -3,9 +3,8 @@ package com.delivery.presenter.rest.api.order;
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
-import com.delivery.presenter.rest.api.entities.CreateOrderRequest;
 import com.delivery.presenter.rest.api.entities.OrderRequestItem;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,13 +13,11 @@ import java.util.stream.Collectors;
 
 public final class CreateOrderInputMapper {
 
-    public static CreateOrderUseCase.InputValues map(CreateOrderRequest createOrderRequest) {
-        PartialOrderRequest partialOrderRequest = createOrderRequest.getPartialOrderRequest();
-
+    public static CreateOrderUseCase.InputValues map(OrderRequest orderRequest, UserDetails userDetails) {
         return new CreateOrderUseCase.InputValues(
-                map(createOrderRequest.getUserDetails()),
-                new Identity(partialOrderRequest.getStoreId()),
-                map(partialOrderRequest.getOrderItems())
+                map(userDetails),
+                new Identity(orderRequest.getStoreId()),
+                map(orderRequest.getOrderItems())
         );
     }
 

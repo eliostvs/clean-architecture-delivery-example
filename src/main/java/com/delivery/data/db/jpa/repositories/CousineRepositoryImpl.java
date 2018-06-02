@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class CousineRepositoryImp implements CousineRepository {
+public class CousineRepositoryImpl implements CousineRepository {
 
     private JpaCousineRepository jpaCousineRepository;
 
-    public CousineRepositoryImp(JpaCousineRepository jpaCousineRepository) {
+    public CousineRepositoryImpl(JpaCousineRepository jpaCousineRepository) {
         this.jpaCousineRepository = jpaCousineRepository;
     }
 

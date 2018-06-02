@@ -9,7 +9,7 @@ import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdUseCase;
 import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
-import com.delivery.presenter.usecases.UseCaseExecutorImp;
+import com.delivery.presenter.usecases.UseCaseExecutorImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-import java.util.Collections;
-
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
@@ -53,7 +52,7 @@ public class ProductControllerTest extends BaseControllerTest {
     private SearchProductsByNameOrDescriptionUseCase searchProductsByNameOrDescriptionUseCase;
 
     @SpyBean
-    private UseCaseExecutorImp useCaseExecutor;
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,11 +66,12 @@ public class ProductControllerTest extends BaseControllerTest {
     public void getProductByIdentityReturnsNotFound() throws Exception {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
+        GetProductByIdUseCase.InputValues input = new GetProductByIdUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
                 .when(getProductByIdUseCase)
-                .execute(eq(id));
+                .execute(eq(input));
 
         // when
         RequestBuilder payload = asyncRequest("/Product/" + id.getNumber());
@@ -89,11 +89,14 @@ public class ProductControllerTest extends BaseControllerTest {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
         Store store = product.getStore();
+        SearchProductsByNameOrDescriptionUseCase.InputValues input =
+                new SearchProductsByNameOrDescriptionUseCase.InputValues("abc");
+        SearchProductsByNameOrDescriptionUseCase.OutputValues output = new SearchProductsByNameOrDescriptionUseCase.OutputValues(singletonList(product));
 
         // and
-        doReturn(Collections.singletonList(product))
+        doReturn(output)
                 .when(searchProductsByNameOrDescriptionUseCase)
-                .execute(eq("abc"));
+                .execute(eq(input));
 
         // when
         RequestBuilder payload = asyncRequest("/Product/search/abc");
@@ -116,10 +119,14 @@ public class ProductControllerTest extends BaseControllerTest {
         Product product = TestCoreEntityGenerator.randomProduct();
         Store store = product.getStore();
 
+        GetAllProductsUseCase.InputValues input = new GetAllProductsUseCase.InputValues();
+        GetAllProductsUseCase.OutputValues output =
+                new GetAllProductsUseCase.OutputValues(singletonList(product));
+
         // and
-        doReturn(Collections.singletonList(product))
+        doReturn(output)
                 .when(getAllProductsUseCase)
-                .execute(null);
+                .execute(input);
 
         // when
         RequestBuilder payload = asyncRequest("/Product");
@@ -141,11 +148,13 @@ public class ProductControllerTest extends BaseControllerTest {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
         Store store = product.getStore();
+        GetProductByIdUseCase.InputValues input = new GetProductByIdUseCase.InputValues(product.getId());
+        GetProductByIdUseCase.OutputValues output = new GetProductByIdUseCase.OutputValues(product);
 
         // and
-        doReturn(product)
+        doReturn(output)
                 .when(getProductByIdUseCase)
-                .execute(eq(product.getId()));
+                .execute(eq(input));
 
         // when
         RequestBuilder payload = asyncRequest("/Product/" + product.getId().getNumber());

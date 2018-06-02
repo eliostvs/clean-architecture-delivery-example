@@ -37,21 +37,19 @@ public class CustomerController implements CustomerResource {
     }
 
     @Override
-    public CompletableFuture<ResponseEntity<ApiResponse>> signUp(@Valid @RequestBody SignUpRequest request,
+    public CompletableFuture<ResponseEntity<ApiResponse>> signUp(@Valid @RequestBody SignUpRequest signUpRequest,
                                                                  HttpServletRequest httpServletRequest) {
         return useCaseExecutor.execute(
                 createCustomerUseCase,
-                request,
-                createCustomerUseCaseInputMapper::map,
-                (customer) -> CreateCustomerUseCaseOutputMapper.map(customer, httpServletRequest));
+                createCustomerUseCaseInputMapper.map(signUpRequest),
+                (outputValues) -> CreateCustomerUseCaseOutputMapper.map(outputValues.getCustomer(), httpServletRequest));
     }
 
     @Override
     public CompletableFuture<ResponseEntity<AuthenticationResponse>> signIn(@Valid @RequestBody SignInRequest signInRequest) {
         return useCaseExecutor.execute(
                 authenticateCustomerUseCase,
-                signInRequest,
-                AuthenticateCustomerUseCaseInputMapper::map,
+                AuthenticateCustomerUseCaseInputMapper.map(signInRequest),
                 AuthenticateCustomerUseCaseOutputMapper::map);
     }
 }

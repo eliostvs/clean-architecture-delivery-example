@@ -26,15 +26,17 @@ public class SearchCousineByNameUseCaseTest {
     public void searchCousineByName() {
         // given
         List<Cousine> cousines = TestCoreEntityGenerator.randomCousines();
-        final String search = "abc";
+        String searchText = "abc";
+        SearchCousineByNameUseCase.InputValues input =
+                new SearchCousineByNameUseCase.InputValues(searchText);
 
         // and
         doReturn(cousines)
                 .when(repository)
-                .searchByName(search);
+                .searchByName(searchText);
 
         // when
-        final List<Cousine> actual = useCase.execute(search);
+        final List<Cousine> actual = useCase.execute(input).getCousines();
 
         // then
         assertThat(actual).isEqualTo(cousines);

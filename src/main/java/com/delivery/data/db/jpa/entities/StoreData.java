@@ -49,7 +49,7 @@ public class StoreData {
     @OneToMany(mappedBy = "store")
     private Set<ProductData> products;
 
-    // TODO: test method
+    // TODO: test
     public static StoreData from(Store store) {
         return new StoreData(
                 convertId(store.getId()),
@@ -63,7 +63,7 @@ public class StoreData {
         return new StoreData(null, name, address, cousineData, new HashSet<>());
     }
 
-    // TODO: test method
+    // TODO: test
     public Store fromThis() {
         return new Store(
                 new Identity(id),

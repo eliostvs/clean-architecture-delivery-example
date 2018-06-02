@@ -1,13 +1,10 @@
 package com.delivery.presenter;
 
-import com.delivery.core.usecases.customer.CreateCustomerUseCase;
-import com.delivery.core.usecases.customer.CustomerRepository;
-import com.delivery.data.db.jpa.entities.CustomerData;
+import com.delivery.presenter.rest.api.customer.CustomerController;
 import com.delivery.presenter.rest.api.entities.OrderRequestItem;
-import com.delivery.presenter.rest.api.entities.PartialOrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
-import com.delivery.presenter.usecases.security.JwtProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URL;
@@ -36,6 +33,8 @@ public class IntegrationTest {
     private static String USER_EMAIL = "email@email.com";
     private static String USER_PASSWORD = "password";
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(IntegrationTest.class);
+
     @LocalServerPort
     private int port;
 
@@ -45,26 +44,11 @@ public class IntegrationTest {
     private TestRestTemplate template;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private CustomerController customerController;
 
     @Before
     public void setUp() throws Exception {
         this.base = new URL("http://localhost:" + port + "/api/v1");
-    }
-
-    private void createAuthUser() {
-        if (!customerRepository.existsByEmail(USER_EMAIL)) {
-            CreateCustomerUseCase.InputValues input = new CreateCustomerUseCase.InputValues(
-                    "name", USER_EMAIL, "address", passwordEncoder.encode(USER_PASSWORD));
-
-            customerRepository.persist(input);
-        }
     }
 
     @Test
@@ -202,7 +186,7 @@ public class IntegrationTest {
     @Test
     public void authenticateCustomer() {
         // given
-        createAuthUser();
+        createTestCustomer();
 
         // and
         SignInRequest request = new SignInRequest(USER_EMAIL, USER_PASSWORD);
@@ -218,11 +202,11 @@ public class IntegrationTest {
     @Test
     public void createOrder() {
         // given
-        createAuthUser();
+        createTestCustomer();
 
         // and
         String url = base.toString() + "/Order";
-        HttpEntity<PartialOrderRequest> request = requestOneShrimpTempuraInHaiShangStore();
+        HttpEntity<OrderRequest> request = requestOneShrimpTempuraInHaiShangStore();
 
         // when
         ResponseEntity<String> response = template.exchange(url, HttpMethod.POST, request, String.class);
@@ -231,30 +215,37 @@ public class IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    private HttpEntity<PartialOrderRequest> requestOneShrimpTempuraInHaiShangStore() {
+    private HttpEntity<OrderRequest> requestOneShrimpTempuraInHaiShangStore() {
         return new HttpEntity<>(createHaiShangOrder(), createAuthHeader());
     }
 
     private HttpHeaders createAuthHeader() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + createToken());
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + getTokenTestCustomer());
         return headers;
     }
 
-    private String createToken() {
-        return jwtProvider.generateToken(getUserId());
+    private void createTestCustomer() {
+        try {
+            customerController
+                    .signUp(new SignUpRequest("name", USER_EMAIL, "address", USER_PASSWORD), new MockHttpServletRequest())
+                    .join();
+
+        } catch (Exception ex) {
+            log.error("Fail to create test customer", ex);
+        }
     }
 
-    private long getUserId() {
-        CustomerData customerData = customerRepository.findByEmail(USER_EMAIL)
-                .orElseThrow(() -> new IllegalStateException("Auth user not registered yet!"));
-
-        return customerData.getId();
+    private String getTokenTestCustomer() {
+        return customerController.signIn(new SignInRequest(USER_EMAIL, USER_PASSWORD))
+                .join()
+                .getBody()
+                .getToken();
     }
 
-    private PartialOrderRequest createHaiShangOrder() {
+    private OrderRequest createHaiShangOrder() {
         Long storeId = 1L;
-        return new PartialOrderRequest(storeId, createOneShrimpTempura());
+        return new OrderRequest(storeId, createOneShrimpTempura());
     }
 
     private List<OrderRequestItem> createOneShrimpTempura() {

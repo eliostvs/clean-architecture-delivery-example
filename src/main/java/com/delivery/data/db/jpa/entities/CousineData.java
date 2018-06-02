@@ -56,7 +56,7 @@ public class CousineData {
         return new CousineData(null, name, new HashSet<>());
     }
 
-    // TODO: test from
+    // TODO: test
     public static CousineData from(Cousine cousine) {
         return new CousineData(
                 convertId(cousine.getId()),

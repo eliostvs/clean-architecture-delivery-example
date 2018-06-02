@@ -27,6 +27,7 @@ public class GetAllStoresUseCaseTest {
     public void returnsAllStores() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
+        GetAllStoresUseCase.InputValues input = new GetAllStoresUseCase.InputValues();
 
         // and
         doReturn(Collections.singletonList(store))
@@ -34,7 +35,7 @@ public class GetAllStoresUseCaseTest {
                 .getAll();
 
         // when
-        List<Store> actual = useCase.execute(null);
+        List<Store> actual = useCase.execute(input).getStores();
 
         // then
         assertThat(actual).containsOnly(store);

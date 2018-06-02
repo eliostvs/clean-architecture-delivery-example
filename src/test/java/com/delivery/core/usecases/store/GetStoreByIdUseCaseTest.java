@@ -18,10 +18,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetStoreByIdentityUseCaseTest {
+public class GetStoreByIdUseCaseTest {
 
     @InjectMocks
-    private GetStoreByIdentityUseCase useCase;
+    private GetStoreByIdUseCase useCase;
 
     @Mock
     private StoreRepository repository;
@@ -34,7 +34,7 @@ public class GetStoreByIdentityUseCaseTest {
         // and
         doReturn(Optional.of(store))
                 .when(repository)
-                .getByIdentity(eq(store.getId()));
+                .getById(eq(store.getId()));
 
         // when
         Store actual = useCase.execute(store.getId());
@@ -46,12 +46,12 @@ public class GetStoreByIdentityUseCaseTest {
     @Test
     public void getStoreByIdentityThrowsNotFound() {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doReturn(Optional.empty())
                 .when(repository)
-                .getByIdentity(eq(id));
+                .getById(eq(id));
 
         // then
         assertThatThrownBy(() -> useCase.execute(id))

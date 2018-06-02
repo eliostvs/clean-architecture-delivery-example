@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -15,6 +17,7 @@ import java.util.Collections;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "username", "email", "password", "address"})
 public class UserPrincipal implements UserDetails {
     private Long id;
 
@@ -24,15 +27,19 @@ public class UserPrincipal implements UserDetails {
 
     private String password;
 
+    private String address;
+
     private Collection<? extends GrantedAuthority> authorities;
 
+    // TODO: test
     public static UserPrincipal from(CustomerData customer) {
         return new UserPrincipal(
                 customer.getId(),
                 customer.getName(),
                 customer.getEmail(),
                 customer.getPassword(),
-                Collections.emptyList());
+                customer.getAddress(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     @Override

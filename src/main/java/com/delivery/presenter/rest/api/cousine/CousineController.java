@@ -3,7 +3,7 @@ package com.delivery.presenter.rest.api.cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.entities.CousineResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
@@ -17,26 +17,26 @@ import java.util.concurrent.CompletableFuture;
 public class CousineController implements CousineResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllCousinesUseCase getAllCousinesUseCase;
-    private GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase;
+    private GetStoresByCousineIdUseCase getStoresByCousineIdUseCase;
     private SearchCousineByNameUseCase getAllCousinesByNameMatching;
 
     public CousineController(UseCaseExecutor useCaseExecutor,
                              GetAllCousinesUseCase getAllCousinesUseCase,
-                             GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase,
+                             GetStoresByCousineIdUseCase getStoresByCousineIdUseCase,
                              SearchCousineByNameUseCase getAllCousinesByNameMatching) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllCousinesUseCase = getAllCousinesUseCase;
-        this.getStoresByCousineIdentityUseCase = getStoresByCousineIdentityUseCase;
+        this.getStoresByCousineIdUseCase = getStoresByCousineIdUseCase;
         this.getAllCousinesByNameMatching = getAllCousinesByNameMatching;
     }
 
     @Override
     public CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getStoresByCousineIdentityUseCase,
+                getStoresByCousineIdUseCase,
                 id,
                 Identity::new,
-                StoreResponse::fromDomain);
+                StoreResponse::from);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CousineController implements CousineResource {
                 getAllCousinesUseCase,
                 null,
                 (arg) -> null,
-                CousineResponse::fromDomain);
+                CousineResponse::from);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class CousineController implements CousineResource {
                 getAllCousinesByNameMatching,
                 text,
                 (searchText) -> searchText,
-                CousineResponse::fromDomain);
+                CousineResponse::from);
     }
 }

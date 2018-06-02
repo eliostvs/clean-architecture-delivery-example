@@ -10,11 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,6 +28,27 @@ public class ProductRepositoryImpTest {
     private JpaProductRepository jpaProductRepository;
 
     @Test
+    public void findProductsByStoreAndProductsIdReturnListOfProducts() {
+        // given
+        Identity storeId = TestCoreEntityGenerator.randomId();
+        final Identity productId = TestCoreEntityGenerator.randomId();
+
+        // and
+        Product product = TestCoreEntityGenerator.randomProduct();
+        ProductData productData = ProductData.from(product);
+
+        doReturn(singletonList(productData))
+                .when(jpaProductRepository)
+                .findByStoreIdAndIdIsIn(eq(storeId.getNumber()), eq(singletonList(productId.getNumber())));
+
+        // when
+        List<Product> actual = productRepository.findProductsByStoreAndProductsId(storeId, singletonList(productId));
+
+        // then
+        assertThat(actual).isEqualTo(singletonList(product));
+    }
+
+    @Test
     public void searchByNameReturnMatchingProducts() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
@@ -34,7 +56,7 @@ public class ProductRepositoryImpTest {
         String searchText = "abc";
 
         // and
-        doReturn(Collections.singletonList(productData))
+        doReturn(singletonList(productData))
                 .when(jpaProductRepository)
                 .findByNameContainingOrDescriptionContainingAllIgnoreCase(searchText, searchText);
 
@@ -48,7 +70,7 @@ public class ProductRepositoryImpTest {
     @Test
     public void getByIdentityReturnsEmpty() {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doReturn(Optional.empty())
@@ -56,7 +78,7 @@ public class ProductRepositoryImpTest {
                 .findById(id.getNumber());
 
         // when
-        Optional<Product> actual = productRepository.getByIdentity(id);
+        Optional<Product> actual = productRepository.getById(id);
 
         // then
         assertThat(actual.isPresent()).isFalse();
@@ -75,7 +97,7 @@ public class ProductRepositoryImpTest {
                 .findById(id.getNumber());
 
         // when
-        Optional<Product> actual = productRepository.getByIdentity(id);
+        Optional<Product> actual = productRepository.getById(id);
 
         // then
         assertThat(actual.isPresent()).isTrue();
@@ -89,7 +111,7 @@ public class ProductRepositoryImpTest {
         ProductData productData = ProductData.from(product);
 
         // and
-        doReturn(Collections.singletonList(productData))
+        doReturn(singletonList(productData))
                 .when(jpaProductRepository)
                 .findAll();
 

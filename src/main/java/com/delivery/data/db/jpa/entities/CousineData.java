@@ -17,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,8 +35,7 @@ public class CousineData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    @NotNull
+    @Column(unique = true, nullable = false)
     private String name;
 
     @OneToMany(
@@ -59,17 +57,18 @@ public class CousineData {
     }
 
     // TODO: test from
-    public static Cousine toDomain(CousineData cousineData) {
-        return new Cousine(
-                new Identity(cousineData.getId()),
-                cousineData.getName());
-    }
-
-    // TODO: test from
-    public static CousineData fromDomain(Cousine cousine) {
+    public static CousineData from(Cousine cousine) {
         return new CousineData(
                 convertId(cousine.getId()),
                 cousine.getName(),
-                new HashSet<>());
+                new HashSet<>()
+        );
+    }
+
+    public Cousine fromThis() {
+        return new Cousine(
+                new Identity(id),
+                name
+        );
     }
 }

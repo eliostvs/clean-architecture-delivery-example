@@ -12,7 +12,7 @@ public interface StoreRepository {
 
     List<Store> searchByName(String searchText);
 
-    Optional<Store> getByIdentity(Identity id);
+    Optional<Store> getById(Identity id);
 
-    List<Product> getProductsByIdentity(Identity id);
+    List<Product> getProductsById(Identity id);
 }

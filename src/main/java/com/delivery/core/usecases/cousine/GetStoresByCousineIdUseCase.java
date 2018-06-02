@@ -7,19 +7,20 @@ import com.delivery.core.usecases.UseCase;
 
 import java.util.List;
 
-public class GetStoresByCousineIdentityUseCase implements UseCase<Identity, List<Store>> {
+public class GetStoresByCousineIdUseCase implements UseCase<Identity, List<Store>> {
     private CousineRepository repository;
 
-    public GetStoresByCousineIdentityUseCase(CousineRepository repository) {
+    public GetStoresByCousineIdUseCase(CousineRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public List<Store> execute(Identity id) {
-        List<Store> stores = repository.getStoresByIdentity(id);
+        List<Store> stores = repository.getStoresById(id);
 
         if (stores.isEmpty()) {
-            throw new NotFoundException("No cousine found for identity: " + id.getNumber());
+            // TODO: Use a simpler exception message
+            throw new NotFoundException("Cousine " + id.getNumber() + " not found");
         }
 
         return stores;

@@ -3,8 +3,8 @@ package com.delivery.presenter.rest.api.store;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
-import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
-import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
+import com.delivery.core.usecases.store.GetStoreByIdUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.rest.api.entities.ProductResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
@@ -20,19 +20,19 @@ public class StoreController implements StoreResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllStoresUseCase getAllStoresUseCase;
     private SearchStoresByNameUseCase searchStoresByNameUseCase;
-    private GetStoreByIdentityUseCase getStoreByIdentityUseCase;
-    private GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase;
+    private GetStoreByIdUseCase getStoreByIdUseCase;
+    private GetProductsByStoreIdUseCase getProductsByStoreIdUseCase;
 
     public StoreController(UseCaseExecutor useCaseExecutor,
                            GetAllStoresUseCase getAllStoresUseCase,
                            SearchStoresByNameUseCase searchStoresByNameUseCase,
-                           GetStoreByIdentityUseCase getStoreByIdentityUseCase,
-                           GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase) {
+                           GetStoreByIdUseCase getStoreByIdUseCase,
+                           GetProductsByStoreIdUseCase getProductsByStoreIdUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllStoresUseCase = getAllStoresUseCase;
         this.searchStoresByNameUseCase = searchStoresByNameUseCase;
-        this.getStoreByIdentityUseCase = getStoreByIdentityUseCase;
-        this.getProductsByStoreIdentityUseCase = getProductsByStoreIdentityUseCase;
+        this.getStoreByIdUseCase = getStoreByIdUseCase;
+        this.getProductsByStoreIdUseCase = getProductsByStoreIdUseCase;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class StoreController implements StoreResource {
                 getAllStoresUseCase,
                 null,
                 (arg) -> null,
-                StoreResponse::fromDomain);
+                StoreResponse::from);
     }
 
     @Override
@@ -50,24 +50,24 @@ public class StoreController implements StoreResource {
                 searchStoresByNameUseCase,
                 text,
                 (arg) -> arg,
-                StoreResponse::fromDomain);
+                StoreResponse::from);
     }
 
     @Override
     public CompletableFuture<StoreResponse> getStoreByIdentity(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getStoreByIdentityUseCase,
+                getStoreByIdUseCase,
                 id,
                 Identity::new,
-                StoreResponse::fromDomain);
+                StoreResponse::from);
     }
 
     @Override
     public CompletableFuture<List<ProductResponse>> getProductsBy(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getProductsByStoreIdentityUseCase,
+                getProductsByStoreIdUseCase,
                 id,
                 Identity::new,
-                ProductResponse::fromDomain);
+                ProductResponse::from);
     }
 }

@@ -6,8 +6,8 @@ import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
-import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
-import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
+import com.delivery.core.usecases.store.GetStoreByIdUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
@@ -54,10 +54,10 @@ public class StoreControllerTest extends BaseControllerTest {
     private SearchStoresByNameUseCase searchStoresByNameUseCase;
 
     @MockBean
-    private GetStoreByIdentityUseCase getStoreByIdentityUseCase;
+    private GetStoreByIdUseCase getStoreByIdUseCase;
 
     @MockBean
-    private GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase;
+    private GetProductsByStoreIdUseCase getProductsByStoreIdUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -98,7 +98,7 @@ public class StoreControllerTest extends BaseControllerTest {
 
         // and
         doReturn(store)
-                .when(getStoreByIdentityUseCase)
+                .when(getStoreByIdUseCase)
                 .execute(eq(store.getId()));
 
         // when
@@ -146,7 +146,7 @@ public class StoreControllerTest extends BaseControllerTest {
 
         // and
         doReturn(Collections.singletonList(product))
-                .when(getProductsByStoreIdentityUseCase)
+                .when(getProductsByStoreIdUseCase)
                 .execute(eq(id));
 
         // when
@@ -167,11 +167,11 @@ public class StoreControllerTest extends BaseControllerTest {
     @Test
     public void getProductsByStoreIdReturnsNotFound() throws Exception {
         //given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doThrow(new NotFoundException("Error"))
-                .when(getProductsByStoreIdentityUseCase)
+                .when(getProductsByStoreIdUseCase)
                 .execute(eq(id));
 
         // when

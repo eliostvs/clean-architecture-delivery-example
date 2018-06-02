@@ -29,6 +29,10 @@ spring:
     console:
       enabled: true
 
+logging:
+  level:
+    org.springframework.web: DEBUG
+
 management:
   endpoints:
     web:

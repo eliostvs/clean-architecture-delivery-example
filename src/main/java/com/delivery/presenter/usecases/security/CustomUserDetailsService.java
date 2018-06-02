@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Transactional
-    UserDetails loadUserById(Long id) {
+    public UserDetails loadUserById(Long id) {
         CustomerData customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));

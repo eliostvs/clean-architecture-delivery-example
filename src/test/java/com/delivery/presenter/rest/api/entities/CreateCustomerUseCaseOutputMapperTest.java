@@ -25,6 +25,8 @@ public class CreateCustomerUseCaseOutputMapperTest {
 
         // then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(actual.getBody().getSuccess()).isTrue();
+        assertThat(actual.getBody().getMessage()).isEqualTo("registered successfully");
         assertThat(actual.getHeaders().getLocation().toString()).isEqualTo("http://localhost/Customer/" + customer.getId().getNumber());
     }
 }

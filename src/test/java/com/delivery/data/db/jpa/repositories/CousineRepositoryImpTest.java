@@ -31,9 +31,9 @@ public class CousineRepositoryImpTest {
     public void getStoresByIdentityReturnsStores() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
-        StoreData storeData = StoreData.fromDomain(store);
+        StoreData storeData = StoreData.from(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -41,7 +41,7 @@ public class CousineRepositoryImpTest {
                 .findStoresById(id.getNumber());
 
         // when
-        final List<Store> actual = cousineRepository.getStoresByIdentity(id);
+        final List<Store> actual = cousineRepository.getStoresById(id);
 
         // then
         assertThat(actual).containsOnly(store);
@@ -51,7 +51,7 @@ public class CousineRepositoryImpTest {
     public void getAllReturnsAllCousines() {
         // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        CousineData cousineData = CousineData.fromDomain(cousine);
+        CousineData cousineData = CousineData.from(cousine);
 
         // and
         doReturn(Collections.singletonList(cousineData))
@@ -68,7 +68,7 @@ public class CousineRepositoryImpTest {
     public void searchCousineByNameReturnsAllCousines() {
         // given
         Cousine cousine = TestCoreEntityGenerator.randomCousine();
-        CousineData cousineData = CousineData.fromDomain(cousine);
+        CousineData cousineData = CousineData.from(cousine);
         String search = "abc";
 
         // and

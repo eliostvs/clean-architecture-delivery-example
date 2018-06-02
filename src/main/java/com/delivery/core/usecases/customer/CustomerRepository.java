@@ -6,7 +6,7 @@ import com.delivery.data.db.jpa.entities.CustomerData;
 import java.util.Optional;
 
 public interface CustomerRepository {
-    Customer save(CreateCustomerInput input);
+    Customer persist(CreateCustomerUseCase.InputValues input);
 
     boolean existsByEmail(String email);
 

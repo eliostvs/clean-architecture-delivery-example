@@ -1,8 +1,7 @@
-package com.delivery.core.usecases.store;
+package com.delivery.core.usecases.cousine;
 
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
-import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import org.junit.Test;
@@ -16,49 +15,48 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetProductsByStoreIdentityUseCaseTest {
+public class GetStoresByCousineIdUseCaseTest {
 
     @InjectMocks
-    private GetProductsByStoreIdentityUseCase useCase;
+    private GetStoresByCousineIdUseCase useCase;
 
     @Mock
-    private StoreRepository repository;
+    private CousineRepository repository;
 
     @Test
-    public void getProductsByStoreIdentityReturnsProductsWhenStoreFound() {
+    public void returnsStoresWhenCousineIdIsFound() {
         // given
-        Product product = TestCoreEntityGenerator.randomProduct();
-        Store store = product.getStore();
+        Store store = TestCoreEntityGenerator.randomStore();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
-        doReturn(Collections.singletonList(product))
+        doReturn(Collections.singletonList(store))
                 .when(repository)
-                .getProductsByIdentity(eq(store.getId()));
+                .getStoresById(id);
 
         // when
-        List<Product> actual = useCase.execute(store.getId());
+        final List<Store> actual = useCase.execute(id);
 
         // then
-        assertThat(actual).containsOnly(product);
+        assertThat(actual).containsOnly(store);
     }
 
     @Test
-    public void getProductsByStoreIdentityThrowsNotFoundWhenStoreNotFound() {
+    public void throwsExceptionWhenCousineIdIsNotFound() {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doReturn(Collections.emptyList())
                 .when(repository)
-                .getProductsByIdentity(eq(id));
+                .getStoresById(id);
 
         // then
         assertThatThrownBy(() -> useCase.execute(id))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("No store found by identity: " + id.getNumber());
+                .hasMessage("Cousine " + id.getNumber() + " not found");
     }
 }

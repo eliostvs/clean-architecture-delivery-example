@@ -11,14 +11,14 @@ public class CousineResponse {
     private final Long id;
     private final String name;
 
-    private static CousineResponse fromDomain(Cousine cousine) {
+    private static CousineResponse from(Cousine cousine) {
         return new CousineResponse(cousine.getId().getNumber(), cousine.getName());
     }
     
-    public static List<CousineResponse> fromDomain(List<Cousine> cousines) {
+    public static List<CousineResponse> from(List<Cousine> cousines) {
         return cousines
                 .stream()
-                .map(CousineResponse::fromDomain)
+                .map(CousineResponse::from)
                 .collect(Collectors.toList());
     }
 }

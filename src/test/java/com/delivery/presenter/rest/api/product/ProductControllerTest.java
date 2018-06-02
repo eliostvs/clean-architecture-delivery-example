@@ -6,7 +6,7 @@ import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
-import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
+import com.delivery.core.usecases.product.GetProductByIdUseCase;
 import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImp;
@@ -44,7 +44,7 @@ public class ProductControllerTest extends BaseControllerTest {
     }
 
     @MockBean
-    private GetProductByIdentityUseCase getProductByIdentityUseCase;
+    private GetProductByIdUseCase getProductByIdUseCase;
 
     @MockBean
     private GetAllProductsUseCase getAllProductsUseCase;
@@ -66,11 +66,11 @@ public class ProductControllerTest extends BaseControllerTest {
     @Test
     public void getProductByIdentityReturnsNotFound() throws Exception {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doThrow(new NotFoundException("Error"))
-                .when(getProductByIdentityUseCase)
+                .when(getProductByIdUseCase)
                 .execute(eq(id));
 
         // when
@@ -144,7 +144,7 @@ public class ProductControllerTest extends BaseControllerTest {
 
         // and
         doReturn(product)
-                .when(getProductByIdentityUseCase)
+                .when(getProductByIdUseCase)
                 .execute(eq(product.getId()));
 
         // when

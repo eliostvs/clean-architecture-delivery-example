@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetProductByIdentityUseCaseTest {
+public class GetProductByIdUseCaseTest {
 
     @InjectMocks
-    private GetProductByIdentityUseCase useCase;
+    private GetProductByIdUseCase useCase;
 
     @Mock
     private ProductRepository repository;
@@ -28,17 +28,17 @@ public class GetProductByIdentityUseCaseTest {
     @Test
     public void executeThrowsException() {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doReturn(Optional.empty())
                 .when(repository)
-                .getByIdentity(id);
+                .getById(id);
 
         // then
         assertThatThrownBy(() -> useCase.execute(id))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("No product found by identity: " + id.getNumber());
+                .hasMessage("Product " + id.getNumber() + " not found");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class GetProductByIdentityUseCaseTest {
         // and
         doReturn(Optional.of(product))
                 .when(repository)
-                .getByIdentity(product.getId());
+                .getById(product.getId());
 
         // when
         Product actual = useCase.execute(product.getId());

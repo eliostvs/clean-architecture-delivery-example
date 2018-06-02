@@ -1,12 +1,30 @@
 package com.delivery.core.domain;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Value
+@AllArgsConstructor
+@EqualsAndHashCode
+@Getter
+@Setter
+@ToString
 public class Product {
-    private final Identity id;
-    private final String name;
-    private final String description;
-    private final Double price;
-    private final Store store;
+    private Identity id;
+    private String name;
+    private String description;
+    private Double price;
+    private Store store;
+
+    public static Product newInstance(Identity id, String name, String description, double price, Store store) {
+        return new Product(
+                id,
+                name,
+                description,
+                price,
+                store
+        );
+    }
 }

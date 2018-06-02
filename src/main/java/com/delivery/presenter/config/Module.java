@@ -2,17 +2,20 @@ package com.delivery.presenter.config;
 
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdentityUseCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
+import com.delivery.core.usecases.order.CreateOrderUseCase;
+import com.delivery.core.usecases.order.OrderRepository;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
-import com.delivery.core.usecases.product.GetProductByIdentityUseCase;
+import com.delivery.core.usecases.product.GetProductByIdUseCase;
+import com.delivery.core.usecases.product.GetProductsByStoreAndProductsIdUseCase;
 import com.delivery.core.usecases.product.ProductRepository;
 import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
-import com.delivery.core.usecases.store.GetProductsByStoreIdentityUseCase;
-import com.delivery.core.usecases.store.GetStoreByIdentityUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
+import com.delivery.core.usecases.store.GetStoreByIdUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.core.usecases.store.StoreRepository;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +23,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean
+    public CreateOrderUseCase createOrderUseCase(GetProductsByStoreAndProductsIdUseCase getProductsByStoreAndProductsIdUseCase,
+                                                 OrderRepository repository) {
+        return new CreateOrderUseCase(getProductsByStoreAndProductsIdUseCase, repository);
+    }
+
+    @Bean
+    public GetProductsByStoreAndProductsIdUseCase getProductsByStoreAndProductsIdUseCase(ProductRepository repository) {
+        return new GetProductsByStoreAndProductsIdUseCase(repository);
+    }
 
     @Bean
     public CreateCustomerUseCase createCustomerUseCase(CustomerRepository repository) {
@@ -32,8 +46,8 @@ public class Module {
     }
 
     @Bean
-    public GetProductByIdentityUseCase getProductByIdentityUseCase(ProductRepository repository) {
-        return new GetProductByIdentityUseCase(repository);
+    public GetProductByIdUseCase getProductByIdentityUseCase(ProductRepository repository) {
+        return new GetProductByIdUseCase(repository);
     }
 
     @Bean
@@ -42,13 +56,13 @@ public class Module {
     }
 
     @Bean
-    public GetProductsByStoreIdentityUseCase getProductsByStoreIdentityUseCase(StoreRepository repository) {
-        return new GetProductsByStoreIdentityUseCase(repository);
+    public GetProductsByStoreIdUseCase getProductsByStoreIdentityUseCase(StoreRepository repository) {
+        return new GetProductsByStoreIdUseCase(repository);
     }
 
     @Bean
-    public GetStoreByIdentityUseCase getStoreByIdentityUseCase(StoreRepository repository) {
-        return new GetStoreByIdentityUseCase(repository);
+    public GetStoreByIdUseCase getStoreByIdentityUseCase(StoreRepository repository) {
+        return new GetStoreByIdUseCase(repository);
     }
 
     @Bean
@@ -62,8 +76,8 @@ public class Module {
     }
 
     @Bean
-    public GetStoresByCousineIdentityUseCase getStoresByCousineIdentityUseCase(CousineRepository repository) {
-        return new GetStoresByCousineIdentityUseCase(repository);
+    public GetStoresByCousineIdUseCase getStoresByCousineIdentityUseCase(CousineRepository repository) {
+        return new GetStoresByCousineIdUseCase(repository);
     }
 
     @Bean

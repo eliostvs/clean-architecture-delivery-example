@@ -26,7 +26,7 @@ public class CreateCustomerUseCaseTest {
     @Test
     public void executeThrowsExceptionWhenEmailIsAlreadyRegistered() {
         // given
-        CreateCustomerInput input = new CreateCustomerInput("name", "email@email.com", "address", "password");
+        CreateCustomerUseCase.InputValues input = new CreateCustomerUseCase.InputValues("name", "email@email.com", "address", "password");
 
         // and
         doReturn(true)
@@ -43,14 +43,14 @@ public class CreateCustomerUseCaseTest {
     public void executeReturnsCreatedCustomer() {
         // given
         Customer customer = TestCoreEntityGenerator.randomCustomer();
-        CreateCustomerInput input = new CreateCustomerInput(
+        CreateCustomerUseCase.InputValues input = new CreateCustomerUseCase.InputValues(
                 customer.getName(), customer.getEmail(),
                 customer.getAddress(), customer.getPassword());
 
         // and
         doReturn(customer)
                 .when(repository)
-                .save(eq(input));
+                .persist(eq(input));
 
         // when
         Customer actual = useCase.execute(input);

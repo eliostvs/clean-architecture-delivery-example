@@ -38,7 +38,6 @@ dependencies {
 	compileOnly('org.projectlombok:lombok')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.flywaydb:flyway-core')
@@ -46,8 +45,9 @@ dependencies {
 	runtime('org.springframework.boot:spring-boot-devtools')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
+	runtime('com.h2database:h2')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
     testCompile('com.github.javafaker:javafaker:0.15')
-	runtime('com.h2database:h2')
 }

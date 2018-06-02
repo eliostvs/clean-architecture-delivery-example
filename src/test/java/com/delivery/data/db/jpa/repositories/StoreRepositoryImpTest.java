@@ -32,7 +32,7 @@ public class StoreRepositoryImpTest {
     public void getAllReturnsAllStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromDomain(store);
+        StoreData storeData = StoreData.from(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -51,7 +51,7 @@ public class StoreRepositoryImpTest {
         // given
         String text = "abc";
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromDomain(store);
+        StoreData storeData = StoreData.from(store);
 
         // and
         doReturn(Collections.singletonList(storeData))
@@ -69,7 +69,7 @@ public class StoreRepositoryImpTest {
     public void getStoreByIdentityReturnsOptionalStore() {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        StoreData storeData = StoreData.fromDomain(store);
+        StoreData storeData = StoreData.from(store);
 
         // and
         doReturn(Optional.of(storeData))
@@ -77,7 +77,7 @@ public class StoreRepositoryImpTest {
                 .findById(store.getId().getNumber());
 
         // when
-        Optional<Store> actual = storeRepository.getByIdentity(store.getId());
+        Optional<Store> actual = storeRepository.getById(store.getId());
 
         // then
         assertThat(actual).isEqualTo(Optional.of(store));
@@ -86,7 +86,7 @@ public class StoreRepositoryImpTest {
     @Test
     public void getStoreByIdentityReturnsOptionalEmpty() {
         // given
-        Identity id = TestCoreEntityGenerator.randomIdentity();
+        Identity id = TestCoreEntityGenerator.randomId();
 
         // and
         doReturn(Optional.empty())
@@ -94,7 +94,7 @@ public class StoreRepositoryImpTest {
                 .findById(id.getNumber());
 
         // when
-        Optional<Store> actual = storeRepository.getByIdentity(id);
+        Optional<Store> actual = storeRepository.getById(id);
 
         // then
         assertThat(actual).isEqualTo(Optional.empty());
@@ -113,7 +113,7 @@ public class StoreRepositoryImpTest {
                 .findProductsById(id.getNumber());
 
         //when
-        List<Product> actual = storeRepository.getProductsByIdentity(id);
+        List<Product> actual = storeRepository.getProductsById(id);
 
         // then
         assertThat(actual).containsOnly(product);

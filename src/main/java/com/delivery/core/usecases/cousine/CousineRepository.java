@@ -7,7 +7,7 @@ import com.delivery.core.domain.Store;
 import java.util.List;
 
 public interface CousineRepository {
-    List<Store> getStoresByIdentity(Identity id);
+    List<Store> getStoresById(Identity id);
 
     List<Cousine> getAll();
 

@@ -2,7 +2,7 @@ package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.domain.Customer;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.customer.CreateCustomerInput;
+import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ public class CustomerRepositoryImpTest {
     public void saveShouldPersistCustomerDataAndReturnsCustomer() throws Exception {
         // given
         Customer customer = TestCoreEntityGenerator.randomCustomer();
-        CreateCustomerInput customerInput = new CreateCustomerInput(
+        CreateCustomerUseCase.InputValues customerInput = new CreateCustomerUseCase.InputValues(
                 customer.getName(), customer.getEmail(),
                 customer.getAddress(), customer.getPassword());
 
@@ -44,7 +44,7 @@ public class CustomerRepositoryImpTest {
                 .save(eq(customerData));
 
         // when
-        Customer actual = customerRepository.save(customerInput);
+        Customer actual = customerRepository.persist(customerInput);
 
         // then
         assertThat(actual).isEqualTo(customer);

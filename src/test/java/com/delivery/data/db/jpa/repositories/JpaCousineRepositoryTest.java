@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.delivery.TestEntityGenerator.randomAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -53,8 +54,8 @@ public class JpaCousineRepositoryTest {
     public void getStoresByCousineId() {
         // given
         CousineData cousine = entityManager.persistFlushFind(CousineData.newInstance("name"));
-        StoreData storeA = entityManager.persistFlushFind(StoreData.newInstance("name A", cousine));
-        StoreData storeB = entityManager.persistFlushFind(StoreData.newInstance("name B", cousine));
+        StoreData storeA = entityManager.persistFlushFind(StoreData.newInstance("name A", randomAddress(), cousine));
+        StoreData storeB = entityManager.persistFlushFind(StoreData.newInstance("name B", randomAddress(), cousine));
 
         // and
         cousine.addStore(storeA);

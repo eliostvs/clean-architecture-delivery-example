@@ -3,7 +3,6 @@ package com.delivery.presenter.rest.api.customer;
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.EmailAlreadyUsedException;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.customer.CreateCustomerInput;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.rest.api.entities.SignInRequest;
@@ -44,7 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerControllerTest extends BaseControllerTest {
 
     @Configuration
-    @ComponentScan(basePackages = {"com.delivery.presenter.rest.api.customer", "com.delivery.presenter.rest.api.common"})
+    @ComponentScan(basePackages = {
+            "com.delivery.presenter.rest.api.customer",
+            "com.delivery.presenter.rest.api.common"
+    })
     static class Config {
     }
 
@@ -130,17 +132,17 @@ public class CustomerControllerTest extends BaseControllerTest {
         // given
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
         String payload = signUpJson.write(signUpRequest).getJson();
-        CreateCustomerInput createCustomerInput = new CreateCustomerInput(null, null, null, null);
+        CreateCustomerUseCase.InputValues inputValues = new CreateCustomerUseCase.InputValues(null, null, null, null);
 
         // and
-        doReturn(createCustomerInput)
+        doReturn(inputValues)
                 .when(createCustomerInputMapper)
                 .map(eq(signUpRequest));
 
         // and
         doThrow(new EmailAlreadyUsedException("Error"))
                 .when(createCustomerUseCase)
-                .execute(createCustomerInput);
+                .execute(inputValues);
         // when
         RequestBuilder request = asyncRequest("/Customer", payload);
 
@@ -158,19 +160,19 @@ public class CustomerControllerTest extends BaseControllerTest {
         final SignUpRequest signUpRequest = new SignUpRequest("name", "email@email.com", "address", "password");
         String payload = signUpJson.write(signUpRequest).getJson();
         Customer customer = TestCoreEntityGenerator.randomCustomer();
-        CreateCustomerInput createCustomerInput = new CreateCustomerInput(
+        CreateCustomerUseCase.InputValues inputValues = new CreateCustomerUseCase.InputValues(
                 customer.getName(), customer.getEmail(),
                 customer.getAddress(), customer.getPassword());
 
         // and
-        doReturn(createCustomerInput)
+        doReturn(inputValues)
                 .when(createCustomerInputMapper)
                 .map(eq(signUpRequest));
 
         // and
         doReturn(customer)
                 .when(createCustomerUseCase)
-                .execute(eq(createCustomerInput));
+                .execute(eq(inputValues));
 
         // when
         RequestBuilder request = asyncRequest("/Customer", payload);

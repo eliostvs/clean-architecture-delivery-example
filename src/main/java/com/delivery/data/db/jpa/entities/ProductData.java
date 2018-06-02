@@ -17,8 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
 
 import static com.delivery.data.db.jpa.entities.IdConverter.convertId;
 
@@ -35,27 +33,27 @@ public class ProductData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    @NotEmpty
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String description;
 
-    @DecimalMin(value = "0.00")
+    @Column(nullable = false)
     private Double price;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
     private StoreData store;
 
-    public static ProductData newInstance(String name, String description, StoreData storeData) {
+    public static ProductData newInstance(String name, String description, Double price, StoreData storeData) {
         return new ProductData(
                 null,
                 name,
                 description,
-                0d,
-                storeData);
+                price,
+                storeData
+        );
     }
 
     public static ProductData from(Product product) {
@@ -64,15 +62,17 @@ public class ProductData {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                StoreData.fromDomain(product.getStore()));
+                StoreData.from(product.getStore())
+        );
     }
 
-    public static Product from(ProductData productData) {
+    public Product fromThis() {
         return new Product(
-                new Identity(productData.getId()),
-                productData.getName(),
-                productData.getDescription(),
-                productData.getPrice(),
-                StoreData.toDomain(productData.getStore()));
+                new Identity(id),
+                name,
+                description,
+                price,
+                store.fromThis()
+        );
     }
 }

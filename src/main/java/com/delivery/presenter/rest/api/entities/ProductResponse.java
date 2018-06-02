@@ -16,7 +16,7 @@ public class ProductResponse {
     private final Double price;
     private final Long storeId;
 
-    public static ProductResponse fromDomain(Product product) {
+    public static ProductResponse from(Product product) {
         return new ProductResponse(
                 convertId(product.getId()),
                 product.getName(),
@@ -25,10 +25,10 @@ public class ProductResponse {
                 convertId(product.getStore().getId()));
     }
 
-    public static List<ProductResponse> fromDomain(List<Product> products) {
+    public static List<ProductResponse> from(List<Product> products) {
         return products
                 .parallelStream()
-                .map(ProductResponse::fromDomain)
+                .map(ProductResponse::from)
                 .collect(Collectors.toList());
     }
 }

@@ -2,7 +2,7 @@ package com.delivery.data.db.jpa.entities;
 
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
-import com.delivery.core.usecases.customer.CreateCustomerInput;
+import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+
+import static com.delivery.data.db.jpa.entities.IdConverter.convertId;
 
 @AllArgsConstructor
 @Entity(name = "customer")
@@ -31,34 +32,57 @@ public class CustomerData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String name;
 
-    @NotEmpty
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String address;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String password;
 
+    // TODO: test
+    public static CustomerData from(Customer customer) {
+        return new CustomerData(
+                convertId(customer.getId()),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getAddress(),
+                customer.getPassword()
+        );
+    }
+
+    public static CustomerData newInstance(String name, String email, String address, String password) {
+        return new CustomerData(
+                null,
+                name,
+                email,
+                address,
+                password
+        );
+    }
+
+    // TODO: test
     public Customer fromThis() {
         return new Customer(
                 new Identity(id),
                 name,
                 email,
                 address,
-                password);
+                password
+        );
     }
 
-    public static CustomerData from(CreateCustomerInput customerInput) {
+    public static CustomerData from(CreateCustomerUseCase.InputValues customerInput) {
         return new CustomerData(
                 null,
                 customerInput.getName(),
                 customerInput.getEmail(),
                 customerInput.getAddress(),
-                customerInput.getPassword());
+                customerInput.getPassword()
+        );
     }
 }

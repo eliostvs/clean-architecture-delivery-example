@@ -17,6 +17,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.delivery.TestEntityGenerator.randomAddress;
+import static com.delivery.TestEntityGenerator.randomName;
+import static com.delivery.TestEntityGenerator.randomPrice;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -41,10 +45,25 @@ public class JpaProductRepositoryTest {
     }
 
     @Test
-    public void findByNameContainingIgnoreCase() {
+    public void findByStoreIdAndIdIsInReturnListOfProductData() {
         // given
         CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance("name"));
-        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", cousineData));
+        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", randomAddress(), cousineData));
+        ProductData productData = entityManager.persistAndFlush(ProductData.newInstance("name", "description", randomPrice(), storeData));
+
+        // when
+        List<ProductData> actual =
+                repository.findByStoreIdAndIdIsIn(storeData.getId(), singletonList(productData.getId()));
+
+        // then
+        assertThat(actual).extracting("id").containsOnly(productData.getId());
+    }
+
+    @Test
+    public void findByNameContainingIgnoreCase() {
+        // given
+        CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance(randomName()));
+        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance(randomName(), randomAddress(), cousineData));
 
         Arrays.stream(new String[]{"AABC", "ABBC", "ABCC"})
                 .forEach(name -> {
@@ -54,7 +73,7 @@ public class JpaProductRepositoryTest {
                         description = "DESCRIPTION";
                     }
 
-                    entityManager.persistAndFlush(ProductData.newInstance(name, description, storeData));
+                    entityManager.persistAndFlush(ProductData.newInstance(name, description, randomPrice(), storeData));
                 });
 
         // when

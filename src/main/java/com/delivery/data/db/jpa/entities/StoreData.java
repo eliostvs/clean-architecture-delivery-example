@@ -18,9 +18,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.delivery.data.db.jpa.entities.IdConverter.convertId;
 
 @AllArgsConstructor
 @Entity(name = "store")
@@ -35,11 +36,10 @@ public class StoreData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    @NotEmpty
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String address;
 
     @ManyToOne
@@ -50,26 +50,26 @@ public class StoreData {
     private Set<ProductData> products;
 
     // TODO: test method
-    public static Store toDomain(StoreData storeData) {
-        return new Store(
-                new Identity(storeData.getId()),
-                storeData.getName(),
-                storeData.getAddress(),
-                CousineData.toDomain(storeData.getCousine())
-        );
-    }
-
-    // TODO: test method
-    public static StoreData fromDomain(Store store) {
+    public static StoreData from(Store store) {
         return new StoreData(
-                store.getId().getNumber(),
+                convertId(store.getId()),
                 store.getName(),
                 store.getAddress(),
-                CousineData.fromDomain(store.getCousine()),
+                CousineData.from(store.getCousine()),
                 new HashSet<>());
     }
 
-    public static StoreData newInstance(String name, CousineData cousineData) {
-        return new StoreData(null, name, "Address of " + name, cousineData, new HashSet<>());
+    public static StoreData newInstance(String name, String address, CousineData cousineData) {
+        return new StoreData(null, name, address, cousineData, new HashSet<>());
+    }
+
+    // TODO: test method
+    public Store fromThis() {
+        return new Store(
+                new Identity(id),
+                name,
+                address,
+                cousine.fromThis()
+        );
     }
 }

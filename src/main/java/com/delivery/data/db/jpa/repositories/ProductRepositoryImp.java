@@ -22,24 +22,40 @@ public class ProductRepositoryImp implements ProductRepository {
     public List<Product> getAll() {
         return repository
                 .findAll()
-                .parallelStream()
-                .map(ProductData::from)
+                .stream()
+                .map(ProductData::fromThis)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Product> getByIdentity(Identity id) {
+    public Optional<Product> getById(Identity id) {
         return repository
                 .findById(id.getNumber())
-                .map(ProductData::from);
+                .map(ProductData::fromThis);
     }
 
     @Override
     public List<Product> searchByNameOrDescription(String searchText) {
         return repository
                 .findByNameContainingOrDescriptionContainingAllIgnoreCase(searchText, searchText)
-                .parallelStream()
-                .map(ProductData::from)
+                .stream()
+                .map(ProductData::fromThis)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> findProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId) {
+        return repository
+                .findByStoreIdAndIdIsIn(storeId.getNumber(), createListOfLong(productsId))
+                .stream()
+                .map(ProductData::fromThis)
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> createListOfLong(List<Identity> productsId) {
+        return productsId
+                .stream()
+                .map(Identity::getNumber)
                 .collect(Collectors.toList());
     }
 }

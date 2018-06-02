@@ -1,6 +1,6 @@
 package com.delivery.presenter.rest.api.entities;
 
-import com.delivery.core.usecases.customer.CreateCustomerInput;
+import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import lombok.Value;
 
 import javax.validation.constraints.Email;
@@ -25,8 +25,8 @@ public class SignUpRequest {
     @Size(min = 6, max = 50)
     private final String password;
 
-    public static CreateCustomerInput from(SignUpRequest signUpRequest) {
-        return new CreateCustomerInput(
+    public static CreateCustomerUseCase.InputValues from(SignUpRequest signUpRequest) {
+        return new CreateCustomerUseCase.InputValues(
                 signUpRequest.getName(),
                 signUpRequest.getEmail(),
                 signUpRequest.getAddress(),

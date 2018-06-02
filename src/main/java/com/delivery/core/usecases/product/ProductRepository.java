@@ -9,7 +9,9 @@ import java.util.Optional;
 public interface ProductRepository {
     List<Product> getAll();
 
-    Optional<Product> getByIdentity(Identity id);
+    Optional<Product> getById(Identity id);
 
     List<Product> searchByNameOrDescription(String searchText);
+
+    List<Product> findProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId);
 }

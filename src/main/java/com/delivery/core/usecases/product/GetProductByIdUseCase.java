@@ -5,17 +5,17 @@ import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Product;
 import com.delivery.core.usecases.UseCase;
 
-public class GetProductByIdentityUseCase implements UseCase<Identity, Product> {
+public class GetProductByIdUseCase implements UseCase<Identity, Product> {
     private ProductRepository repository;
 
-    public GetProductByIdentityUseCase(ProductRepository repository) {
+    public GetProductByIdUseCase(ProductRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public Product execute(Identity id) {
         return repository
-                .getByIdentity(id)
-                .orElseThrow(() -> new NotFoundException("No product found by identity: " + id.getNumber()));
+                .getById(id)
+                .orElseThrow(() -> new NotFoundException("Product " + id.getNumber() + " not found"));
     }
 }

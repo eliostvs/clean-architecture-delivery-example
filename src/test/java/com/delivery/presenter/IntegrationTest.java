@@ -190,6 +190,27 @@ public class IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Test
+    @Sql(scripts = "classpath:clean-up.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void getCustomerByOrder() throws Exception {
+        // given
+        template.postForEntity(createUrl("/Customer"), createSignUpRequest(), String.class);
+
+        // and
+        String uri = template.exchange(createUrl("/Order"), HttpMethod.POST, createOrderRequest(), String.class)
+                .getHeaders()
+                .getLocation()
+                .toString()
+                .concat("/customer");
+
+        // when
+        ResponseEntity<String> response =
+                template.exchange(uri, HttpMethod.GET, createAuthRequest(), String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
     // Helpers
 
     private SignUpRequest createSignUpRequest() {

@@ -1,12 +1,14 @@
 package com.delivery.presenter.rest.api.order;
 
 import com.delivery.TestEntityGenerator;
+import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.GetOrderByIdUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
+import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import com.delivery.presenter.config.WebSecurityConfig;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
@@ -71,6 +73,9 @@ public class OrderControllerTest extends BaseControllerTest {
     private GetOrderByIdUseCase getOrderByIdUseCase;
 
     @MockBean
+    private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
+
+    @MockBean
     private JwtProvider jwtProvider;
 
     @SpyBean
@@ -113,6 +118,33 @@ public class OrderControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
+    }
+
+    @Test
+    public void getCustomerByOrderIdReturnsOk() throws Exception {
+        // given
+        Order order = TestCoreEntityGenerator.randomOrder();
+        Customer customer = order.getCustomer();
+
+        GetCustomerByOrderIdUseCase.InputValues input =
+                new GetCustomerByOrderIdUseCase.InputValues(order.getId());
+
+        GetCustomerByOrderIdUseCase.OutputValues output =
+                new GetCustomerByOrderIdUseCase.OutputValues(customer);
+
+        // and
+        doReturn(output)
+                .when(getCustomerByOrderIdUseCase)
+                .execute(input);
+
+        // and
+        RequestBuilder request = asyncGetRequest("/Order/" + order.getId().getNumber() + "/customer", TOKEN);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.name", is(customer.getName())));
     }
 
     @Test

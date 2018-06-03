@@ -8,6 +8,7 @@ import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
+import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
 import com.delivery.core.usecases.order.OrderRepository;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdUseCase;
@@ -24,6 +25,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase(GetOrderByIdUseCase getOrderByIdUseCase) {
+        return new GetCustomerByOrderIdUseCase(getOrderByIdUseCase);
+    }
 
     @Bean GetOrderByIdUseCase getOrderByIdUseCase(OrderRepository repository) {
         return new GetOrderByIdUseCase(repository);

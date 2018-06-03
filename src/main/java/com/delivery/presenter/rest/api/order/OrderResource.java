@@ -1,6 +1,7 @@
 package com.delivery.presenter.rest.api.order;
 
 import com.delivery.presenter.rest.api.entities.ApiResponse;
+import com.delivery.presenter.rest.api.entities.CustomerResponse;
 import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.rest.api.entities.OrderResponse;
 import com.delivery.presenter.usecases.security.CurrentUser;
@@ -24,7 +25,7 @@ public interface OrderResource {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<ResponseEntity<ApiResponse>> createOrder(
+    CompletableFuture<ResponseEntity<ApiResponse>> create(
             @CurrentUser UserPrincipal userPrincipal,
             HttpServletRequest httpServletRequest,
             @Valid @RequestBody OrderRequest orderRequest
@@ -33,7 +34,15 @@ public interface OrderResource {
     // TODO: add post authorize
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<OrderResponse> getOrderById(
+    CompletableFuture<OrderResponse> getById(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable Long id
+    );
+
+    // TODO: add post authorize
+    @GetMapping("/{id}/customer")
+    @PreAuthorize("hasRole('USER')")
+    CompletableFuture<CustomerResponse> getCustomerById(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable Long id
     );

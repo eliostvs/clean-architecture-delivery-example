@@ -21,9 +21,9 @@ public class OrderResponseTest {
         // then
         assertThat(actual.getId()).isEqualTo(order.getId().getNumber());
         assertThat(actual.getDate()).isEqualTo(order.getCreatedAt());
-        assertThat(actual.getCustomerId()).isEqualTo(order.getCustomer().getId().getNumber());
+        assertThat(actual.getCustomer()).isEqualTo(CustomerResponse.from(order.getCustomer()));
         assertThat(actual.getContact()).isEqualTo(order.getCustomer().getName());
-        assertThat(actual.getStoreId()).isEqualTo(order.getStore().getId().getNumber());
+        assertThat(actual.getStore()).isEqualTo(StoreResponse.from(order.getStore()));
         assertThat(actual.getTotal()).isEqualTo(order.getTotal());
         assertThat(actual.getStatus()).isEqualTo(order.getStatus());
         assertThat(actual.getLastUpdate()).isEqualTo(order.getUpdatedAt());

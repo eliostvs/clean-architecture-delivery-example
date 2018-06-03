@@ -13,9 +13,9 @@ import static com.delivery.data.db.jpa.entities.IdConverter.convertId;
 public class OrderResponse {
     private final Long id;
     private final Instant date;
-    private final Long customerId;
+    private final CustomerResponse customer;
+    private final StoreResponse store;
     private final String contact;
-    private final Long storeId;
     private final Double total;
     private final Status status;
     private final Instant lastUpdate;
@@ -25,9 +25,9 @@ public class OrderResponse {
         return new OrderResponse(
                 convertId(order.getId()),
                 order.getCreatedAt(),
-                convertId(order.getCustomer().getId()),
+                CustomerResponse.from(order.getCustomer()),
+                StoreResponse.from(order.getStore()),
                 order.getCustomer().getName(),
-                convertId(order.getStore().getId()),
                 order.getTotal(),
                 order.getStatus(),
                 order.getUpdatedAt(),

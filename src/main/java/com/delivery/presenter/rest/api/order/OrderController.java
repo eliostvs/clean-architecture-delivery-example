@@ -4,7 +4,9 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.GetOrderByIdUseCase;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
+import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
+import com.delivery.presenter.rest.api.entities.CustomerResponse;
 import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.rest.api.entities.OrderResponse;
 import com.delivery.presenter.usecases.security.CurrentUser;
@@ -23,19 +25,22 @@ public class OrderController implements OrderResource {
     private UseCaseExecutor useCaseExecutor;
     private CreateOrderUseCase createOrderUseCase;
     private GetOrderByIdUseCase getOrderByIdUseCase;
+    private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
 
     public OrderController(UseCaseExecutor useCaseExecutor,
                            CreateOrderUseCase createOrderUseCase,
-                           GetOrderByIdUseCase getOrderByIdUseCase) {
+                           GetOrderByIdUseCase getOrderByIdUseCase,
+                           GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderByIdUseCase = getOrderByIdUseCase;
+        this.getCustomerByOrderIdUseCase = getCustomerByOrderIdUseCase;
     }
 
     @Override
-    public CompletableFuture<ResponseEntity<ApiResponse>> createOrder(@CurrentUser UserPrincipal userDetails,
-                                                                      HttpServletRequest httpServletRequest,
-                                                                      @Valid @RequestBody OrderRequest orderRequest) {
+    public CompletableFuture<ResponseEntity<ApiResponse>> create(@CurrentUser UserPrincipal userDetails,
+                                                                 HttpServletRequest httpServletRequest,
+                                                                 @Valid @RequestBody OrderRequest orderRequest) {
         return useCaseExecutor.execute(
                 createOrderUseCase,
                 CreateOrderInputMapper.map(orderRequest, userDetails),
@@ -44,12 +49,22 @@ public class OrderController implements OrderResource {
     }
 
     @Override
-    public CompletableFuture<OrderResponse> getOrderById(@CurrentUser UserPrincipal userPrincipal,
-                                                         @PathVariable Long id) {
+    public CompletableFuture<OrderResponse> getById(@CurrentUser UserPrincipal userPrincipal,
+                                                    @PathVariable Long id) {
         return useCaseExecutor.execute(
                 getOrderByIdUseCase,
                 new GetOrderByIdUseCase.InputValues(new Identity(id)),
                 (outputValues) -> OrderResponse.from(outputValues.getOrder())
+        );
+    }
+
+    @Override
+    public CompletableFuture<CustomerResponse> getCustomerById(@CurrentUser UserPrincipal userPrincipal,
+                                                               @PathVariable Long id) {
+        return useCaseExecutor.execute(
+                getCustomerByOrderIdUseCase,
+                new GetCustomerByOrderIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> CustomerResponse.from(outputValues.getCustomer())
         );
     }
 }

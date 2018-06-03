@@ -38,4 +38,21 @@ public class Order {
                 .mapToDouble(OrderItem::getTotal)
                 .sum();
     }
+
+    public Order delete() {
+        if (this.status != Status.OPEN) {
+            throw new IllegalStateException("Order should be open to be cancelled");
+        }
+
+        return new Order(
+                id,
+                Status.CANCELLED,
+                customer,
+                store,
+                orderItems,
+                total,
+                createdAt,
+                Instant.now()
+        );
+    }
 }

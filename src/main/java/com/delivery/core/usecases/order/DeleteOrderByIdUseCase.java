@@ -6,10 +6,10 @@ import com.delivery.core.domain.Order;
 import com.delivery.core.usecases.UseCase;
 import lombok.Value;
 
-public class GetOrderByIdUseCase extends UseCase<GetOrderByIdUseCase.InputValues, GetOrderByIdUseCase.OutputValues> {
+public class DeleteOrderByIdUseCase extends UseCase<DeleteOrderByIdUseCase.InputValues, DeleteOrderByIdUseCase.OutputValues> {
     private OrderRepository repository;
 
-    public GetOrderByIdUseCase(OrderRepository repository) {
+    public DeleteOrderByIdUseCase(OrderRepository repository) {
         this.repository = repository;
     }
 
@@ -17,9 +17,17 @@ public class GetOrderByIdUseCase extends UseCase<GetOrderByIdUseCase.InputValues
     public OutputValues execute(InputValues input) {
         final Identity id = input.getId();
 
-        return repository.getById(id)
+        return this.repository
+                .getById(id)
+                .map(this::deleteOrder)
                 .map(OutputValues::new)
-                .orElseThrow(() -> new NotFoundException("Order %s not found", id.getNumber()));
+                .orElseThrow(() -> new NotFoundException("Order %s not found", id));
+    }
+
+    private Order deleteOrder(Order order) {
+        order.delete();
+
+        return this.repository.persist(order);
     }
 
     @Value

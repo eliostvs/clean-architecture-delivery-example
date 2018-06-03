@@ -5,7 +5,8 @@ import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.DeleteOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
@@ -76,6 +77,9 @@ public class OrderControllerTest extends BaseControllerTest {
     private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
 
     @MockBean
+    private DeleteOrderByIdUseCase deleteOrderByIdUseCase;
+
+    @MockBean
     private JwtProvider jwtProvider;
 
     @SpyBean
@@ -118,6 +122,31 @@ public class OrderControllerTest extends BaseControllerTest {
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
+    }
+
+    @Test
+    public void deleteOrderByIdReturnsOk() throws Exception {
+        // given
+        Order order = TestCoreEntityGenerator.randomOrder();
+        DeleteOrderByIdUseCase.InputValues input =
+                new DeleteOrderByIdUseCase.InputValues(order.getId());
+
+        DeleteOrderByIdUseCase.OutputValues output = new DeleteOrderByIdUseCase.OutputValues(order.delete());
+
+        // and
+        doReturn(output)
+                .when(deleteOrderByIdUseCase)
+                .execute(input);
+
+        // and
+        RequestBuilder request = asyncDeleteRequest("/Order/" + order.getId().getNumber(), TOKEN);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.message", is("Order successfully canceled")));
     }
 
     @Test

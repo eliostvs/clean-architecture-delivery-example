@@ -3,7 +3,6 @@ package com.delivery.core.usecases.order;
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.GetOrderByIdUseCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

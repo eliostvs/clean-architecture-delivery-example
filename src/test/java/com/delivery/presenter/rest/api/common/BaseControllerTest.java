@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
@@ -14,14 +15,22 @@ public abstract class BaseControllerTest {
 
     protected abstract MockMvc getMockMvc();
 
+    protected RequestBuilder asyncDeleteRequest(String url, String token) throws Exception {
+        return methodRequestBuilder(token, delete(url));
+    }
+
     protected RequestBuilder asyncGetRequest(String url, String token) throws Exception {
-        return asyncDispatch(getMockMvc().perform(get(url).header("Authorization", "Bearer " + token))
-                .andExpect(request().asyncStarted())
-                .andReturn());
+        return methodRequestBuilder(token, get(url));
     }
 
     protected RequestBuilder asyncGetRequest(String url) throws Exception {
         return asyncDispatch(getMockMvc().perform(get(url))
+                .andExpect(request().asyncStarted())
+                .andReturn());
+    }
+
+    private RequestBuilder methodRequestBuilder(String token, MockHttpServletRequestBuilder method) throws Exception {
+        return asyncDispatch(getMockMvc().perform(method.header("Authorization", "Bearer " + token))
                 .andExpect(request().asyncStarted())
                 .andReturn());
     }

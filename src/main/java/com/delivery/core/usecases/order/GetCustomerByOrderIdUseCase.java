@@ -3,7 +3,6 @@ package com.delivery.core.usecases.order;
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.Order;
-import com.delivery.core.usecases.GetOrderByIdUseCase;
 import com.delivery.core.usecases.UseCase;
 import lombok.Value;
 

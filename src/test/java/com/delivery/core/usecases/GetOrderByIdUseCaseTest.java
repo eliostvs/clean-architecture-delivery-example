@@ -4,6 +4,7 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
+import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.order.OrderRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;

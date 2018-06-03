@@ -1,7 +1,8 @@
 package com.delivery.presenter.rest.api.order;
 
 import com.delivery.core.domain.Identity;
-import com.delivery.core.usecases.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.DeleteOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
@@ -26,15 +27,18 @@ public class OrderController implements OrderResource {
     private CreateOrderUseCase createOrderUseCase;
     private GetOrderByIdUseCase getOrderByIdUseCase;
     private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
+    private DeleteOrderByIdUseCase deleteOrderByIdUseCase;
 
     public OrderController(UseCaseExecutor useCaseExecutor,
                            CreateOrderUseCase createOrderUseCase,
                            GetOrderByIdUseCase getOrderByIdUseCase,
-                           GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase) {
+                           GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase,
+                           DeleteOrderByIdUseCase deleteOrderByIdUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderByIdUseCase = getOrderByIdUseCase;
         this.getCustomerByOrderIdUseCase = getCustomerByOrderIdUseCase;
+        this.deleteOrderByIdUseCase = deleteOrderByIdUseCase;
     }
 
     @Override
@@ -65,6 +69,16 @@ public class OrderController implements OrderResource {
                 getCustomerByOrderIdUseCase,
                 new GetCustomerByOrderIdUseCase.InputValues(new Identity(id)),
                 (outputValues) -> CustomerResponse.from(outputValues.getCustomer())
+        );
+    }
+
+    @Override
+    public CompletableFuture<ApiResponse> delete(@CurrentUser UserPrincipal userPrincipal,
+                                                 @PathVariable Long id) {
+        return useCaseExecutor.execute(
+                deleteOrderByIdUseCase,
+                new DeleteOrderByIdUseCase.InputValues(new Identity(id)),
+                (outputValues) -> new ApiResponse(true, "Order successfully canceled")
         );
     }
 }

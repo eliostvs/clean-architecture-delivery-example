@@ -8,6 +8,7 @@ import com.delivery.presenter.usecases.security.CurrentUser;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,25 +26,25 @@ public interface OrderResource {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<ResponseEntity<ApiResponse>> create(
-            @CurrentUser UserPrincipal userPrincipal,
-            HttpServletRequest httpServletRequest,
-            @Valid @RequestBody OrderRequest orderRequest
-    );
+    CompletableFuture<ResponseEntity<ApiResponse>> create(@CurrentUser UserPrincipal userPrincipal,
+                                                          HttpServletRequest httpServletRequest,
+                                                          @Valid @RequestBody OrderRequest orderRequest);
 
     // TODO: add post authorize
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<OrderResponse> getById(
-            @CurrentUser UserPrincipal userPrincipal,
-            @PathVariable Long id
-    );
+    CompletableFuture<OrderResponse> getById(@CurrentUser UserPrincipal userPrincipal,
+                                             @PathVariable Long id);
 
     // TODO: add post authorize
     @GetMapping("/{id}/customer")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<CustomerResponse> getCustomerById(
-            @CurrentUser UserPrincipal userPrincipal,
-            @PathVariable Long id
+    CompletableFuture<CustomerResponse> getCustomerById(@CurrentUser UserPrincipal userPrincipal,
+                                                        @PathVariable Long id
     );
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
+    CompletableFuture<ApiResponse> delete(@CurrentUser UserPrincipal userPrincipal,
+                                          @PathVariable Long id);
 }

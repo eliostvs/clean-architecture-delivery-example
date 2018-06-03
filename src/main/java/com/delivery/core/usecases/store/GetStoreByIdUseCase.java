@@ -20,7 +20,7 @@ public class GetStoreByIdUseCase extends UseCase<GetStoreByIdUseCase.InputValues
         return repository
                 .getById(id)
                 .map(OutputValues::new)
-                .orElseThrow(() -> new NotFoundException("No store found by identity: " + id.getNumber()));
+                .orElseThrow(() -> new NotFoundException("Store %s not found", id.getNumber()));
     }
 
     @Value

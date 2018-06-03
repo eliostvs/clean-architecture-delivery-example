@@ -46,6 +46,7 @@ public class ProductData {
     @JoinColumn(name = "store_id", nullable = false)
     private StoreData store;
 
+    // TODO: test
     public static ProductData newInstance(String name, String description, Double price, StoreData storeData) {
         return new ProductData(
                 null,
@@ -56,6 +57,7 @@ public class ProductData {
         );
     }
 
+    // TODO: test
     public static ProductData from(Product product) {
         return new ProductData(
                 convertId(product.getId()),
@@ -66,6 +68,7 @@ public class ProductData {
         );
     }
 
+    // TODO: test
     public Product fromThis() {
         return new Product(
                 new Identity(id),

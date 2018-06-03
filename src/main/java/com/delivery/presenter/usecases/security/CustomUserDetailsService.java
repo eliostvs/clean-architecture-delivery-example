@@ -22,10 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         CustomerData customerData = customerRepository
                 .findByEmail(email)
-                .orElseThrow(() -> {
-                    String msg = "User not found with email: " + email;
-                    return new UsernameNotFoundException(msg);
-                });
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", email)));
 
         return UserPrincipal.from(customerData);
     }
@@ -34,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserById(Long id) {
         CustomerData customer = customerRepository
                 .findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", id)));
 
         return UserPrincipal.from(customer);
     }

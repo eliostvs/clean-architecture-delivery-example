@@ -42,7 +42,7 @@ public class ProductRepositoryImplTest {
                 .findByStoreIdAndIdIsIn(eq(storeId.getNumber()), eq(singletonList(productId.getNumber())));
 
         // when
-        List<Product> actual = productRepository.findProductsByStoreAndProductsId(storeId, singletonList(productId));
+        List<Product> actual = productRepository.searchProductsByStoreAndProductsId(storeId, singletonList(productId));
 
         // then
         assertThat(actual).isEqualTo(singletonList(product));

@@ -44,7 +44,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId) {
+    public List<Product> searchProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId) {
         return repository
                 .findByStoreIdAndIdIsIn(storeId.getNumber(), createListOfLong(productsId))
                 .stream()

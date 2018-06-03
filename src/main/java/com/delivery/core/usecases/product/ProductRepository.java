@@ -13,5 +13,5 @@ public interface ProductRepository {
 
     List<Product> searchByNameOrDescription(String searchText);
 
-    List<Product> findProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId);
+    List<Product> searchProductsByStoreAndProductsId(Identity storeId, List<Identity> productsId);
 }

@@ -1,11 +1,9 @@
 package com.delivery.presenter;
 
-import com.delivery.presenter.rest.api.customer.CustomerController;
-import com.delivery.presenter.rest.api.entities.OrderRequestItem;
 import com.delivery.presenter.rest.api.entities.OrderRequest;
+import com.delivery.presenter.rest.api.entities.OrderRequestItem;
 import com.delivery.presenter.rest.api.entities.SignInRequest;
 import com.delivery.presenter.rest.api.entities.SignUpRequest;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +15,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,29 +32,19 @@ public class IntegrationTest {
 
     private static String USER_EMAIL = "email@email.com";
     private static String USER_PASSWORD = "password";
-
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(IntegrationTest.class);
+    private static final String USER_NAME = "name";
+    private static final String USER_ADDRESS = "address";
 
     @LocalServerPort
     private int port;
 
-    private URL base;
-
     @Autowired
     private TestRestTemplate template;
 
-    @Autowired
-    private CustomerController customerController;
-
-    @Before
-    public void setUp() throws Exception {
-        this.base = new URL("http://localhost:" + port + "/api/v1");
-    }
-
     @Test
-    public void getAllCousines() {
+    public void getAllCousines() throws Exception {
         // given
-        String url = base.toString() + "/Cousine";
+        String url = createUrl("/Cousine");
 
         // when
         ResponseEntity<String> response = template.getForEntity(url, String.class);
@@ -64,183 +54,183 @@ public class IntegrationTest {
     }
 
     @Test
-    public void getStoresByCousineId() {
-        // given
-        String url = base.toString() + "/Cousine/1/stores";
-
+    public void getStoresByCousineId() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Cousine/1/stores"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void searchCousine() {
-        // given
-        String url = base.toString() + "/Cousine/search/abc";
-
+    public void searchCousine() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Cousine/search/abc"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getStores() {
-        // given
-        String url = base.toString() + "/Store";
-
+    public void getStores() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Store"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void searchStore() {
-        // given
-        String url = base.toString() + "/Store/search/pizza";
-
+    public void searchStore() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Store/search/pizza"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getStoreById() {
-        // given
-        String url = base.toString() + "/Store/1/";
-
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+    public void getStoreById() throws Exception {
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Store/1/"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getProductsByStoreId() {
-        // given
-        String url = base.toString() + "/Store/1/products";
-
+    public void getProductsByStoreId() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Store/1/products"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getAllProducts() {
-        // given
-        String url = base.toString() + "/Product/";
-
+    public void getAllProducts() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Product/"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getProductById() {
-        // given
-        String url = base.toString() + "/Product/1";
-
+    public void getProductById() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Product/1"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void searchProductByNameOrDescription() {
-        // given
-        String url = base.toString() + "/Product/search/temp";
-
+    public void searchProductByNameOrDescription() throws Exception {
         // when
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        ResponseEntity<String> response = template.getForEntity(createUrl("/Product/search/temp"), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void createCustomer() {
-        // given
-        String url = base.toString() + "/Customer";
-        SignUpRequest request = new SignUpRequest("name", "create@USER_EMAIL.com", "address", "password");
-
+    @Sql(scripts = "classpath:clean-up.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void createCustomer() throws Exception {
         // when
-        ResponseEntity<String> response = template.postForEntity(url, request, String.class);
+        ResponseEntity<String> response =
+                template.postForEntity(createUrl("/Customer"), createSignUpRequest(), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    public void authenticateCustomer() {
+    @Sql(scripts = "classpath:clean-up.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void authenticateCustomer() throws Exception {
         // given
-        createTestCustomer();
-
-        // and
-        SignInRequest request = new SignInRequest(USER_EMAIL, USER_PASSWORD);
-        String url = base.toString() + "/Customer/auth";
+        template.postForEntity(createUrl("/Customer"), createSignUpRequest(), String.class);
 
         // when
-        ResponseEntity<String> response = template.postForEntity(url, request, String.class);
+        ResponseEntity<String> response =
+                template.postForEntity(createUrl("/Customer/auth"), createSignInRequest(), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void createOrder() {
+    @Sql(scripts = "classpath:clean-up.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void createOrder() throws Exception {
         // given
-        createTestCustomer();
-
-        // and
-        String url = base.toString() + "/Order";
-        HttpEntity<OrderRequest> request = requestOneShrimpTempuraInHaiShangStore();
+        template.postForEntity(createUrl("/Customer"), createSignUpRequest(), String.class);
 
         // when
-        ResponseEntity<String> response = template.exchange(url, HttpMethod.POST, request, String.class);
+        ResponseEntity<String> response =
+                template.exchange(createUrl("/Order"), HttpMethod.POST, createOrderRequest(), String.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    private HttpEntity<OrderRequest> requestOneShrimpTempuraInHaiShangStore() {
-        return new HttpEntity<>(createHaiShangOrder(), createAuthHeader());
+    @Test
+    @Sql(scripts = "classpath:clean-up.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void getOrderById() throws Exception {
+        // given
+        template.postForEntity(createUrl("/Customer"), createSignUpRequest(), String.class);
+
+        // and
+        URI uri = template.exchange(createUrl("/Order"), HttpMethod.POST, createOrderRequest(), String.class)
+                .getHeaders().getLocation();
+
+        // when
+        ResponseEntity<String> response =
+                template.exchange(uri, HttpMethod.GET, createAuthRequest(), String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    private HttpHeaders createAuthHeader() {
+    // Helpers
+
+    private SignUpRequest createSignUpRequest() {
+        return new SignUpRequest(USER_NAME, USER_EMAIL, USER_ADDRESS, USER_PASSWORD);
+    }
+
+    private String createUrl(String path) throws Exception {
+        return new URL(String.format("http://localhost:%s/api/v1/%s", port, path)).toString();
+    }
+
+    private HttpEntity createAuthRequest() throws Exception {
+        return new HttpEntity(createAuthHeader());
+    }
+
+    private HttpHeaders createAuthHeader() throws Exception {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + getTokenTestCustomer());
+        headers.set(HttpHeaders.AUTHORIZATION, createAuthToken());
         return headers;
     }
 
-    private void createTestCustomer() {
-        try {
-            customerController
-                    .signUp(new SignUpRequest("name", USER_EMAIL, "address", USER_PASSWORD), new MockHttpServletRequest())
-                    .join();
+    private static class AuthenticationResponse {
+        private String token;
 
-        } catch (Exception ex) {
-            log.error("Fail to create test customer", ex);
+        public String getToken() {
+            return token;
         }
     }
 
-    private String getTokenTestCustomer() {
-        return customerController.signIn(new SignInRequest(USER_EMAIL, USER_PASSWORD))
-                .join()
-                .getBody()
-                .getToken();
+    private String createAuthToken() throws Exception {
+        return "Bearer " +
+                template.postForEntity(createUrl("/Customer/auth"), createSignInRequest(), AuthenticationResponse.class)
+                        .getBody()
+                        .getToken();
+    }
+
+    private SignInRequest createSignInRequest() {
+        return new SignInRequest(USER_EMAIL, USER_PASSWORD);
+    }
+
+    private HttpEntity<OrderRequest> createOrderRequest() throws Exception {
+        return new HttpEntity<>(createHaiShangOrder(), createAuthHeader());
     }
 
     private OrderRequest createHaiShangOrder() {

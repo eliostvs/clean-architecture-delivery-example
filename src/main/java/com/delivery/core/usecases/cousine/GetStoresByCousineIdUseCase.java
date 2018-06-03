@@ -22,7 +22,7 @@ public class GetStoresByCousineIdUseCase extends UseCase<GetStoresByCousineIdUse
         List<Store> stores = repository.getStoresById(id);
 
         if (stores.isEmpty()) {
-            throw new NotFoundException("Cousine " + id.getNumber() + " not found");
+            throw new NotFoundException("Cousine %s not found", id.getNumber());
         }
 
         return new OutputValues(stores);

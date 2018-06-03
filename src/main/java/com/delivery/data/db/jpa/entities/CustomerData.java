@@ -55,6 +55,7 @@ public class CustomerData {
         );
     }
 
+    // TODO: test
     public static CustomerData newInstance(String name, String email, String address, String password) {
         return new CustomerData(
                 null,
@@ -76,6 +77,7 @@ public class CustomerData {
         );
     }
 
+    // TODO: test
     public static CustomerData from(CreateCustomerUseCase.InputValues customerInput) {
         return new CustomerData(
                 null,

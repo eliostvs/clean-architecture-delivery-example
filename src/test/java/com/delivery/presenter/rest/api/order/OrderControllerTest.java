@@ -4,6 +4,7 @@ import com.delivery.TestEntityGenerator;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
+import com.delivery.core.usecases.GetOrderByIdUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
@@ -47,8 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = OrderController.class, secure = false)
 public class OrderControllerTest extends BaseControllerTest {
 
+    private static final String TOKEN = "token";
     private JacksonTester<OrderRequest> createOrderJson;
-    private UserPrincipal userPrincipal;
 
     @Configuration
     @ComponentScan(basePackages = {
@@ -66,11 +67,14 @@ public class OrderControllerTest extends BaseControllerTest {
     @MockBean
     private CreateOrderUseCase createOrderUseCase;
 
-    @SpyBean
-    private UseCaseExecutorImpl useCaseExecutor;
+    @MockBean
+    private GetOrderByIdUseCase getOrderByIdUseCase;
 
     @MockBean
     private JwtProvider jwtProvider;
+
+    @SpyBean
+    private UseCaseExecutorImpl useCaseExecutor;
 
     @Autowired
     private MockMvc mockMvc;
@@ -79,7 +83,7 @@ public class OrderControllerTest extends BaseControllerTest {
     public void setUp() {
         JacksonTester.initFields(this, new ObjectMapper());
 
-        userPrincipal = TestEntityGenerator.randomUserPrincipal();
+        UserPrincipal userPrincipal = TestEntityGenerator.randomUserPrincipal();
 
         CustomerData customerData = new CustomerData(
                 userPrincipal.getId(),
@@ -99,16 +103,40 @@ public class OrderControllerTest extends BaseControllerTest {
 
         doReturn(true)
                 .when(jwtProvider)
-                .validateToken(eq("token"));
+                .validateToken(eq(TOKEN));
 
         doReturn(userPrincipal.getId())
                 .when(jwtProvider)
-                .getUserIdFromToken(eq("token"));
+                .getUserIdFromToken(eq(TOKEN));
     }
 
     @Override
     protected MockMvc getMockMvc() {
         return mockMvc;
+    }
+
+    @Test
+    public void getOrderByIdReturnOk() throws Exception {
+        // given
+        Order order = TestCoreEntityGenerator.randomOrder();
+
+        GetOrderByIdUseCase.InputValues input = new GetOrderByIdUseCase.InputValues(order.getId());
+
+        GetOrderByIdUseCase.OutputValues output = new GetOrderByIdUseCase.OutputValues(order);
+
+        // and
+        doReturn(output)
+                .when(getOrderByIdUseCase)
+                .execute(eq(input));
+
+        // and
+        RequestBuilder request = asyncGetRequest("/Order/" + order.getId().getNumber(), TOKEN);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(order.getId().getNumber().intValue())));
     }
 
     @Test
@@ -137,7 +165,7 @@ public class OrderControllerTest extends BaseControllerTest {
                 .execute(any(CreateOrderUseCase.InputValues.class));
 
         // when
-        RequestBuilder request = asyncRequest("/Order", payload, "token");
+        RequestBuilder request = asyncPostRequest("/Order", payload, TOKEN);
 
         // then
         mockMvc.perform(request)
@@ -159,10 +187,11 @@ public class OrderControllerTest extends BaseControllerTest {
         // and
         doReturn(output)
                 .when(createOrderUseCase)
+                // TODO: use a more specific match
                 .execute(any(CreateOrderUseCase.InputValues.class));
 
         // when
-        RequestBuilder request = asyncRequest("/Order", payload, "token");
+        RequestBuilder request = asyncPostRequest("/Order", payload, TOKEN);
 
         // then
         mockMvc.perform(request)

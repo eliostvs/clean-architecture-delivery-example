@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -22,6 +24,25 @@ public class OrderRepositoryImplTest {
 
     @Mock
     private JpaOrderRepository jpaRepository;
+
+    @Test
+    public void getByIdReturnOrderData() {
+        // given
+        Order expected = TestCoreEntityGenerator.randomOrder();
+        OrderData toBeReturned = OrderData.from(expected);
+
+        // and
+        doReturn(Optional.of(toBeReturned))
+                .when(jpaRepository)
+                .findById(eq(expected.getId().getNumber()));
+
+        // when
+        Optional<Order> actual = orderRepository.getById(expected.getId());
+
+        // then
+        assertThat(actual.isPresent()).isTrue();
+        assertThat(actual.get()).isEqualTo(expected);
+    }
 
     @Test
     public void persistSaveAndReturnOrderData() throws Exception {

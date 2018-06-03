@@ -43,6 +43,7 @@ public class CousineData {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<StoreData> stores;
 
+    // TODO: test
     public void addStore(StoreData store) {
         if (this.stores == null) {
             this.stores = new HashSet<>();
@@ -52,6 +53,7 @@ public class CousineData {
         this.stores.add(store);
     }
 
+    // TODO: test
     public static CousineData newInstance(String name) {
         return new CousineData(null, name, new HashSet<>());
     }

@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,12 @@ public class OrderData {
     @JoinColumn(name = "store_id", nullable = false)
     private StoreData store;
 
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "order",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            orphanRemoval = true
+    )
     private Set<OrderItemData> orderItems;
 
     @Column(nullable = false)
@@ -68,6 +74,7 @@ public class OrderData {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    // TODO: test
     public void addOrderItem(OrderItemData orderItem) {
         if (this.orderItems == null) {
             this.orderItems = new HashSet<>();
@@ -79,6 +86,7 @@ public class OrderData {
         this.calculateTotal();
     }
 
+    // TODO: test
     public Order fromThis() {
         return new Order(
                 new Identity(id),
@@ -99,6 +107,7 @@ public class OrderData {
                 .collect(Collectors.toList());
     }
 
+    // TODO: test
     public static OrderData newInstance(CustomerData customer,
                                         StoreData store,
                                         Set<OrderItemData> orderItems) {
@@ -125,6 +134,7 @@ public class OrderData {
                 .sum();
     }
 
+    // TODO: test
     public static OrderData from(Order order) {
         OrderData orderData = new OrderData(
                 convertId(order.getId()),

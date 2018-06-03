@@ -76,7 +76,7 @@ public class CousineControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
+        final RequestBuilder payload = asyncGetRequest("/Cousine/" + id.getNumber() + "/stores");
 
         // then
         mockMvc.perform(payload)
@@ -100,7 +100,7 @@ public class CousineControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/" + id.getNumber() + "/stores");
+        final RequestBuilder payload = asyncGetRequest("/Cousine/" + id.getNumber() + "/stores");
 
         // then
         mockMvc.perform(payload)
@@ -128,7 +128,7 @@ public class CousineControllerTest extends BaseControllerTest {
                 .execute(input);
 
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine");
+        final RequestBuilder payload = asyncGetRequest("/Cousine");
 
         // then
         mockMvc.perform(payload)
@@ -152,7 +152,7 @@ public class CousineControllerTest extends BaseControllerTest {
                 .when(searchCousineByNameUseCase)
                 .execute(input);
         // when
-        final RequestBuilder payload = asyncRequest("/Cousine/search/abc");
+        final RequestBuilder payload = asyncGetRequest("/Cousine/search/abc");
 
         // then
         mockMvc.perform(payload)

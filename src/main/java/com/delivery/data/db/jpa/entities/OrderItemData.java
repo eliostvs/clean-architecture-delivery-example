@@ -53,6 +53,7 @@ public class OrderItemData {
     @Column(nullable = false)
     private Double total;
 
+    // TODO: test
     public static Set<OrderItemData> from(List<OrderItem> orderItems) {
         return orderItems
                 .stream()
@@ -60,6 +61,7 @@ public class OrderItemData {
                 .collect(Collectors.toSet());
     }
 
+    // TODO: test
     public static OrderItemData from(OrderItem orderItem) {
         return new OrderItemData(
                 convertId(orderItem.getId()),
@@ -71,6 +73,7 @@ public class OrderItemData {
         );
     }
 
+    // TODO: test
     public static OrderItemData newInstance(ProductData productData, Integer quantity) {
         return new OrderItemData(
                 null,
@@ -82,6 +85,7 @@ public class OrderItemData {
         );
     }
 
+    // TODO: test
     public OrderItem fromThis() {
         return new OrderItem(
                 new Identity(id),

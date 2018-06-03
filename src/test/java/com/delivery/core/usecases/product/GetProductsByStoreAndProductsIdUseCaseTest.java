@@ -41,7 +41,7 @@ public class GetProductsByStoreAndProductsIdUseCaseTest {
 
         doReturn(products)
                 .when(repository)
-                .findProductsByStoreAndProductsId(eq(storeId), eq(productsId));
+                .searchProductsByStoreAndProductsId(eq(storeId), eq(productsId));
 
         // when
         GetProductsByStoreAndProductsIdUseCase.OutputValues actual = useCase.execute(inputValues);
@@ -61,7 +61,7 @@ public class GetProductsByStoreAndProductsIdUseCaseTest {
         // and
         doReturn(Collections.emptyList())
                 .when(repository)
-                .findProductsByStoreAndProductsId(eq(storeId), eq(singletonList(productId)));
+                .searchProductsByStoreAndProductsId(eq(storeId), eq(singletonList(productId)));
 
         // then
         assertThatThrownBy(() -> useCase.execute(inputValues))

@@ -95,7 +95,7 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder request = asyncRequest("/Customer/auth", payload);
+        RequestBuilder request = asyncPostRequest("/Customer/auth", payload);
 
         // then
         mockMvc.perform(request)
@@ -119,7 +119,7 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder request = asyncRequest("/Customer/auth", payload);
+        RequestBuilder request = asyncPostRequest("/Customer/auth", payload);
 
         // then
         mockMvc.perform(request)
@@ -146,7 +146,7 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .when(createCustomerUseCase)
                 .execute(inputValues);
         // when
-        RequestBuilder request = asyncRequest("/Customer", payload);
+        RequestBuilder request = asyncPostRequest("/Customer", payload);
 
         // then
         mockMvc.perform(request)
@@ -180,7 +180,7 @@ public class CustomerControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder request = asyncRequest("/Customer", payload);
+        RequestBuilder request = asyncPostRequest("/Customer", payload);
 
         // then
         mockMvc.perform(request)

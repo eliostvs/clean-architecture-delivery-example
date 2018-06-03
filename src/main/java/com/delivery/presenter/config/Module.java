@@ -1,5 +1,6 @@
 package com.delivery.presenter.config;
 
+import com.delivery.core.usecases.GetOrderByIdUseCase;
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
 import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
@@ -23,6 +24,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Module {
+
+    @Bean GetOrderByIdUseCase getOrderByIdUseCase(OrderRepository repository) {
+        return new GetOrderByIdUseCase(repository);
+    }
 
     @Bean
     public CreateOrderUseCase createOrderUseCase(GetProductsByStoreAndProductsIdUseCase getProductsByStoreAndProductsIdUseCase,

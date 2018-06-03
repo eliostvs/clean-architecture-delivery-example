@@ -58,6 +58,6 @@ public class GetStoreByIdUseCaseTest {
         // then
         assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("No store found by identity: " + id.getNumber());
+                .hasMessage("Store " + id.getNumber() + " not found");
     }
 }

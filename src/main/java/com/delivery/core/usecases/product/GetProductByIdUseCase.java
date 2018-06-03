@@ -20,7 +20,7 @@ public class GetProductByIdUseCase extends UseCase<GetProductByIdUseCase.InputVa
         return repository
                 .getById(id)
                 .map(OutputValues::new)
-                .orElseThrow(() -> new NotFoundException("Product " + id.getNumber() + " not found"));
+                .orElseThrow(() -> new NotFoundException("Product %s not found", id.getNumber()));
     }
 
     @Value

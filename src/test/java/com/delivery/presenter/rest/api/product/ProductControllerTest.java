@@ -74,7 +74,7 @@ public class ProductControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder payload = asyncRequest("/Product/" + id.getNumber());
+        RequestBuilder payload = asyncGetRequest("/Product/" + id.getNumber());
 
         // then
         mockMvc.perform(payload)
@@ -99,7 +99,7 @@ public class ProductControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder payload = asyncRequest("/Product/search/abc");
+        RequestBuilder payload = asyncGetRequest("/Product/search/abc");
 
         // then
         mockMvc.perform(payload)
@@ -129,7 +129,7 @@ public class ProductControllerTest extends BaseControllerTest {
                 .execute(input);
 
         // when
-        RequestBuilder payload = asyncRequest("/Product");
+        RequestBuilder payload = asyncGetRequest("/Product");
 
         // then
         mockMvc.perform(payload)
@@ -157,7 +157,7 @@ public class ProductControllerTest extends BaseControllerTest {
                 .execute(eq(input));
 
         // when
-        RequestBuilder payload = asyncRequest("/Product/" + product.getId().getNumber());
+        RequestBuilder payload = asyncGetRequest("/Product/" + product.getId().getNumber());
 
         // then
         mockMvc.perform(payload)

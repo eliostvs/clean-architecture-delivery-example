@@ -22,7 +22,7 @@ public class GetProductsByStoreAndProductsIdUseCase extends UseCase<GetProductsB
         final List<Identity> distinctProductsId = distinctIds(input.getProductsId());
 
         List<Product> foundProducts = repository
-                .findProductsByStoreAndProductsId(input.getStoreId(), distinctProductsId);
+                .searchProductsByStoreAndProductsId(input.getStoreId(), distinctProductsId);
 
         throwIfAnyProductIsNotFound(distinctProductsId, foundProducts);
 

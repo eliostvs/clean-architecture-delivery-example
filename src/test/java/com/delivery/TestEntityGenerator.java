@@ -27,7 +27,7 @@ public final class TestEntityGenerator {
                 randomEmail(),
                 randomPassword(),
                 faker.address().fullAddress(),
-                Collections.singletonList(new SimpleGrantedAuthority("USER"))
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }
 

@@ -5,18 +5,17 @@ import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.DeleteOrderUseCase;
 import com.delivery.core.usecases.order.DeliveryOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerOrderUseCase;
 import com.delivery.core.usecases.order.GetOrderUseCase;
 import com.delivery.core.usecases.order.PayOrderUseCase;
-import com.delivery.data.db.jpa.entities.CustomerData;
 import com.delivery.presenter.config.WebSecurityConfig;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.rest.api.entities.OrderRequest;
 import com.delivery.presenter.usecases.UseCaseExecutorImpl;
+import com.delivery.presenter.usecases.security.CustomUserDetailsService;
 import com.delivery.presenter.usecases.security.JwtProvider;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,8 +34,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,9 +64,6 @@ public class OrderControllerTest extends BaseControllerTest {
     }
 
     @MockBean
-    private CustomerRepository customerRepository;
-
-    @MockBean
     private CreateOrderUseCase createOrderUseCase;
 
     @MockBean
@@ -90,6 +84,9 @@ public class OrderControllerTest extends BaseControllerTest {
     @MockBean
     private JwtProvider jwtProvider;
 
+    @MockBean
+    private CustomUserDetailsService userDetailsService;
+
     @SpyBean
     private UseCaseExecutorImpl useCaseExecutor;
 
@@ -102,21 +99,9 @@ public class OrderControllerTest extends BaseControllerTest {
 
         UserPrincipal userPrincipal = TestEntityGenerator.randomUserPrincipal();
 
-        CustomerData customerData = new CustomerData(
-                userPrincipal.getId(),
-                userPrincipal.getUsername(),
-                userPrincipal.getEmail(),
-                userPrincipal.getAddress(),
-                userPrincipal.getPassword()
-        );
-
-        doReturn(Optional.of(customerData))
-                .when(customerRepository)
-                .findById(userPrincipal.getId());
-
-        doReturn(Optional.of(customerData))
-                .when(customerRepository)
-                .findByEmail(eq(userPrincipal.getEmail()));
+        doReturn(userPrincipal)
+                .when(userDetailsService)
+                .loadUserById(userPrincipal.getId());
 
         doReturn(true)
                 .when(jwtProvider)

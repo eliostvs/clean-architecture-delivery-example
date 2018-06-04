@@ -2,25 +2,25 @@ package com.delivery.presenter.config;
 
 import com.delivery.core.usecases.order.DeleteOrderUseCase;
 import com.delivery.core.usecases.order.DeliveryOrderUseCase;
-import com.delivery.core.usecases.order.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetOrderUseCase;
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
-import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
+import com.delivery.core.usecases.order.GetCustomerOrderUseCase;
 import com.delivery.core.usecases.order.OrderRepository;
 import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
-import com.delivery.core.usecases.product.GetProductByIdUseCase;
+import com.delivery.core.usecases.product.GetProductUseCase;
 import com.delivery.core.usecases.product.GetProductsByStoreAndProductsIdUseCase;
 import com.delivery.core.usecases.product.ProductRepository;
 import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
-import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
-import com.delivery.core.usecases.store.GetStoreByIdUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreUseCase;
+import com.delivery.core.usecases.store.GetStoreUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.core.usecases.store.StoreRepository;
 import org.springframework.context.annotation.Bean;
@@ -40,18 +40,18 @@ public class Module {
     }
 
     @Bean
-    public DeleteOrderUseCase deleteOrderByIdUseCase(OrderRepository repository) {
+    public DeleteOrderUseCase deleteOrderUseCase(OrderRepository repository) {
         return new DeleteOrderUseCase(repository);
     }
 
     @Bean
-    public GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase(GetOrderByIdUseCase getOrderByIdUseCase) {
-        return new GetCustomerByOrderIdUseCase(getOrderByIdUseCase);
+    public GetCustomerOrderUseCase getCustomerOrderUseCase(GetOrderUseCase getOrderUseCase) {
+        return new GetCustomerOrderUseCase(getOrderUseCase);
     }
 
     @Bean
-    public GetOrderByIdUseCase getOrderByIdUseCase(OrderRepository repository) {
-        return new GetOrderByIdUseCase(repository);
+    public GetOrderUseCase getOrderUseCase(OrderRepository repository) {
+        return new GetOrderUseCase(repository);
     }
 
     @Bean
@@ -76,8 +76,8 @@ public class Module {
     }
 
     @Bean
-    public GetProductByIdUseCase getProductByIdentityUseCase(ProductRepository repository) {
-        return new GetProductByIdUseCase(repository);
+    public GetProductUseCase getProductUseCase(ProductRepository repository) {
+        return new GetProductUseCase(repository);
     }
 
     @Bean
@@ -86,13 +86,13 @@ public class Module {
     }
 
     @Bean
-    public GetProductsByStoreIdUseCase getProductsByStoreIdentityUseCase(StoreRepository repository) {
-        return new GetProductsByStoreIdUseCase(repository);
+    public GetProductsByStoreUseCase getProductsByStoreIdentityUseCase(StoreRepository repository) {
+        return new GetProductsByStoreUseCase(repository);
     }
 
     @Bean
-    public GetStoreByIdUseCase getStoreByIdentityUseCase(StoreRepository repository) {
-        return new GetStoreByIdUseCase(repository);
+    public GetStoreUseCase getStoreUseCase(StoreRepository repository) {
+        return new GetStoreUseCase(repository);
     }
 
     @Bean
@@ -106,8 +106,8 @@ public class Module {
     }
 
     @Bean
-    public GetStoresByCousineIdUseCase getStoresByCousineIdentityUseCase(CousineRepository repository) {
-        return new GetStoresByCousineIdUseCase(repository);
+    public GetStoresByCousineUseCase getStoresByCousineUseCase(CousineRepository repository) {
+        return new GetStoresByCousineUseCase(repository);
     }
 
     @Bean

@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetStoresByCousineIdUseCaseTest {
+public class GetStoresByCousineUseCaseTest {
 
     @InjectMocks
-    private GetStoresByCousineIdUseCase useCase;
+    private GetStoresByCousineUseCase useCase;
 
     @Mock
     private CousineRepository repository;
@@ -31,7 +31,7 @@ public class GetStoresByCousineIdUseCaseTest {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
         Identity id = TestCoreEntityGenerator.randomId();
-        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
+        GetStoresByCousineUseCase.InputValues input = new GetStoresByCousineUseCase.InputValues(id);
 
         // and
         doReturn(Collections.singletonList(store))
@@ -49,7 +49,7 @@ public class GetStoresByCousineIdUseCaseTest {
     public void throwsExceptionWhenCousineIdIsNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
+        GetStoresByCousineUseCase.InputValues input = new GetStoresByCousineUseCase.InputValues(id);
 
         // and
         doReturn(Collections.emptyList())

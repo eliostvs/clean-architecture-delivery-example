@@ -9,8 +9,8 @@ import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.DeleteOrderUseCase;
 import com.delivery.core.usecases.order.DeliveryOrderUseCase;
-import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
-import com.delivery.core.usecases.order.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetCustomerOrderUseCase;
+import com.delivery.core.usecases.order.GetOrderUseCase;
 import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import com.delivery.presenter.config.WebSecurityConfig;
@@ -73,10 +73,10 @@ public class OrderControllerTest extends BaseControllerTest {
     private CreateOrderUseCase createOrderUseCase;
 
     @MockBean
-    private GetOrderByIdUseCase getOrderByIdUseCase;
+    private GetOrderUseCase getOrderUseCase;
 
     @MockBean
-    private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
+    private GetCustomerOrderUseCase getCustomerOrderUseCase;
 
     @MockBean
     private DeleteOrderUseCase deleteOrderUseCase;
@@ -213,15 +213,15 @@ public class OrderControllerTest extends BaseControllerTest {
         Order order = TestCoreEntityGenerator.randomOrder();
         Customer customer = order.getCustomer();
 
-        GetCustomerByOrderIdUseCase.InputValues input =
-                new GetCustomerByOrderIdUseCase.InputValues(order.getId());
+        GetCustomerOrderUseCase.InputValues input =
+                new GetCustomerOrderUseCase.InputValues(order.getId());
 
-        GetCustomerByOrderIdUseCase.OutputValues output =
-                new GetCustomerByOrderIdUseCase.OutputValues(customer);
+        GetCustomerOrderUseCase.OutputValues output =
+                new GetCustomerOrderUseCase.OutputValues(customer);
 
         // and
         doReturn(output)
-                .when(getCustomerByOrderIdUseCase)
+                .when(getCustomerOrderUseCase)
                 .execute(input);
 
         // and
@@ -239,13 +239,13 @@ public class OrderControllerTest extends BaseControllerTest {
         // given
         Order order = TestCoreEntityGenerator.randomOrder();
 
-        GetOrderByIdUseCase.InputValues input = new GetOrderByIdUseCase.InputValues(order.getId());
+        GetOrderUseCase.InputValues input = new GetOrderUseCase.InputValues(order.getId());
 
-        GetOrderByIdUseCase.OutputValues output = new GetOrderByIdUseCase.OutputValues(order);
+        GetOrderUseCase.OutputValues output = new GetOrderUseCase.OutputValues(order);
 
         // and
         doReturn(output)
-                .when(getOrderByIdUseCase)
+                .when(getOrderUseCase)
                 .execute(eq(input));
 
         // and

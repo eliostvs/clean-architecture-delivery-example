@@ -4,7 +4,7 @@ import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.order.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetOrderUseCase;
 import com.delivery.core.usecases.order.OrderRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +20,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetOrderByIdUseCaseTest {
+public class GetOrderUseCaseTest {
 
     @InjectMocks
-    private GetOrderByIdUseCase useCase;
+    private GetOrderUseCase useCase;
 
     @Mock
     private OrderRepository repository;
@@ -32,7 +32,7 @@ public class GetOrderByIdUseCaseTest {
     public void executeThrowExceptionWhenOrderIsNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetOrderByIdUseCase.InputValues input = new GetOrderByIdUseCase.InputValues(id);
+        GetOrderUseCase.InputValues input = new GetOrderUseCase.InputValues(id);
 
         // and
         doReturn(Optional.empty())
@@ -49,7 +49,7 @@ public class GetOrderByIdUseCaseTest {
     public void executeReturnsOrderWhenOrderIsFound() {
         // given
         Order expected = TestCoreEntityGenerator.randomOrder();
-        GetOrderByIdUseCase.InputValues input = new GetOrderByIdUseCase.InputValues(expected.getId());
+        GetOrderUseCase.InputValues input = new GetOrderUseCase.InputValues(expected.getId());
 
         // and
         doReturn(Optional.of(expected))

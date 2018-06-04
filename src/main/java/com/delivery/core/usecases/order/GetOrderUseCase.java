@@ -6,10 +6,10 @@ import com.delivery.core.domain.Order;
 import com.delivery.core.usecases.UseCase;
 import lombok.Value;
 
-public class GetOrderByIdUseCase extends UseCase<GetOrderByIdUseCase.InputValues, GetOrderByIdUseCase.OutputValues> {
+public class GetOrderUseCase extends UseCase<GetOrderUseCase.InputValues, GetOrderUseCase.OutputValues> {
     private OrderRepository repository;
 
-    public GetOrderByIdUseCase(OrderRepository repository) {
+    public GetOrderUseCase(OrderRepository repository) {
         this.repository = repository;
     }
 

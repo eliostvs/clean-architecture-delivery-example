@@ -8,10 +8,10 @@ import lombok.Value;
 
 import java.util.List;
 
-public class GetProductsByStoreIdUseCase extends UseCase<GetProductsByStoreIdUseCase.InputValues, GetProductsByStoreIdUseCase.OutputValues> {
+public class GetProductsByStoreUseCase extends UseCase<GetProductsByStoreUseCase.InputValues, GetProductsByStoreUseCase.OutputValues> {
     private StoreRepository repository;
 
-    public GetProductsByStoreIdUseCase(StoreRepository repository) {
+    public GetProductsByStoreUseCase(StoreRepository repository) {
         this.repository = repository;
     }
 

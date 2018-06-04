@@ -2,7 +2,6 @@ package com.delivery.core.usecases.store;
 
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
-import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import org.junit.Test;
@@ -11,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,48 +18,46 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetProductsByStoreIdUseCaseTest {
+public class GetStoreUseCaseTest {
 
     @InjectMocks
-    private GetProductsByStoreIdUseCase useCase;
+    private GetStoreUseCase useCase;
 
     @Mock
     private StoreRepository repository;
 
     @Test
-    public void getProductsByStoreIdentityReturnsProductsWhenStoreFound() {
+    public void getStoreByIdentityReturnsStore() {
         // given
-        Product product = TestCoreEntityGenerator.randomProduct();
-        Store store = product.getStore();
-        GetProductsByStoreIdUseCase.InputValues input =
-                new GetProductsByStoreIdUseCase.InputValues(store.getId());
+        Store store = TestCoreEntityGenerator.randomStore();
+        GetStoreUseCase.InputValues input = new GetStoreUseCase.InputValues(store.getId());
 
         // and
-        doReturn(Collections.singletonList(product))
+        doReturn(Optional.of(store))
                 .when(repository)
-                .getProductsById(eq(store.getId()));
+                .getById(eq(store.getId()));
 
         // when
-        List<Product> actual = useCase.execute(input).getProducts();
+        Store actual = useCase.execute(input).getStore();
 
         // then
-        assertThat(actual).containsOnly(product);
+        assertThat(actual).isEqualTo(store);
     }
 
     @Test
-    public void getProductsByStoreIdentityThrowsNotFoundWhenStoreNotFound() {
+    public void getStoreByIdentityThrowsNotFound() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
+        GetStoreUseCase.InputValues input = new GetStoreUseCase.InputValues(id);
 
         // and
-        doReturn(Collections.emptyList())
+        doReturn(Optional.empty())
                 .when(repository)
-                .getProductsById(eq(id));
+                .getById(eq(id));
 
         // then
         assertThatThrownBy(() -> useCase.execute(input))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("No store found by identity: " + id.getNumber());
+                .hasMessage("Store " + id.getNumber() + " not found");
     }
 }

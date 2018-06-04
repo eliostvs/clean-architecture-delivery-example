@@ -6,7 +6,7 @@ import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
-import com.delivery.core.usecases.product.GetProductByIdUseCase;
+import com.delivery.core.usecases.product.GetProductUseCase;
 import com.delivery.core.usecases.product.SearchProductsByNameOrDescriptionUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImpl;
@@ -43,7 +43,7 @@ public class ProductControllerTest extends BaseControllerTest {
     }
 
     @MockBean
-    private GetProductByIdUseCase getProductByIdUseCase;
+    private GetProductUseCase getProductUseCase;
 
     @MockBean
     private GetAllProductsUseCase getAllProductsUseCase;
@@ -66,11 +66,11 @@ public class ProductControllerTest extends BaseControllerTest {
     public void getProductByIdentityReturnsNotFound() throws Exception {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetProductByIdUseCase.InputValues input = new GetProductByIdUseCase.InputValues(id);
+        GetProductUseCase.InputValues input = new GetProductUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
-                .when(getProductByIdUseCase)
+                .when(getProductUseCase)
                 .execute(eq(input));
 
         // when
@@ -148,12 +148,12 @@ public class ProductControllerTest extends BaseControllerTest {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
         Store store = product.getStore();
-        GetProductByIdUseCase.InputValues input = new GetProductByIdUseCase.InputValues(product.getId());
-        GetProductByIdUseCase.OutputValues output = new GetProductByIdUseCase.OutputValues(product);
+        GetProductUseCase.InputValues input = new GetProductUseCase.InputValues(product.getId());
+        GetProductUseCase.OutputValues output = new GetProductUseCase.OutputValues(product);
 
         // and
         doReturn(output)
-                .when(getProductByIdUseCase)
+                .when(getProductUseCase)
                 .execute(eq(input));
 
         // when

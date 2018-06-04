@@ -3,7 +3,7 @@ package com.delivery.presenter.rest.api.cousine;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.entities.CousineResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
@@ -17,24 +17,24 @@ import java.util.concurrent.CompletableFuture;
 public class CousineController implements CousineResource {
     private UseCaseExecutor useCaseExecutor;
     private GetAllCousinesUseCase getAllCousinesUseCase;
-    private GetStoresByCousineIdUseCase getStoresByCousineIdUseCase;
+    private GetStoresByCousineUseCase getStoresByCousineUseCase;
     private SearchCousineByNameUseCase searchCousineByNameUseCase;
 
     public CousineController(UseCaseExecutor useCaseExecutor,
                              GetAllCousinesUseCase getAllCousinesUseCase,
-                             GetStoresByCousineIdUseCase getStoresByCousineIdUseCase,
+                             GetStoresByCousineUseCase getStoresByCousineUseCase,
                              SearchCousineByNameUseCase searchCousineByNameUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.getAllCousinesUseCase = getAllCousinesUseCase;
-        this.getStoresByCousineIdUseCase = getStoresByCousineIdUseCase;
+        this.getStoresByCousineUseCase = getStoresByCousineUseCase;
         this.searchCousineByNameUseCase = searchCousineByNameUseCase;
     }
 
     @Override
     public CompletableFuture<List<StoreResponse>> getStoresByCousineId(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getStoresByCousineIdUseCase,
-                new GetStoresByCousineIdUseCase.InputValues(new Identity(id)),
+                getStoresByCousineUseCase,
+                new GetStoresByCousineUseCase.InputValues(new Identity(id)),
                 (outputValues) -> StoreResponse.from(outputValues.getStores()));
     }
 

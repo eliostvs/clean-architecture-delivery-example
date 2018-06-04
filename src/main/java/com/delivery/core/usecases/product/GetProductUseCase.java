@@ -1,15 +1,15 @@
-package com.delivery.core.usecases.store;
+package com.delivery.core.usecases.product;
 
 import com.delivery.core.domain.Identity;
 import com.delivery.core.domain.NotFoundException;
-import com.delivery.core.domain.Store;
+import com.delivery.core.domain.Product;
 import com.delivery.core.usecases.UseCase;
 import lombok.Value;
 
-public class GetStoreByIdUseCase extends UseCase<GetStoreByIdUseCase.InputValues, GetStoreByIdUseCase.OutputValues> {
-    private StoreRepository repository;
+public class GetProductUseCase extends UseCase<GetProductUseCase.InputValues, GetProductUseCase.OutputValues> {
+    private ProductRepository repository;
 
-    public GetStoreByIdUseCase(StoreRepository repository) {
+    public GetProductUseCase(ProductRepository repository) {
         this.repository = repository;
     }
 
@@ -20,7 +20,7 @@ public class GetStoreByIdUseCase extends UseCase<GetStoreByIdUseCase.InputValues
         return repository
                 .getById(id)
                 .map(OutputValues::new)
-                .orElseThrow(() -> new NotFoundException("Store %s not found", id.getNumber()));
+                .orElseThrow(() -> new NotFoundException("Product %s not found", id.getNumber()));
     }
 
     @Value
@@ -30,6 +30,6 @@ public class GetStoreByIdUseCase extends UseCase<GetStoreByIdUseCase.InputValues
 
     @Value
     public static class OutputValues implements UseCase.OutputValues {
-        private final Store store;
+        private final Product product;
     }
 }

@@ -6,17 +6,17 @@ import com.delivery.core.domain.Order;
 import com.delivery.core.usecases.UseCase;
 import lombok.Value;
 
-public class GetCustomerByOrderIdUseCase extends UseCase<GetCustomerByOrderIdUseCase.InputValues, GetCustomerByOrderIdUseCase.OutputValues> {
-    private GetOrderByIdUseCase getOrderByIdUseCase;
+public class GetCustomerOrderUseCase extends UseCase<GetCustomerOrderUseCase.InputValues, GetCustomerOrderUseCase.OutputValues> {
+    private GetOrderUseCase getOrderUseCase;
 
-    public GetCustomerByOrderIdUseCase(GetOrderByIdUseCase getOrderByIdUseCase) {
-        this.getOrderByIdUseCase = getOrderByIdUseCase;
+    public GetCustomerOrderUseCase(GetOrderUseCase getOrderUseCase) {
+        this.getOrderUseCase = getOrderUseCase;
     }
 
     @Override
     public OutputValues execute(InputValues input) {
-        Order order = getOrderByIdUseCase
-                .execute(new GetOrderByIdUseCase.InputValues(input.getId()))
+        Order order = getOrderUseCase
+                .execute(new GetOrderUseCase.InputValues(input.getId()))
                 .getOrder();
 
         return new OutputValues(order.getCustomer());

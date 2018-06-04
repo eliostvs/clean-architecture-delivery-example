@@ -14,13 +14,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetCustomerByOrderIdUseCaseTest {
+public class GetCustomerOrderUseCaseTest {
 
     @InjectMocks
-    private GetCustomerByOrderIdUseCase useCase;
+    private GetCustomerOrderUseCase useCase;
 
     @Mock
-    private GetOrderByIdUseCase getOrderByIdUseCase;
+    private GetOrderUseCase getOrderUseCase;
 
     @Test
     public void executeReturnsOrderCustomer() {
@@ -28,18 +28,18 @@ public class GetCustomerByOrderIdUseCaseTest {
         Order order = TestCoreEntityGenerator.randomOrder();
         Customer expected = order.getCustomer();
 
-        GetCustomerByOrderIdUseCase.InputValues input =
-                new GetCustomerByOrderIdUseCase.InputValues(order.getId());
+        GetCustomerOrderUseCase.InputValues input =
+                new GetCustomerOrderUseCase.InputValues(order.getId());
 
-        GetOrderByIdUseCase.InputValues orderByIdInput =
-                new GetOrderByIdUseCase.InputValues(order.getId());
+        GetOrderUseCase.InputValues orderByIdInput =
+                new GetOrderUseCase.InputValues(order.getId());
 
-        GetOrderByIdUseCase.OutputValues orderByIdOutput =
-                new GetOrderByIdUseCase.OutputValues(order);
+        GetOrderUseCase.OutputValues orderByIdOutput =
+                new GetOrderUseCase.OutputValues(order);
 
         // and
         doReturn(orderByIdOutput)
-                .when(getOrderByIdUseCase)
+                .when(getOrderUseCase)
                 .execute(eq(orderByIdInput));
 
         // when

@@ -3,10 +3,10 @@ package com.delivery.presenter.rest.api.order;
 import com.delivery.core.domain.Identity;
 import com.delivery.core.usecases.order.DeleteOrderUseCase;
 import com.delivery.core.usecases.order.DeliveryOrderUseCase;
-import com.delivery.core.usecases.order.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.GetOrderUseCase;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
-import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
+import com.delivery.core.usecases.order.GetCustomerOrderUseCase;
 import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
 import com.delivery.presenter.rest.api.entities.CustomerResponse;
@@ -27,23 +27,23 @@ import java.util.concurrent.CompletableFuture;
 public class OrderController implements OrderResource {
     private UseCaseExecutor useCaseExecutor;
     private CreateOrderUseCase createOrderUseCase;
-    private GetOrderByIdUseCase getOrderByIdUseCase;
-    private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
+    private GetOrderUseCase getOrderUseCase;
+    private GetCustomerOrderUseCase getCustomerOrderUseCase;
     private DeleteOrderUseCase deleteOrderUseCase;
     private PayOrderUseCase payOrderUseCase;
     private DeliveryOrderUseCase deliveryOrderUseCase;
 
     public OrderController(UseCaseExecutor useCaseExecutor,
                            CreateOrderUseCase createOrderUseCase,
-                           GetOrderByIdUseCase getOrderByIdUseCase,
-                           GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase,
+                           GetOrderUseCase getOrderUseCase,
+                           GetCustomerOrderUseCase getCustomerOrderUseCase,
                            DeleteOrderUseCase deleteOrderUseCase,
                            PayOrderUseCase payOrderUseCase,
                            DeliveryOrderUseCase deliveryOrderUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.createOrderUseCase = createOrderUseCase;
-        this.getOrderByIdUseCase = getOrderByIdUseCase;
-        this.getCustomerByOrderIdUseCase = getCustomerByOrderIdUseCase;
+        this.getOrderUseCase = getOrderUseCase;
+        this.getCustomerOrderUseCase = getCustomerOrderUseCase;
         this.deleteOrderUseCase = deleteOrderUseCase;
         this.payOrderUseCase = payOrderUseCase;
         this.deliveryOrderUseCase = deliveryOrderUseCase;
@@ -63,8 +63,8 @@ public class OrderController implements OrderResource {
     @Override
     public CompletableFuture<OrderResponse> getById(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getOrderByIdUseCase,
-                new GetOrderByIdUseCase.InputValues(new Identity(id)),
+                getOrderUseCase,
+                new GetOrderUseCase.InputValues(new Identity(id)),
                 (outputValues) -> OrderResponse.from(outputValues.getOrder())
         );
     }
@@ -72,8 +72,8 @@ public class OrderController implements OrderResource {
     @Override
     public CompletableFuture<CustomerResponse> getCustomerById(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                getCustomerByOrderIdUseCase,
-                new GetCustomerByOrderIdUseCase.InputValues(new Identity(id)),
+                getCustomerOrderUseCase,
+                new GetCustomerOrderUseCase.InputValues(new Identity(id)),
                 (outputValues) -> CustomerResponse.from(outputValues.getCustomer())
         );
     }

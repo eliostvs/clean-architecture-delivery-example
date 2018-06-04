@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetProductByIdUseCaseTest {
+public class GetProductUseCaseTest {
 
     @InjectMocks
-    private GetProductByIdUseCase useCase;
+    private GetProductUseCase useCase;
 
     @Mock
     private ProductRepository repository;
@@ -29,8 +29,8 @@ public class GetProductByIdUseCaseTest {
     public void executeThrowsException() {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetProductByIdUseCase.InputValues input =
-                new GetProductByIdUseCase.InputValues(id);
+        GetProductUseCase.InputValues input =
+                new GetProductUseCase.InputValues(id);
 
         // and
         doReturn(Optional.empty())
@@ -47,8 +47,8 @@ public class GetProductByIdUseCaseTest {
     public void executeReturnsProduct() {
         // given
         Product product = TestCoreEntityGenerator.randomProduct();
-        GetProductByIdUseCase.InputValues input =
-                new GetProductByIdUseCase.InputValues(product.getId());
+        GetProductUseCase.InputValues input =
+                new GetProductUseCase.InputValues(product.getId());
 
         // and
         doReturn(Optional.of(product))

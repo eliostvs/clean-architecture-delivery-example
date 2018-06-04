@@ -6,7 +6,7 @@ import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
-import com.delivery.core.usecases.cousine.GetStoresByCousineIdUseCase;
+import com.delivery.core.usecases.cousine.GetStoresByCousineUseCase;
 import com.delivery.core.usecases.cousine.SearchCousineByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImpl;
@@ -48,7 +48,7 @@ public class CousineControllerTest extends BaseControllerTest {
     private UseCaseExecutorImpl useCaseExecutor;
 
     @MockBean
-    private GetStoresByCousineIdUseCase getStoresByCousineIdUseCase;
+    private GetStoresByCousineUseCase getStoresByCousineUseCase;
 
     @MockBean
     private GetAllCousinesUseCase getAllCousinesUseCase;
@@ -68,11 +68,11 @@ public class CousineControllerTest extends BaseControllerTest {
     public void getStoreByCousineIdReturnsNotFound() throws Exception {
         // given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
+        GetStoresByCousineUseCase.InputValues input = new GetStoresByCousineUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
-                .when(getStoresByCousineIdUseCase)
+                .when(getStoresByCousineUseCase)
                 .execute(eq(input));
 
         // when
@@ -90,13 +90,13 @@ public class CousineControllerTest extends BaseControllerTest {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
         Identity id = store.getCousine().getId();
-        GetStoresByCousineIdUseCase.InputValues input = new GetStoresByCousineIdUseCase.InputValues(id);
-        GetStoresByCousineIdUseCase.OutputValues output =
-                new GetStoresByCousineIdUseCase.OutputValues(singletonList(store));
+        GetStoresByCousineUseCase.InputValues input = new GetStoresByCousineUseCase.InputValues(id);
+        GetStoresByCousineUseCase.OutputValues output =
+                new GetStoresByCousineUseCase.OutputValues(singletonList(store));
 
         // and
         doReturn(output)
-                .when(getStoresByCousineIdUseCase)
+                .when(getStoresByCousineUseCase)
                 .execute(eq(input));
 
         // when

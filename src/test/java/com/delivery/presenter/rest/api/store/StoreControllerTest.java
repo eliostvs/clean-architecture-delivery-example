@@ -6,8 +6,8 @@ import com.delivery.core.domain.Product;
 import com.delivery.core.domain.Store;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import com.delivery.core.usecases.store.GetAllStoresUseCase;
-import com.delivery.core.usecases.store.GetProductsByStoreIdUseCase;
-import com.delivery.core.usecases.store.GetStoreByIdUseCase;
+import com.delivery.core.usecases.store.GetProductsByStoreUseCase;
+import com.delivery.core.usecases.store.GetStoreUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
 import com.delivery.presenter.usecases.UseCaseExecutorImpl;
@@ -53,10 +53,10 @@ public class StoreControllerTest extends BaseControllerTest {
     private SearchStoresByNameUseCase searchStoresByNameUseCase;
 
     @MockBean
-    private GetStoreByIdUseCase getStoreByIdUseCase;
+    private GetStoreUseCase getStoreUseCase;
 
     @MockBean
-    private GetProductsByStoreIdUseCase getProductsByStoreIdUseCase;
+    private GetProductsByStoreUseCase getProductsByStoreUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -96,12 +96,12 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getStoreByIdentityReturnsOk() throws Exception {
         // given
         Store store = TestCoreEntityGenerator.randomStore();
-        GetStoreByIdUseCase.OutputValues output = new GetStoreByIdUseCase.OutputValues(store);
-        GetStoreByIdUseCase.InputValues input = new GetStoreByIdUseCase.InputValues(store.getId());
+        GetStoreUseCase.OutputValues output = new GetStoreUseCase.OutputValues(store);
+        GetStoreUseCase.InputValues input = new GetStoreUseCase.InputValues(store.getId());
 
         // and
         doReturn(output)
-                .when(getStoreByIdUseCase)
+                .when(getStoreUseCase)
                 .execute(eq(input));
 
         // when
@@ -149,12 +149,12 @@ public class StoreControllerTest extends BaseControllerTest {
         //given
         Product product = TestCoreEntityGenerator.randomProduct();
         Identity id = product.getStore().getId();
-        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
-        GetProductsByStoreIdUseCase.OutputValues output = new GetProductsByStoreIdUseCase.OutputValues(singletonList(product));
+        GetProductsByStoreUseCase.InputValues input = new GetProductsByStoreUseCase.InputValues(id);
+        GetProductsByStoreUseCase.OutputValues output = new GetProductsByStoreUseCase.OutputValues(singletonList(product));
 
         // and
         doReturn(output)
-                .when(getProductsByStoreIdUseCase)
+                .when(getProductsByStoreUseCase)
                 .execute(eq(input));
 
         // when
@@ -176,11 +176,11 @@ public class StoreControllerTest extends BaseControllerTest {
     public void getProductsByStoreIdReturnsNotFound() throws Exception {
         //given
         Identity id = TestCoreEntityGenerator.randomId();
-        GetProductsByStoreIdUseCase.InputValues input = new GetProductsByStoreIdUseCase.InputValues(id);
+        GetProductsByStoreUseCase.InputValues input = new GetProductsByStoreUseCase.InputValues(id);
 
         // and
         doThrow(new NotFoundException("Error"))
-                .when(getProductsByStoreIdUseCase)
+                .when(getProductsByStoreUseCase)
                 .execute(eq(input));
 
         // when

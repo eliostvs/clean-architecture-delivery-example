@@ -17,14 +17,4 @@ public class Product {
     private String description;
     private Double price;
     private Store store;
-
-    public static Product newInstance(Identity id, String name, String description, double price, Store store) {
-        return new Product(
-                id,
-                name,
-                description,
-                price,
-                store
-        );
-    }
 }

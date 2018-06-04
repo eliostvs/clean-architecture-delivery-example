@@ -6,8 +6,4 @@ import lombok.Value;
 public class Cousine {
     private final Identity id;
     private final String name;
-
-    public static Cousine newInstance(Identity id, String name) {
-        return new Cousine(id, name);
-    }
 }

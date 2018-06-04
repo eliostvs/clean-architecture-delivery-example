@@ -23,7 +23,7 @@ public final class TestCoreEntityGenerator {
     }
 
     public static Cousine randomCousine() {
-        return Cousine.newInstance(
+        return new Cousine(
                 randomId(),
                 faker.name().name()
         );
@@ -38,7 +38,7 @@ public final class TestCoreEntityGenerator {
     }
 
     public static Store randomStore() {
-        return Store.newInstance(
+        return new Store(
                 randomId(),
                 faker.name().name(),
                 faker.address().streetAddress(),
@@ -47,7 +47,7 @@ public final class TestCoreEntityGenerator {
     }
 
     public static Product randomProduct() {
-        return Product.newInstance(
+        return new Product(
                 randomId(),
                 faker.name().name(),
                 faker.name().fullName(),
@@ -61,7 +61,7 @@ public final class TestCoreEntityGenerator {
     }
 
     public static Customer randomCustomer() {
-        return Customer.newInstance(
+        return new Customer(
                 randomId(),
                 faker.name().name(),
                 faker.internet().emailAddress(),

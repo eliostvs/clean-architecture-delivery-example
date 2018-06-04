@@ -1,6 +1,7 @@
 package com.delivery.presenter.config;
 
-import com.delivery.core.usecases.order.DeleteOrderByIdUseCase;
+import com.delivery.core.usecases.order.DeleteOrderUseCase;
+import com.delivery.core.usecases.order.DeliveryOrderUseCase;
 import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.cousine.CousineRepository;
 import com.delivery.core.usecases.cousine.GetAllCousinesUseCase;
@@ -11,6 +12,7 @@ import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
 import com.delivery.core.usecases.order.OrderRepository;
+import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.core.usecases.product.GetAllProductsUseCase;
 import com.delivery.core.usecases.product.GetProductByIdUseCase;
 import com.delivery.core.usecases.product.GetProductsByStoreAndProductsIdUseCase;
@@ -28,10 +30,19 @@ import org.springframework.context.annotation.Configuration;
 public class Module {
 
     @Bean
-    public DeleteOrderByIdUseCase deleteOrderByIdUseCase(OrderRepository repository) {
-        return new DeleteOrderByIdUseCase(repository);
+    public DeliveryOrderUseCase deliveryOrderUseCase(OrderRepository repository) {
+        return new DeliveryOrderUseCase(repository);
     }
 
+    @Bean
+    public PayOrderUseCase payOrderUseCase(OrderRepository repository) {
+        return new PayOrderUseCase(repository);
+    }
+
+    @Bean
+    public DeleteOrderUseCase deleteOrderByIdUseCase(OrderRepository repository) {
+        return new DeleteOrderUseCase(repository);
+    }
 
     @Bean
     public GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase(GetOrderByIdUseCase getOrderByIdUseCase) {

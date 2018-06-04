@@ -1,11 +1,13 @@
 package com.delivery.presenter.rest.api.order;
 
 import com.delivery.core.domain.Identity;
-import com.delivery.core.usecases.order.DeleteOrderByIdUseCase;
+import com.delivery.core.usecases.order.DeleteOrderUseCase;
+import com.delivery.core.usecases.order.DeliveryOrderUseCase;
 import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.UseCaseExecutor;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
+import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.presenter.rest.api.entities.ApiResponse;
 import com.delivery.presenter.rest.api.entities.CustomerResponse;
 import com.delivery.presenter.rest.api.entities.OrderRequest;
@@ -27,18 +29,24 @@ public class OrderController implements OrderResource {
     private CreateOrderUseCase createOrderUseCase;
     private GetOrderByIdUseCase getOrderByIdUseCase;
     private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
-    private DeleteOrderByIdUseCase deleteOrderByIdUseCase;
+    private DeleteOrderUseCase deleteOrderUseCase;
+    private PayOrderUseCase payOrderUseCase;
+    private DeliveryOrderUseCase deliveryOrderUseCase;
 
     public OrderController(UseCaseExecutor useCaseExecutor,
                            CreateOrderUseCase createOrderUseCase,
                            GetOrderByIdUseCase getOrderByIdUseCase,
                            GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase,
-                           DeleteOrderByIdUseCase deleteOrderByIdUseCase) {
+                           DeleteOrderUseCase deleteOrderUseCase,
+                           PayOrderUseCase payOrderUseCase,
+                           DeliveryOrderUseCase deliveryOrderUseCase) {
         this.useCaseExecutor = useCaseExecutor;
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderByIdUseCase = getOrderByIdUseCase;
         this.getCustomerByOrderIdUseCase = getCustomerByOrderIdUseCase;
-        this.deleteOrderByIdUseCase = deleteOrderByIdUseCase;
+        this.deleteOrderUseCase = deleteOrderUseCase;
+        this.payOrderUseCase = payOrderUseCase;
+        this.deliveryOrderUseCase = deliveryOrderUseCase;
     }
 
     @Override
@@ -53,8 +61,7 @@ public class OrderController implements OrderResource {
     }
 
     @Override
-    public CompletableFuture<OrderResponse> getById(@CurrentUser UserPrincipal userPrincipal,
-                                                    @PathVariable Long id) {
+    public CompletableFuture<OrderResponse> getById(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getOrderByIdUseCase,
                 new GetOrderByIdUseCase.InputValues(new Identity(id)),
@@ -63,8 +70,7 @@ public class OrderController implements OrderResource {
     }
 
     @Override
-    public CompletableFuture<CustomerResponse> getCustomerById(@CurrentUser UserPrincipal userPrincipal,
-                                                               @PathVariable Long id) {
+    public CompletableFuture<CustomerResponse> getCustomerById(@PathVariable Long id) {
         return useCaseExecutor.execute(
                 getCustomerByOrderIdUseCase,
                 new GetCustomerByOrderIdUseCase.InputValues(new Identity(id)),
@@ -73,12 +79,29 @@ public class OrderController implements OrderResource {
     }
 
     @Override
-    public CompletableFuture<ApiResponse> delete(@CurrentUser UserPrincipal userPrincipal,
-                                                 @PathVariable Long id) {
+    public CompletableFuture<ApiResponse> delete(@PathVariable Long id) {
         return useCaseExecutor.execute(
-                deleteOrderByIdUseCase,
-                new DeleteOrderByIdUseCase.InputValues(new Identity(id)),
+                deleteOrderUseCase,
+                new DeleteOrderUseCase.InputValues(new Identity(id)),
                 (outputValues) -> new ApiResponse(true, "Order successfully canceled")
+        );
+    }
+
+    @Override
+    public CompletableFuture<ApiResponse> pay(@PathVariable Long id) {
+        return useCaseExecutor.execute(
+                payOrderUseCase,
+                new DeleteOrderUseCase.InputValues(new Identity(id)),
+                (outputValues) -> new ApiResponse(true, "Order successfully paid")
+        );
+    }
+
+    @Override
+    public CompletableFuture<ApiResponse> delivery(@PathVariable Long id) {
+        return useCaseExecutor.execute(
+                deliveryOrderUseCase,
+                new DeleteOrderUseCase.InputValues(new Identity(id)),
+                (outputValues) -> new ApiResponse(true, "Order successfully delivered")
         );
     }
 }

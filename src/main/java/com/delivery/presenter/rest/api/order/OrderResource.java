@@ -30,21 +30,23 @@ public interface OrderResource {
                                                           HttpServletRequest httpServletRequest,
                                                           @Valid @RequestBody OrderRequest orderRequest);
 
-    // TODO: add post authorize
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<OrderResponse> getById(@CurrentUser UserPrincipal userPrincipal,
-                                             @PathVariable Long id);
+    CompletableFuture<OrderResponse> getById(@PathVariable Long id);
 
-    // TODO: add post authorize
     @GetMapping("/{id}/customer")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<CustomerResponse> getCustomerById(@CurrentUser UserPrincipal userPrincipal,
-                                                        @PathVariable Long id
-    );
+    CompletableFuture<CustomerResponse> getCustomerById(@PathVariable Long id);
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    CompletableFuture<ApiResponse> delete(@CurrentUser UserPrincipal userPrincipal,
-                                          @PathVariable Long id);
+    CompletableFuture<ApiResponse> delete(@PathVariable Long id);
+
+    @PostMapping("/{id}/payment")
+    @PreAuthorize("hasRole('USER')")
+    CompletableFuture<ApiResponse> pay(@PathVariable Long id);
+
+    @PostMapping("/{id}/delivery")
+    @PreAuthorize("hasRole('USER')")
+    CompletableFuture<ApiResponse> delivery(@PathVariable Long id);
 }

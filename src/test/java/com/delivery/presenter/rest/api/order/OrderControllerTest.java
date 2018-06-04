@@ -5,11 +5,13 @@ import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.NotFoundException;
 import com.delivery.core.domain.Order;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.order.DeleteOrderByIdUseCase;
-import com.delivery.core.usecases.order.GetOrderByIdUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.core.usecases.order.CreateOrderUseCase;
+import com.delivery.core.usecases.order.DeleteOrderUseCase;
+import com.delivery.core.usecases.order.DeliveryOrderUseCase;
 import com.delivery.core.usecases.order.GetCustomerByOrderIdUseCase;
+import com.delivery.core.usecases.order.GetOrderByIdUseCase;
+import com.delivery.core.usecases.order.PayOrderUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import com.delivery.presenter.config.WebSecurityConfig;
 import com.delivery.presenter.rest.api.common.BaseControllerTest;
@@ -77,7 +79,13 @@ public class OrderControllerTest extends BaseControllerTest {
     private GetCustomerByOrderIdUseCase getCustomerByOrderIdUseCase;
 
     @MockBean
-    private DeleteOrderByIdUseCase deleteOrderByIdUseCase;
+    private DeleteOrderUseCase deleteOrderUseCase;
+
+    @MockBean
+    private PayOrderUseCase payOrderUseCase;
+
+    @MockBean
+    private DeliveryOrderUseCase deliveryOrderUseCase;
 
     @MockBean
     private JwtProvider jwtProvider;
@@ -125,17 +133,67 @@ public class OrderControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void deleteOrderByIdReturnsOk() throws Exception {
+    public void deliveryOrderReturnsOk() throws Exception {
         // given
         Order order = TestCoreEntityGenerator.randomOrder();
-        DeleteOrderByIdUseCase.InputValues input =
-                new DeleteOrderByIdUseCase.InputValues(order.getId());
+        DeliveryOrderUseCase.InputValues input =
+                new DeliveryOrderUseCase.InputValues(order.getId());
 
-        DeleteOrderByIdUseCase.OutputValues output = new DeleteOrderByIdUseCase.OutputValues(order.delete());
+        DeliveryOrderUseCase.OutputValues output = new DeliveryOrderUseCase.OutputValues(order.delete());
 
         // and
         doReturn(output)
-                .when(deleteOrderByIdUseCase)
+                .when(deliveryOrderUseCase)
+                .execute(input);
+
+        // and
+        RequestBuilder request = asyncPostRequest("/Order/" + order.getId().getNumber() + "/delivery", "", TOKEN);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.message", is("Order successfully delivered")));
+    }
+
+    @Test
+    public void payOrderReturnsOk() throws Exception {
+        // given
+        Order order = TestCoreEntityGenerator.randomOrder();
+        PayOrderUseCase.InputValues input =
+                new PayOrderUseCase.InputValues(order.getId());
+
+        PayOrderUseCase.OutputValues output = new PayOrderUseCase.OutputValues(order.delete());
+
+        // and
+        doReturn(output)
+                .when(payOrderUseCase)
+                .execute(input);
+
+        // and
+        RequestBuilder request = asyncPostRequest("/Order/" + order.getId().getNumber() + "/payment", "", TOKEN);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.message", is("Order successfully paid")));
+    }
+
+    @Test
+    public void deleteOrderReturnsOk() throws Exception {
+        // given
+        Order order = TestCoreEntityGenerator.randomOrder();
+        DeleteOrderUseCase.InputValues input =
+                new DeleteOrderUseCase.InputValues(order.getId());
+
+        DeleteOrderUseCase.OutputValues output = new DeleteOrderUseCase.OutputValues(order.delete());
+
+        // and
+        doReturn(output)
+                .when(deleteOrderUseCase)
                 .execute(input);
 
         // and

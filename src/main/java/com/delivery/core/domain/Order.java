@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Value
-@EqualsAndHashCode(of = {"id", "status", "customer", "store", "total", "createdAt", "updatedAt"})
+@EqualsAndHashCode(of = {"id", "status", "customer", "store", "total", "createdAt"})
 public class Order {
     private final Identity id;
     private final Status status;
@@ -44,9 +44,29 @@ public class Order {
             throw new IllegalStateException("Order should be open to be cancelled");
         }
 
+        return newInstanceWith(Status.CANCELLED);
+    }
+
+    public Order delivery() {
+        if (this.status != Status.PAID) {
+            throw new IllegalStateException("Order should be paid to be delivered");
+        }
+
+        return newInstanceWith(Status.DELIVERED);
+    }
+
+    public Order pay() {
+        if (this.status != Status.OPEN) {
+            throw new IllegalStateException("Order should be open to be paid");
+        }
+
+        return newInstanceWith(Status.PAID);
+    }
+
+    private Order newInstanceWith(Status status) {
         return new Order(
                 id,
-                Status.CANCELLED,
+                status,
                 customer,
                 store,
                 orderItems,

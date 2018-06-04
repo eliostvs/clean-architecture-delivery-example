@@ -15,36 +15,36 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DeleteOrderByIdUseCaseTest {
+public class PayOrderUseCaseTest {
 
     @InjectMocks
-    private DeleteOrderByIdUseCase useCase;
+    private PayOrderUseCase useCase;
 
     @Mock
     private OrderRepository repository;
 
     @Test
-    public void executeReturnsOkWhenOrderStatusIsOpen() {
+    public void executeShouldPayOrder() {
         // given
         Order order = TestCoreEntityGenerator.randomOrder();
-        Order toBeReturned = order.delete();
+        Order expected = order.pay();
 
-        DeleteOrderByIdUseCase.InputValues input =
-                new DeleteOrderByIdUseCase.InputValues(order.getId());
+        PayOrderUseCase.InputValues input =
+                new PayOrderUseCase.InputValues(order.getId());
 
         // and
         doReturn(Optional.of(order))
                 .when(repository)
                 .getById(eq(order.getId()));
 
-        doReturn(toBeReturned)
+        doReturn(expected)
                 .when(repository)
-                .persist(eq(order));
+                .persist(eq(expected));
 
         // when
         Order actual = useCase.execute(input).getOrder();
 
         // then
-        assertThat(actual).isEqualTo(toBeReturned);
+        assertThat(actual).isEqualTo(expected);
     }
 }

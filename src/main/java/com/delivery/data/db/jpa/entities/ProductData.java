@@ -47,17 +47,6 @@ public class ProductData {
     private StoreData store;
 
     // TODO: test
-    public static ProductData newInstance(String name, String description, Double price, StoreData storeData) {
-        return new ProductData(
-                null,
-                name,
-                description,
-                price,
-                storeData
-        );
-    }
-
-    // TODO: test
     public static ProductData from(Product product) {
         return new ProductData(
                 convertId(product.getId()),

@@ -59,10 +59,6 @@ public class StoreData {
                 new HashSet<>());
     }
 
-    public static StoreData newInstance(String name, String address, CousineData cousineData) {
-        return new StoreData(null, name, address, cousineData, new HashSet<>());
-    }
-
     // TODO: test
     public Store fromThis() {
         return new Store(

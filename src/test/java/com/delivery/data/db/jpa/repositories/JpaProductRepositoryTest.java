@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.delivery.TestEntityGenerator.randomAddress;
@@ -48,8 +49,8 @@ public class JpaProductRepositoryTest {
     public void findByStoreIdAndIdIsInReturnListOfProductData() {
         // given
         CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance("name"));
-        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", randomAddress(), cousineData));
-        ProductData productData = entityManager.persistAndFlush(ProductData.newInstance("name", "description", randomPrice(), storeData));
+        StoreData storeData = entityManager.persistFlushFind(new StoreData(null,"name", randomAddress(), cousineData, new HashSet<>()));
+        ProductData productData = entityManager.persistAndFlush(new ProductData(null, "name", "description", randomPrice(), storeData));
 
         // when
         List<ProductData> actual =
@@ -63,7 +64,7 @@ public class JpaProductRepositoryTest {
     public void findByNameContainingIgnoreCase() {
         // given
         CousineData cousineData = entityManager.persistFlushFind(CousineData.newInstance(randomName()));
-        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance(randomName(), randomAddress(), cousineData));
+        StoreData storeData = entityManager.persistFlushFind(new StoreData(null, randomName(), randomAddress(), cousineData, new HashSet<>()));
 
         Arrays.stream(new String[]{"AABC", "ABBC", "ABCC"})
                 .forEach(name -> {
@@ -73,7 +74,7 @@ public class JpaProductRepositoryTest {
                         description = "DESCRIPTION";
                     }
 
-                    entityManager.persistAndFlush(ProductData.newInstance(name, description, randomPrice(), storeData));
+                    entityManager.persistAndFlush(new ProductData(null, name, description, randomPrice(), storeData));
                 });
 
         // when

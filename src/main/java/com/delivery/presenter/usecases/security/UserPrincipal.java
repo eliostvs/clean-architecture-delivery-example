@@ -17,11 +17,11 @@ import java.util.Collections;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"id", "username", "email", "password", "address"})
+@ToString(of = {"id", "name", "email", "password", "address"})
 public class UserPrincipal implements UserDetails {
     private Long id;
 
-    private String username;
+    private String name;
 
     private String email;
 
@@ -31,7 +31,6 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    // TODO: test
     public static UserPrincipal from(CustomerData customer) {
         return new UserPrincipal(
                 customer.getId(),
@@ -40,6 +39,10 @@ public class UserPrincipal implements UserDetails {
                 customer.getPassword(),
                 customer.getAddress(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+    }
+
+    public String getUsername() {
+        return name;
     }
 
     @Override

@@ -13,7 +13,6 @@ public class OrderItem {
     private final Product product;
     private final Double total;
 
-    // TODO: test
     public static OrderItem newInstance(Identity id, Product product, Integer quantity) {
         return new OrderItem(
                 id,

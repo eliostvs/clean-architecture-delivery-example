@@ -47,7 +47,7 @@ public class JpaOrderRepositoryTest {
     @Test
     public void saveOrder() {
         // given
-        CustomerData customerData = CustomerData.newInstance(randomName(), randomEmail(), randomAddress(), randomPassword());
+        CustomerData customerData = new CustomerData(null, randomName(), randomEmail(), randomAddress(), randomPassword());
         customerData = entityManager.persistFlushFind(customerData);
 
         //and
@@ -55,11 +55,11 @@ public class JpaOrderRepositoryTest {
         cousineData = entityManager.persistFlushFind(cousineData);
 
         // and
-        StoreData storeData = StoreData.newInstance(randomName(), randomAddress(), cousineData);
+        StoreData storeData = new StoreData(null, randomName(), randomAddress(), cousineData, new HashSet<>());
         storeData = entityManager.persistFlushFind(storeData);
 
         // and
-        ProductData productData = ProductData.newInstance(randomName(), randomDescription(), randomPrice(), storeData);
+        ProductData productData = new ProductData(null, randomName(), randomDescription(), randomPrice(), storeData);
         productData = entityManager.persistAndFlush(productData);
 
         // and

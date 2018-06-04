@@ -3,13 +3,40 @@ package com.delivery.core.domain;
 import com.delivery.core.entities.TestCoreEntityGenerator;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class OrderTest {
+
+    @Test
+    public void newInstance() throws InterruptedException {
+        // given
+        Identity id = TestCoreEntityGenerator.randomId();
+        Customer customer = TestCoreEntityGenerator.randomCustomer();
+        Store store = TestCoreEntityGenerator.randomStore();
+        OrderItem orderItem = TestCoreEntityGenerator.randomOrderItem();
+        Instant now = Instant.now();
+
+        Thread.sleep(100);
+
+        // when
+        Order actual = Order.newInstance(id, customer, store, asList(orderItem, orderItem));
+
+        // then
+        assertThat(actual.getId()).isEqualTo(id);
+        assertThat(actual.getStatus()).isEqualTo(Status.OPEN);
+        assertThat(actual.getCustomer()).isEqualTo(customer);
+        assertThat(actual.getStore()).isEqualTo(store);
+        assertThat(actual.getOrderItems()).containsOnly(orderItem);
+        assertThat(actual.getTotal()).isEqualTo(orderItem.getTotal() * 2);
+        assertThat(actual.getCreatedAt()).isAfter(now);
+        assertThat(actual.getUpdatedAt()).isAfter(now);
+    }
 
     @Test
     public void deliveryOrderThrowExceptionWhenStatusIsDifferentFromOpen() {
@@ -81,5 +108,4 @@ public class OrderTest {
         assertThat(actual.getStatus()).isEqualTo(paid);
         assertThat(actual.getUpdatedAt()).isAfter(order.getUpdatedAt());
     }
-
 }

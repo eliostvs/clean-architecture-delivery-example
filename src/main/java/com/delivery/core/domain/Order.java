@@ -18,7 +18,6 @@ public class Order {
     private final Instant createdAt;
     private final Instant updatedAt;
 
-    // TODO: test
     public static Order newInstance(Identity id, Customer customer, Store store, List<OrderItem> orderItems) {
         return new Order(
                 id,

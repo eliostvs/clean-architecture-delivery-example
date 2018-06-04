@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.delivery.TestEntityGenerator.randomAddress;
@@ -49,7 +50,7 @@ public class JpaStoreRepositoryTest {
         // given
         Arrays.stream(new String[]{"aAbc", "abBc", "abCc"})
                 .forEach(name -> {
-                    final StoreData storeData = StoreData.newInstance(name, randomAddress(), cousineData);
+                    final StoreData storeData = new StoreData(null, name, randomAddress(), cousineData, new HashSet<>());
                     entityManager.persistAndFlush(storeData);
                 });
 
@@ -63,12 +64,12 @@ public class JpaStoreRepositoryTest {
     @Test
     public void findProductsByIdReturnsAllProducts() {
         // given
-        StoreData storeData = entityManager.persistFlushFind(StoreData.newInstance("name", randomAddress(), cousineData));
+        StoreData storeData = entityManager.persistFlushFind(new StoreData(null, "name", randomAddress(), cousineData, new HashSet<>()));
 
         // and
         Arrays.stream(new String[]{"product A", "product B"})
                 .forEach(name -> {
-                    final ProductData productData = ProductData.newInstance(name, "desc", randomPrice(), storeData);
+                    final ProductData productData = new ProductData(null, name, "desc", randomPrice(), storeData);
                     entityManager.persistAndFlush(productData);
                 });
 

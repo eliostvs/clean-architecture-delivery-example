@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.delivery.TestEntityGenerator.randomAddress;
@@ -54,8 +55,8 @@ public class JpaCousineRepositoryTest {
     public void getStoresByCousineId() {
         // given
         CousineData cousine = entityManager.persistFlushFind(CousineData.newInstance("name"));
-        StoreData storeA = entityManager.persistFlushFind(StoreData.newInstance("name A", randomAddress(), cousine));
-        StoreData storeB = entityManager.persistFlushFind(StoreData.newInstance("name B", randomAddress(), cousine));
+        StoreData storeA = entityManager.persistFlushFind(new StoreData(null, "name A", randomAddress(), cousine, new HashSet<>()));
+        StoreData storeB = entityManager.persistFlushFind(new StoreData(null, "name B", randomAddress(), cousine, new HashSet<>()));
 
         // and
         cousine.addStore(storeA);

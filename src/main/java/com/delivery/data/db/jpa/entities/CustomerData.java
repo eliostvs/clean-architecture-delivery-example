@@ -55,17 +55,6 @@ public class CustomerData {
     }
 
     // TODO: test
-    public static CustomerData newInstance(String name, String email, String address, String password) {
-        return new CustomerData(
-                null,
-                name,
-                email,
-                address,
-                password
-        );
-    }
-
-    // TODO: test
     public Customer fromThis() {
         return new Customer(
                 new Identity(id),

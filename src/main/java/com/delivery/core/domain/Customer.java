@@ -1,18 +1,28 @@
 package com.delivery.core.domain;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Value
+@AllArgsConstructor
+@EqualsAndHashCode
+@Getter
+@NoArgsConstructor
+@Setter
+@ToString
 public class Customer {
-    private final Identity id;
-    private final String name;
-    private final String email;
-    private final String address;
-    private final String password;
+    private Identity id;
+    private String name;
+    private String email;
+    private String address;
+    private String password;
 
-    public static Customer newInstance(Identity id, String name, String email, String address, String password) {
+    public static Customer newInstance(String name, String email, String address, String password) {
         return new Customer(
-                id,
+                Identity.nothing(),
                 name,
                 email,
                 address,

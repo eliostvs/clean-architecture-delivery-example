@@ -1,7 +1,6 @@
 package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.domain.Customer;
-import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.core.usecases.customer.CustomerRepository;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import org.springframework.stereotype.Repository;
@@ -17,8 +16,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Customer persist(CreateCustomerUseCase.InputValues customerInput) {
-        final CustomerData customerData = CustomerData.from(customerInput);
+    public Customer persist(Customer customer) {
+        final CustomerData customerData = CustomerData.from(customer);
         return repository.save(customerData).fromThis();
     }
 

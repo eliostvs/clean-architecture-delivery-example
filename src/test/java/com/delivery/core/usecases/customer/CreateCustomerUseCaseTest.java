@@ -43,14 +43,20 @@ public class CreateCustomerUseCaseTest {
     public void executeReturnsCreatedCustomer() {
         // given
         Customer customer = TestCoreEntityGenerator.randomCustomer();
+        Customer toBeMatched = Customer.newInstance(
+                customer.getName(), customer.getEmail(),
+                customer.getAddress(), customer.getPassword()
+        );
+
         CreateCustomerUseCase.InputValues input = new CreateCustomerUseCase.InputValues(
                 customer.getName(), customer.getEmail(),
-                customer.getAddress(), customer.getPassword());
+                customer.getAddress(), customer.getPassword()
+        );
 
         // and
         doReturn(customer)
                 .when(repository)
-                .persist(eq(input));
+                .persist(eq(toBeMatched));
 
         // when
         Customer actual = useCase.execute(input).getCustomer();

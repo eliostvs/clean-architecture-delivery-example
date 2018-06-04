@@ -2,7 +2,6 @@ package com.delivery.data.db.jpa.entities;
 
 import com.delivery.core.domain.Customer;
 import com.delivery.core.domain.Identity;
-import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -74,17 +73,6 @@ public class CustomerData {
                 email,
                 address,
                 password
-        );
-    }
-
-    // TODO: test
-    public static CustomerData from(CreateCustomerUseCase.InputValues customerInput) {
-        return new CustomerData(
-                null,
-                customerInput.getName(),
-                customerInput.getEmail(),
-                customerInput.getAddress(),
-                customerInput.getPassword()
         );
     }
 }

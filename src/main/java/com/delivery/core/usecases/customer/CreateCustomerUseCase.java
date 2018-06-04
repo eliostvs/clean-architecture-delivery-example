@@ -13,13 +13,19 @@ public class CreateCustomerUseCase extends UseCase<CreateCustomerUseCase.InputVa
     }
 
     @Override
-    public OutputValues execute(InputValues customerInput) {
-        if (repository.existsByEmail(customerInput.getEmail())) {
+    public OutputValues execute(InputValues input) {
+        if (repository.existsByEmail(input.getEmail())) {
             throw new EmailAlreadyUsedException("Email address already in use!");
         }
 
-        // TODO: convert to Customer first
-        return new OutputValues(repository.persist(customerInput));
+        Customer customer = Customer.newInstance(
+                input.getName(),
+                input.getEmail(),
+                input.getAddress(),
+                input.getPassword()
+        );
+
+        return new OutputValues(repository.persist(customer));
     }
 
     @Value

@@ -2,7 +2,6 @@ package com.delivery.data.db.jpa.repositories;
 
 import com.delivery.core.domain.Customer;
 import com.delivery.core.entities.TestCoreEntityGenerator;
-import com.delivery.core.usecases.customer.CreateCustomerUseCase;
 import com.delivery.data.db.jpa.entities.CustomerData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,27 +26,19 @@ public class CustomerRepositoryImplTest {
     @Test
     public void saveShouldPersistCustomerDataAndReturnsCustomer() throws Exception {
         // given
-        Customer customer = TestCoreEntityGenerator.randomCustomer();
-        CreateCustomerUseCase.InputValues customerInput = new CreateCustomerUseCase.InputValues(
-                customer.getName(), customer.getEmail(),
-                customer.getAddress(), customer.getPassword());
-
-        CustomerData customerData = newInstanceWithProperties(CustomerData.class, customerInput);
-
-        //and
-        CustomerData toBeReturned = newInstanceWithProperties(CustomerData.class, customerData);
-        toBeReturned.setId(customer.getId().getNumber());
+        Customer expected = TestCoreEntityGenerator.randomCustomer();
+        Customer input = newInstanceWithProperties(Customer.class, expected, "id");
 
         // and
-        doReturn(toBeReturned)
+        doReturn(CustomerData.from(expected))
                 .when(jpaCustomerRepository)
-                .save(eq(customerData));
+                .save(eq(CustomerData.from(input)));
 
         // when
-        Customer actual = customerRepository.persist(customerInput);
+        Customer actual = customerRepository.persist(input);
 
         // then
-        assertThat(actual).isEqualTo(customer);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

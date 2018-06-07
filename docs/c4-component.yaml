@@ -1,0 +1,198 @@
+---
+elements:
+  -
+    type: 'Software System'
+    name: 'Example Clear Architecture.'
+    description: 'Example of Clear Architecture in a food delivery system'
+    tags: Internal
+    containers:
+      -
+        type: Container
+        name: Database
+        description: 'Stores data.'
+        technology: 'H2 Relational Database'
+        tags: Database
+        position: '1920,995'
+        components: []
+      -
+        type: Container
+        name: 'Web Application'
+        description: ""
+        technology: 'Java and Spring MVC'
+        tags: ""
+        components:
+          -
+            type: Component
+            name: JpaOrderRepository
+            description: 'Communicates with the database.'
+            technology: 'JPA Data Interface'
+            tags: ""
+            position: '1285,995'
+          -
+            type: Component
+            name: Order
+            description: 'Has the business logic to pay the order.'
+            technology: 'Java Pojo'
+            tags: ""
+            position: '80,995'
+          -
+            type: Component
+            name: OrderController
+            description: 'It receives the request and calls the UseCaseExecutor with the use case, the input, and the input/output mappers. Implements the OrderResource interface.'
+            technology: 'Spring MVC Controller'
+            tags: ""
+            position: '1285,565'
+          -
+            type: Component
+            name: OrderRepositoryImpl
+            description: 'Abstracts the data layer from the use case. Implements the OrderRepository interface.'
+            technology: 'Java Bean'
+            tags: ""
+            position: '685,995'
+          -
+            type: Component
+            name: PayOrderUseCase
+            description: 'Orquestrates the order and the repository. Implements the UseCase interface.'
+            technology: 'Java Pojo'
+            tags: ""
+            position: '80,565'
+          -
+            type: Component
+            name: UseCaseExecutorImpl
+            description: 'It calls use case with and then maps its output using the output mapper function. Implements the UseCaseExecutor interface.'
+            technology: 'Spring Bean'
+            tags: ""
+            position: '685,565'
+  -
+    type: Person
+    name: User
+    description: 'User of the system'
+    tags: ""
+    position: '710,49'
+relationships:
+  -
+    source: JpaOrderRepository
+    description: Uses
+    technology: ""
+    destination: Database
+    tags: ""
+  -
+    source: OrderController
+    description: Uses
+    technology: ""
+    destination: UseCaseExecutorImpl
+    tags: ""
+  -
+    source: OrderRepositoryImpl
+    description: Uses
+    technology: ""
+    destination: JpaOrderRepository
+    tags: ""
+  -
+    source: PayOrderUseCase
+    description: Uses
+    technology: ""
+    destination: Order
+    tags: ""
+  -
+    source: PayOrderUseCase
+    description: Uses
+    technology: ""
+    destination: OrderRepositoryImpl
+    tags: ""
+  -
+    source: UseCaseExecutorImpl
+    description: Uses
+    technology: ""
+    destination: PayOrderUseCase
+    tags: ""
+  -
+    source: User
+    description: Uses
+    technology: HTTP
+    destination: OrderController
+    tags: ""
+styles:
+  -
+    type: element
+    tag: Component
+    width: ""
+    height: ""
+    background: '#85bbf0'
+    color: '#000000'
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: ""
+    metadata: ""
+    description: ""
+  -
+    type: element
+    tag: Container
+    width: ""
+    height: ""
+    background: '#438dd5'
+    color: ""
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: ""
+    metadata: ""
+    description: ""
+  -
+    type: element
+    tag: Database
+    width: ""
+    height: ""
+    background: ""
+    color: ""
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: Cylinder
+    metadata: ""
+    description: ""
+  -
+    type: element
+    tag: Element
+    width: ""
+    height: ""
+    background: ""
+    color: '#ffffff'
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: ""
+    metadata: ""
+    description: ""
+  -
+    type: element
+    tag: Person
+    width: ""
+    height: ""
+    background: '#08427b'
+    color: ""
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: Person
+    metadata: ""
+    description: ""
+  -
+    type: element
+    tag: 'Software System'
+    width: ""
+    height: ""
+    background: '#1168bd'
+    color: ""
+    border: ""
+    opacity: ""
+    fontSize: ""
+    shape: ""
+    metadata: ""
+    description: ""
+type: Component
+scope: 'Web Application'
+description: 'Pay order workflow'
+size: A5_Landscape
+

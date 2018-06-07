@@ -26,4 +26,4 @@ In this module, gateways for the repositories are being defined.
 
 ## Diagram
 
-![c4 component](./doc./c4-component.png)
+![c4 component](./docs/c4-component.png)

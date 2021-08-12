@@ -8,13 +8,13 @@ import com.delivery.core.usecases.store.GetStoreUseCase;
 import com.delivery.core.usecases.store.SearchStoresByNameUseCase;
 import com.delivery.presenter.rest.api.entities.ProductResponse;
 import com.delivery.presenter.rest.api.entities.StoreResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Component
+@Controller
 public class StoreController implements StoreResource {
 
     private UseCaseExecutor useCaseExecutor;

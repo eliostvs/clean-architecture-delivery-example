@@ -15,7 +15,7 @@ import com.delivery.presenter.rest.api.entities.OrderResponse;
 import com.delivery.presenter.usecases.security.CurrentUser;
 import com.delivery.presenter.usecases.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 
-@Component
+@Controller
 public class OrderController implements OrderResource {
     private UseCaseExecutor useCaseExecutor;
     private CreateOrderUseCase createOrderUseCase;

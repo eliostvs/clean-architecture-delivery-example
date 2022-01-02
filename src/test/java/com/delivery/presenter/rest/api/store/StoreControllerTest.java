@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = StoreController.class, secure = false)
+@WebMvcTest(value = StoreController.class)
 public class StoreControllerTest extends BaseControllerTest {
 
     @Configuration

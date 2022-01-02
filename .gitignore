@@ -25,4 +25,4 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/docs/tests/
+/docs/coverage/

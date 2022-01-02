@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = OrderController.class, secure = false)
+@WebMvcTest(value = OrderController.class)
 public class OrderControllerTest extends BaseControllerTest {
 
     private static final String TOKEN = "token";

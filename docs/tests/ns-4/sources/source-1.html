@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CreateCustomerUseCase</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.delivery.core.usecases.customer</a>
+</div>
+
+<h1>Coverage Summary for Class: CreateCustomerUseCase (com.delivery.core.usecases.customer)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CreateCustomerUseCase</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CreateCustomerUseCase$InputValues</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">CreateCustomerUseCase$OutputValues</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.delivery.core.usecases.customer;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.delivery.core.domain.Customer;
+<i class="no-highlight">4</i>&nbsp;import com.delivery.core.domain.EmailAlreadyUsedException;
+<i class="no-highlight">5</i>&nbsp;import com.delivery.core.usecases.UseCase;
+<i class="no-highlight">6</i>&nbsp;import lombok.Value;
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;public class CreateCustomerUseCase extends UseCase&lt;CreateCustomerUseCase.InputValues, CreateCustomerUseCase.OutputValues&gt; {
+<i class="no-highlight">9</i>&nbsp;    private CustomerRepository repository;
+<i class="no-highlight">10</i>&nbsp;
+<b class="nc"><i class="no-highlight">11</i>&nbsp;    public CreateCustomerUseCase(CustomerRepository repository) {</b>
+<b class="nc"><i class="no-highlight">12</i>&nbsp;        this.repository = repository;</b>
+<i class="no-highlight">13</i>&nbsp;    }
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    @Override
+<i class="no-highlight">16</i>&nbsp;    public OutputValues execute(InputValues input) {
+<b class="nc"><i class="no-highlight">17</i>&nbsp;        if (repository.existsByEmail(input.getEmail())) {</b>
+<b class="nc"><i class="no-highlight">18</i>&nbsp;            throw new EmailAlreadyUsedException(&quot;Email address already in use!&quot;);</b>
+<i class="no-highlight">19</i>&nbsp;        }
+<i class="no-highlight">20</i>&nbsp;
+<b class="nc"><i class="no-highlight">21</i>&nbsp;        Customer customer = Customer.newInstance(</b>
+<b class="nc"><i class="no-highlight">22</i>&nbsp;                input.getName(),</b>
+<b class="nc"><i class="no-highlight">23</i>&nbsp;                input.getEmail(),</b>
+<b class="nc"><i class="no-highlight">24</i>&nbsp;                input.getAddress(),</b>
+<b class="nc"><i class="no-highlight">25</i>&nbsp;                input.getPassword()</b>
+<i class="no-highlight">26</i>&nbsp;        );
+<i class="no-highlight">27</i>&nbsp;
+<b class="nc"><i class="no-highlight">28</i>&nbsp;        return new OutputValues(repository.persist(customer));</b>
+<i class="no-highlight">29</i>&nbsp;    }
+<i class="no-highlight">30</i>&nbsp;
+<b class="nc"><i class="no-highlight">31</i>&nbsp;    @Value</b>
+<i class="no-highlight">32</i>&nbsp;    public static class InputValues implements UseCase.InputValues{
+<b class="nc"><i class="no-highlight">33</i>&nbsp;        private final String name;</b>
+<b class="nc"><i class="no-highlight">34</i>&nbsp;        private final String email;</b>
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        private final String address;</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        private final String password;</b>
+<i class="no-highlight">37</i>&nbsp;    }
+<i class="no-highlight">38</i>&nbsp;
+<b class="nc"><i class="no-highlight">39</i>&nbsp;    @Value</b>
+<i class="no-highlight">40</i>&nbsp;    public static class OutputValues implements UseCase.OutputValues {
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        private final Customer customer;</b>
+<i class="no-highlight">42</i>&nbsp;    }
+<i class="no-highlight">43</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-01-02 12:55</div>
+</div>
+</body>
+</html>

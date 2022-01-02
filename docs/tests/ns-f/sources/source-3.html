@@ -1,0 +1,129 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CousineResponse</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.delivery.presenter.rest.api.entities</a>
+</div>
+
+<h1>Coverage Summary for Class: CousineResponse (com.delivery.presenter.rest.api.entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CousineResponse</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.delivery.presenter.rest.api.entities;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.delivery.core.domain.Cousine;
+<i class="no-highlight">4</i>&nbsp;import lombok.Value;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.List;
+<i class="no-highlight">7</i>&nbsp;import java.util.stream.Collectors;
+<i class="no-highlight">8</i>&nbsp;
+<b class="nc"><i class="no-highlight">9</i>&nbsp;@Value</b>
+<i class="no-highlight">10</i>&nbsp;public class CousineResponse {
+<b class="nc"><i class="no-highlight">11</i>&nbsp;    private final Long id;</b>
+<b class="nc"><i class="no-highlight">12</i>&nbsp;    private final String name;</b>
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    private static CousineResponse from(Cousine cousine) {
+<b class="nc"><i class="no-highlight">15</i>&nbsp;        return new CousineResponse(cousine.getId().getNumber(), cousine.getName());</b>
+<i class="no-highlight">16</i>&nbsp;    }
+<i class="no-highlight">17</i>&nbsp;    
+<i class="no-highlight">18</i>&nbsp;    public static List&lt;CousineResponse&gt; from(List&lt;Cousine&gt; cousines) {
+<b class="nc"><i class="no-highlight">19</i>&nbsp;        return cousines</b>
+<b class="nc"><i class="no-highlight">20</i>&nbsp;                .stream()</b>
+<b class="nc"><i class="no-highlight">21</i>&nbsp;                .map(CousineResponse::from)</b>
+<b class="nc"><i class="no-highlight">22</i>&nbsp;                .collect(Collectors.toList());</b>
+<i class="no-highlight">23</i>&nbsp;    }
+<i class="no-highlight">24</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-01-02 12:55</div>
+</div>
+</body>
+</html>
